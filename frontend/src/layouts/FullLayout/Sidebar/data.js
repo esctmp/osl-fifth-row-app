@@ -12,6 +12,42 @@ import {
 
 const Menuitems = [
   {
+    title: "FifthRow_Homepage",
+    href: "fifthrow/homepage",
+  },
+  {
+    title: "FifthRow_EPF",
+    href: "fifthrow/epf",
+  },
+  {
+    title: "FifthRow_Submit",
+    href: "fifthrow/epf/submit",
+    type: "sub-heading"
+  },
+  {
+    title: "FifthRow_View",
+    href: "fifthrow/epf/view",
+    type: "sub-heading"
+  },
+  {
+    title: "OSL_Homepage",
+    href: "osl/homepage",
+  },
+  {
+    title: "OSL_EPF",
+    href: "osl/epf",
+  },
+  {
+    title: "OSL_Submit",
+    href: "osl/epf/submit",
+    type: "sub-heading"
+  },
+  {
+    title: "OSL_View",
+    href: "osl/epf/view",
+    type: "sub-heading"
+  },
+  {
     title: "Dashboard",
     icon: DashboardOutlined,
     href: "/dashboards/dashboard1",

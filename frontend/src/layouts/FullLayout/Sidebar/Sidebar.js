@@ -13,7 +13,6 @@ import {
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
 import LogoIcon from "../Logo/LogoIcon";
 import Menuitems from "./data";
-import Buynow from "./Buynow";
 
 const Sidebar = (props) => {
   const [open, setOpen] = React.useState(true);
@@ -63,21 +62,16 @@ const Sidebar = (props) => {
                     }),
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      ...(pathDirect === item.href && { color: "white" }),
-                    }}
-                  >
-                    <item.icon width="20" height="20" />
-                  </ListItemIcon>
-                  <ListItemText>{item.title}</ListItemText>
+                  {item?.type == "sub-heading" 
+                    ? <ListItemText sx={{ml: 3}}>{item.title}</ListItemText>
+                    : <ListItemText sx={{ml: 0}}>{item.title}</ListItemText>
+                  }
                 </ListItem>
               </List>
             );
           })}
         </List>
       </Box>
-      <Buynow />
     </Box>
   );
   if (lgUp) {
