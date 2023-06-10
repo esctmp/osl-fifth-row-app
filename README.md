@@ -2,7 +2,7 @@
 
 ## Frontend
 
-[Figma design](https://www.figma.com/file/e6LCGMBJwvEcE2QKydRHc4/Low-fidelity-prototype?type=design&node-id=0-1&t=Hl6P5sS0GO3vXqbU-0)
+[Figma design](https://www.figma.com/file/e6LCGMBJwvEcE2QKydRHc4/Low-fidelity-prototype?type=design&node-id=0-1&t=Hl6P5sS0GO3vXqbU-0) | [Javascript tutorial](https://javascript.info/) | [React documentation](https://react.dev/) | [MUI component library](https://mui.com/material-ui/getting-started/overview/)
 
 ### Setup
 
@@ -21,4 +21,4 @@
 5. In the process of working, feel free to commit & push to your own branch regularly
 6. After your page has been created bug-free, run `git fetch origin main` to update the `main` branch
 7. Run `git merge main` to merge the changes in the `main` branch into your branch; fix merge conflicts if arise
-8. Run `git push` then go to `https://github.com/fillantrophy02/osl-fifth-row-app`. You'll see a banner stating an option to create a pull request from your branch; create the pull request and approve it. Your new page will now be updated in the `main` branch
+8. Run `git push` then go to [https://github.com/fillantrophy02/osl-fifth-row-app](https://github.com/fillantrophy02/osl-fifth-row-app). You'll see a banner stating an option to create a pull request from your branch; create the pull request and approve it. Your new page will now be updated in the `main` branch
