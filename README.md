@@ -7,8 +7,6 @@
 - constants and global variables (pls avoid global variables) are capital letters eg: PI = 3.14
 - filenames use lowercase eg: picture.jpg
 
-Example
-
 **Spaces:**
 - every operation need a space -> eg: x = 1 + 2
 
