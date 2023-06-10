@@ -1,4 +1,41 @@
 # OSL-Fifth-Row-App
+---
+## [JavaScript Coding Convention ](https://www.w3schools.com/js/js_conventions.asp)
+
+**Naming Convention**: camelCase
+- every variable and function starts with a name eg: blueTooth = True
+- constants and global variables (pls avoid global variables) are capital letters eg: PI = 3.14
+- filenames use lowercase eg: picture.jpg
+
+Example
+
+**Spaces:**
+- every operation need a space -> eg: x = 1 + 2
+
+**Indentation:**
+- 4 spaces
+- Use line breaks to separate logical sections of code.
+
+**Object Rules**
+
+General rules for object definitions:
+- Place the opening bracket on the same line as the object name.
+- Use colon plus one space between each property and its value.
+- Use quotes around string values, not around numeric values.
+- Do not add a comma after the last property-value pair.
+- Place the closing bracket on a new line, without leading spaces.
+- Always end an object definition with a semicolon.
+
+```js
+Example
+const person = {
+  firstName: "John",
+  lastName: "Doe",
+  age: 50,
+  eyeColor: "blue"
+};
+```
+---
 
 ## Frontend
 
