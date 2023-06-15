@@ -1,5 +1,4 @@
 import React from "react";
-import { Input, createStyles } from '@material-ui/core';
 import {
   Card,
   CardContent,
@@ -10,11 +9,13 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
+  Input,
   Button,
   Grid,
   RadioGroup,
   Radio,
   FormControl,
+  Stack,
   MenuItem,
 } from "@material-ui/core";
 
@@ -357,6 +358,18 @@ const FormComments = () =>
   <>
   </>;
 
+const draftButtonStyle = {
+  "&.MuiButton-contained": {
+    backgroundColor: "#B9B9B9"
+  },
+  "&:active": {
+    backgroundColor: '#818181'
+  },
+  "&:hover": {
+    backgroundColor: '#818181'
+  }
+};
+
 const EPFSubmit = () => {
 
   return (
@@ -386,6 +399,10 @@ const EPFSubmit = () => {
                     <SectionF />
                     <SectionG />
                   </form>
+                  <Stack spacing={2} direction="row" justifyContent="center">
+                    <Button style={{ width: 120, height: 40 }} variant="contained">Submit</Button>
+                    <Button style={{ width: 120, height: 40 }}  sx={draftButtonStyle} variant="contained">Save draft</Button>
+                  </Stack>
                 </CardContent>
               </Grid>
               <Grid item lg={3} md={3}>
