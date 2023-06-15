@@ -15,7 +15,7 @@
 ### Dev
 
 1. Everyone has their own branch they can work on. Run `git branch -r` to see all remote branches
-2. Run `git fetch origin <your-branch>` to fetch your own branch
+2. Run `git switch <your-branch>` to fetch your own branch
 3. Run `git branch` to see which branch you're on and `git checkout <your-branch>` to switch to your own branch
 4. Except for Login (cause I'm not sure where it should be placed), blank pages e.g. FifthRow_Homepage and OSL_EPFView have been created in the `/src/pages` folder and linked up to the sidebar. Please edit in these pages
 5. In the process of working, feel free to commit & push to your own branch regularly
