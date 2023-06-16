@@ -11,7 +11,7 @@ const EPFView = () => {
       <Box>
       <Card variant="outlined">
         <CardContent>
-          <Typography variant="h3">Basic Table</Typography>
+          <Typography variant="h3">Archives</Typography>
           <Box
             sx={{
               overflow: {
