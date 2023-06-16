@@ -203,6 +203,10 @@ const TableRow = ({ sectionName, rowIdx, rowName, colConfig, rowMinHeight, rowNa
 
 
 const SectionC = () => {
+  const [numRows1, setNumRows1] = useState(1);
+  const [numRows2, setNumRows2] = useState(1);
+  const [numRows3_1, setNumRows3_1] = useState(1);
+  const [numRows3_2, setNumRows3_2] = useState(1);
   return (
     <>
       <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
@@ -211,11 +215,47 @@ const SectionC = () => {
       <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
         Please include all the necessary details about each activity and other necessary details such as wet weather plan. The project director is incharge of ensuring the plan is followed.
       </Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>
+        C.1 Pre-Event
+        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your pre-event set up. </i></div>
+      </Typography>
       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-        <TableColHeaders colNames={['', 'Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[2, 2, 2, 4, 2]} />
-        <TableRow sectionName="C" rowIdx={1} rowName="Pre-Event" colConfig={[2, 2, 2, 4, 2]} />
-        <TableRow sectionName="C" rowIdx={2} rowName="Event" colConfig={[2, 2, 2, 4, 2]} />
-        <TableRow sectionName="C" rowIdx={3} rowName="Post-Event" colConfig={[2, 2, 2, 4, 2]} />
+        <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
+        {[...Array(numRows1)].map(idx =>
+          <TableRow sectionName="C1" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
+        )}
+        <TableDeleteRow onClickFunction={(e) => {setNumRows1(numRows1-1);}} />
+        <TableAddRow onClickFunction={(e) => {setNumRows1(numRows1+1);}} />
+      </Grid>
+      <Typography sx={{ fontWeight: 'bold' }}>
+        C.2 Event
+        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your event and description of each activity.</i></div>
+      </Typography>
+      <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+        <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
+        {[...Array(numRows2)].map(idx =>
+          <TableRow sectionName="C2" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
+        )}
+        <TableDeleteRow onClickFunction={(e) => {setNumRows2(numRows2-1);}} />
+        <TableAddRow onClickFunction={(e) => {setNumRows2(numRows2+1);}} />
+      </Grid>
+      <Typography sx={{ fontWeight: 'bold' }}>
+        C.3 Post-Event
+        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your post event clean up, management of resources and waste and excess food. </i></div>
+      </Typography>
+      <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+        <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
+        {[...Array(numRows3_1)].map(idx =>
+          <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
+        )}
+        <TableDeleteRow onClickFunction={(e) => {setNumRows3_1(numRows3_1-1);}} />
+        <TableAddRow onClickFunction={(e) => {setNumRows3_1(numRows3_1+1);}} />
+        <TableColHeaders colNames={['Clean up']} colConfig={[12]} />
+        {[...Array(numRows3_2)].map(idx =>
+          <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
+        )}
+        <TableDeleteRow onClickFunction={(e) => {setNumRows3_2(numRows3_2-1);}} />
+        <TableAddRow onClickFunction={(e) => {setNumRows3_2(numRows3_2+1);}} />
       </Grid>
     </>
   );
