@@ -326,81 +326,21 @@ const TableAddRow = ({ onClickFunction }) =>
     </Grid>
   </>
 
-
-const TableRowRemovable = ({ sectionName, rowIdx, rowName, colConfig, rowMinHeight, rowNameAlign, onRemoveFunction }) =>
-  <>
-    {rowName != ''
-      ? <>
-        {colConfig.map((_, j) =>
-          <>
-            {j == 0
-              ?
-              <Grid item display="flex" lg={colConfig[j]} md={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-                <Box display="flex" width="100%" alignItems="center" justifyContent="center" sx={{ padding: "8px" }}>
-                  <Typography align={rowNameAlign != '' ? rowNameAlign : "center"} sx={{ fontWeight: 'bold' }}>
-                    {rowName}
-                  </Typography>
-                </Box>
-              </Grid>
-              :
-              <Grid item lg={colConfig[j]} md={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-                <Input
-                  id={`${sectionName}-${rowIdx}-${j}`}
-                  fullWidth
-                  multiline
-                  minRows={rowMinHeight != null ? rowMinHeight : 3}
-                  disableUnderline='true'
-                  sx={{ padding: "8px" }}
-                />
-              </Grid>
-            }
-          </>
-        )}
-      </>
-      : <>
-        {colConfig.map((_, j) =>
-          <>
-            {j != colConfig.length - 1
-              ?
-              <>
-                <Grid item lg={colConfig[j]} md={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-                  <Input
-                    id={`${sectionName}-${rowIdx}-${j + 1}`}
-                    fullWidth
-                    multiline
-                    minRows={rowMinHeight != null ? rowMinHeight : 3}
-                    disableUnderline='true'
-                    sx={{ padding: "8px" }}
-                  />
-                </Grid>
-              </>
-              :
-              <>
-                <Grid item lg={colConfig[j]} md={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-                  <Grid container spacing={0}>
-                    <Grid item lg={10} md={10}>
-                      <Input
-                        id={`${sectionName}-${rowIdx}-${j + 1}`}
-                        fullWidth
-                        multiline
-                        minRows={rowMinHeight != null ? rowMinHeight : 3}
-                        disableUnderline='true'
-                        sx={{ padding: "8px" }}
-                      />
-
-                    </Grid>
-                    <Grid item lg={2} md={2}>
-                      <Button variant='outlined' color='error' fullWidth sx={{minWidth: 0, fontSize: 28, height: '30px'}}>-</Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </>
-            }
-          </>
-        )}
-
-      </>
-    }
+  
+const TableDeleteRow = ({ onClickFunction }) =>
+<>
+  <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
+    <Button
+      id='delete-row'
+      variant='outlined'
+      color='error'
+      display='flex'
+      sx={{ fontSize: 28, height: '30px', width: '100%' }}
+      onClick={onClickFunction}
+    >
+      -
+    </Button>
+  </Grid>
   </>
 
 const SectionF = () => {
@@ -413,8 +353,9 @@ const SectionF = () => {
       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
         <TableColHeaders colNames={['Name', 'Student ID', 'Position']} colConfig={[4, 4, 4]} />
         {[...Array(numRows)].map(idx =>
-          <TableRowRemovable sectionName="F" rowIdx={idx + 1} rowName="" colConfig={[4, 4, 4]} rowMinHeight={2} />
+          <TableRow sectionName="F" rowIdx={idx + 1} rowName="" colConfig={[4, 4, 4]} rowMinHeight={2} />
         )}
+        <TableDeleteRow onClickFunction={(e) => { setNumRows(numRows - 1); }} />
         <TableAddRow onClickFunction={(e) => { setNumRows(numRows + 1); }} />
       </Grid>
     </>
