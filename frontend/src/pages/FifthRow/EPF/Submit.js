@@ -115,6 +115,8 @@ const SectionB = () =>
         <TextField
           id="B-event-schedule"
           label="Event Schedule"
+          defaultValue="2023-12-31T12:00"
+          type="datetime-local"
           fullWidth
         />
       </Grid>
