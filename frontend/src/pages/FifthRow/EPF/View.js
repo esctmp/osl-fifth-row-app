@@ -4,6 +4,7 @@ import { Card, CardContent, Box, Typography } from "@material-ui/core";
 
 import ExTable from "../../../components/CM_Components/views/dashboards/dashboard1-components/ExTable";
 
+
 const EPFView = () => {
 
   return (
@@ -12,6 +13,7 @@ const EPFView = () => {
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h3">Archives</Typography>
+          
           <Box
             sx={{
               overflow: {
