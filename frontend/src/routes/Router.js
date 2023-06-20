@@ -7,7 +7,8 @@ const FullLayout = lazy(() => import("../layouts/FullLayout/FullLayout.js"));
 
 /*****Pages******/
 const Dashboard1 = lazy(() => import("../views/dashboards/Dashboard1"));
-const Login = lazy(() => import("../pages/Shared/Login.js"))
+const Login = lazy(() => import("../pages/Shared/Login.js"));
+const ForgetPassword = lazy(() => import("../pages/Shared/ForgetPassword.js"));
 const FifthRowHomepage = lazy(() => import("../pages/FifthRow/Homepage"));
 const FifthRowEPF = lazy(() => import("../pages/FifthRow/EPF/EPF"));
 const FifthRowEPFSubmit = lazy(() => import("../pages/FifthRow/EPF/Submit"));
@@ -40,8 +41,9 @@ const ThemeRoutes = [
     path: "/",
     element: <FullLayout />,
     children: [
-      { path: "/", element: <Navigate to="/dashboards/dashboard1" /> },
+      { path: "/", element: <Navigate to="/login" /> },
       { path: "/login", exact: true, element: <Login /> },
+      { path: "/forgetpassword", exact: true, element: <ForgetPassword /> },
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element: <FifthRowEPF /> },
       { path: "/fifthrow/epf/submit", exact: true, element: <FifthRowEPFSubmit /> },
