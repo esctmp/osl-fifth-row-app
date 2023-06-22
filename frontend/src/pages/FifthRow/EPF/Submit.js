@@ -19,31 +19,15 @@ import {
   FormControl,
   Stack,
   MenuItem,
+  FormGroup,
 } from "@material-ui/core";
+import { Controller, useForm } from "react-hook-form";
 
 // TODO modularize components
 // TODO add grid lg mb ..
 // TODO add plus minus field to table D11 and D2
 // TODO redo plus minius field UI
 // TODO add form field ids
-
-
-const SectionA = () => {
-  const section = "A";
-  return (
-    <>
-      <SectionHeader section={section} text="Project Director's Particulars" />
-      <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
-      <Grid container spacing={2} sx={{ mb: 5 }}>
-        <Grid item xs={6}><FormInputField section={section} name="Name"/></Grid>
-        <Grid item xs={6}><FormInputField section={section} name="Student ID"/></Grid>
-        <Grid item xs={6}><FormInputField section={section} name="Organisation"/></Grid>
-        <Grid item xs={6}><FormInputField section={section} name="Contact Number"/></Grid>
-        <Grid item xs={12}><FormInputField section={section} name="Email"/></Grid>
-      </Grid>
-    </>
-  );
-}
 
 
 const SectionB = () =>
@@ -405,6 +389,47 @@ const draftButtonStyle = {
 };
 
 const EPFSubmit = () => {
+  const [formValues, setFormValues] = useState({});
+  const { handleSubmit, reset, control } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
+  const FormInputField = ({ name }) => {
+    const nameFancy = name.split('_').slice(1,).map((word) =>
+      word[0].toUpperCase() + word.substring(1)
+    ).join(" ");
+    return (
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <TextField
+            id={name}
+            label={nameFancy}
+            onChange={onChange}
+            value={value}
+            fullWidth
+          />
+        )}
+      />
+    );
+  }
+
+  const SectionA = () => {
+    return (
+      <>
+        <SectionHeader text="A. Project Director's Particulars" />
+        <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
+        <Grid container spacing={2} sx={{ mb: 5 }}>
+          <Grid item xs={6}><FormInputField name="A_name" control={control} /></Grid>
+          <Grid item xs={6}><FormInputField name="Student ID" control={control} /></Grid>
+          <Grid item xs={6}><FormInputField name="Organisation" control={control} /></Grid>
+          <Grid item xs={6}><FormInputField name="Contact Number" control={control} /></Grid>
+          <Grid item xs={12}><FormInputField name="Email" control={control} /></Grid>
+        </Grid>
+      </>
+    );
+  };
 
   return (
     <Grid container spacing={0}>
@@ -425,18 +450,20 @@ const EPFSubmit = () => {
                   }}
                 >
                   <form>
-                    <SectionA />
-                    <SectionB />
-                    <SectionC />
-                    <SectionD />
-                    <SectionE />
-                    <SectionF />
-                    <SectionG />
+                    <FormGroup>
+                      <SectionA />
+                      {/* <SectionB />
+                      <SectionC />
+                      <SectionD />
+                      <SectionE />
+                      <SectionF />
+                      <SectionG /> */}
+                      <Stack spacing={2} direction="row" justifyContent="center">
+                        <Button style={{ width: 120, height: 40 }} variant="contained" onClick={handleSubmit(onSubmit)}>Submit</Button>
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
+                      </Stack>
+                    </FormGroup>
                   </form>
-                  <Stack spacing={2} direction="row" justifyContent="center">
-                    <Button style={{ width: 120, height: 40 }} variant="contained">Submit</Button>
-                    <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
-                  </Stack>
                 </CardContent>
               </Grid>
               <Grid item lg={3} md={3}>

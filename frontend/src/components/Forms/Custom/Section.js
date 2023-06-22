@@ -20,10 +20,10 @@ import {
     MenuItem,
 } from "@material-ui/core";
 
-export const SectionHeader = ({ section, text }) =>
+export const SectionHeader = ({ text }) =>
     <>
         <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-            {section + '. ' + text}
+            {text}
         </Typography>
     </>
 
