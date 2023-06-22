@@ -1,6 +1,6 @@
-import React from "react";
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormHeader, SectionHeader, SectionBody, FormInputField } from "../../../components/Forms/Custom";
+import dummyEPF from '../../../assets/dummyEPF.json';
 import {
   Card,
   CardContent,
@@ -388,26 +388,41 @@ const draftButtonStyle = {
   }
 };
 
+
+const loadFormData = () => {
+  return dummyEPF; // TODO integrate w api
+};
+
+// MODES = ["new", "draft", "review"];
+// LOAD EXISTING FORM DATA IF MODE ISN'T "NEW"
+// DISABLE INPUT FIELDS IF MODE IS REVIEW
+// ENABLE COMMENTS IF MODE IS COMMENT
+const MODE = "review";
+
 const EPFSubmit = () => {
-  const [formValues, setFormValues] = useState({});
+  const disabled = (MODE == "review") ? true : false;
+  const formValues = (MODE != "new") ? loadFormData() : null;
   const { handleSubmit, reset, control } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  // DEFINE COMPONENTS 
+  const onSubmit = (data) => console.log(data, control);
 
   const FormInputField = ({ name }) => {
     const nameFancy = name.split('_').slice(1,).map((word) =>
       word[0].toUpperCase() + word.substring(1)
-    ).join(" ");
+    ).join(" "); 
     return (
       <Controller
         name={name}
         control={control}
+        defaultValue={formValues != {} ? formValues[name] : ""}
         render={({ field: { onChange, value } }) => (
           <TextField
             id={name}
             label={nameFancy}
             onChange={onChange}
             value={value}
+            disabled={disabled}
             fullWidth
           />
         )}
@@ -415,17 +430,18 @@ const EPFSubmit = () => {
     );
   }
 
+  // DEFINE SECTIONS
   const SectionA = () => {
     return (
       <>
         <SectionHeader text="A. Project Director's Particulars" />
         <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
         <Grid container spacing={2} sx={{ mb: 5 }}>
-          <Grid item xs={6}><FormInputField name="A_name" control={control} /></Grid>
-          <Grid item xs={6}><FormInputField name="Student ID" control={control} /></Grid>
-          <Grid item xs={6}><FormInputField name="Organisation" control={control} /></Grid>
-          <Grid item xs={6}><FormInputField name="Contact Number" control={control} /></Grid>
-          <Grid item xs={12}><FormInputField name="Email" control={control} /></Grid>
+          <Grid item xs={6}><FormInputField name="A_name" /></Grid>
+          <Grid item xs={6}><FormInputField name="A_student_id" /></Grid>
+          <Grid item xs={6}><FormInputField name="A_organisation" /></Grid>
+          <Grid item xs={6}><FormInputField name="A_contact_number" /></Grid>
+          <Grid item xs={12}><FormInputField name="A_email" /></Grid>
         </Grid>
       </>
     );
