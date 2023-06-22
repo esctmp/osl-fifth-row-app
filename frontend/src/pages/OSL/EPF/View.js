@@ -4,6 +4,10 @@ import { Card, CardContent, Box, Typography } from "@material-ui/core";
 
 import OSL_ExTable from "../../../components/CM_Components/views/dashboards/dashboard1-components/OSL_ExTable";
 import OSL_Archives_ExTable from "../../../components/CM_Components/views/dashboards/dashboard1-components/OSL_Archives_ExTable";
+import { DefaultButtonGroup } from "../../../components/CM_Components/DefaultButtonGroup";
+
+
+
 const EPFView = () => {
 
   return (
@@ -12,6 +16,11 @@ const EPFView = () => {
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h3">Pending Approval</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ marginLeft: 'auto' }}>
+              <DefaultButtonGroup />
+            </Box>
+          </Box>
           <Box
             sx={{
               overflow: {
@@ -30,6 +39,11 @@ const EPFView = () => {
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h3">Archives</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ marginLeft: 'auto' }}>
+              <DefaultButtonGroup />
+            </Box>
+          </Box>
           <Box
             sx={{
               overflow: {

@@ -68,6 +68,7 @@ const ExTable = () => {
   );
 
   return (
+    <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
     <Table
       aria-label="simple table"
       sx={{
@@ -160,6 +161,7 @@ const ExTable = () => {
         onPageChange={handleChangePage}
       />
     </Table>
+    </div>
   );
 };
 

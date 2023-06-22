@@ -52,7 +52,7 @@ const products = [
   {
     id: "5",
     date: "14 Feb 2023",
-    epf_Name: "Valentines' HEARTminton",
+    epf_Name: "Valentines' HEARTminton OMOMOMOMO TESTING OVERFLOW",
     status: "Approved",
     pbg: "success.main",
     club: "Badminton Club",
@@ -75,6 +75,7 @@ const OSL_ExTable = () => {
   );
 
   return (
+    <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
     <Table
       aria-label="simple table"
       sx={{
@@ -215,6 +216,7 @@ const OSL_ExTable = () => {
         onPageChange={handleChangePage}
       />
     </Table>
+    </div>
   );
 };
 

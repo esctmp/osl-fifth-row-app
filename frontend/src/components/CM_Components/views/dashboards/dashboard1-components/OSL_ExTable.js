@@ -77,6 +77,7 @@ const OSL_ExTable = () => {
 
 
   return (
+    <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
     <Table
       aria-label="simple table"
       sx={{
@@ -122,14 +123,22 @@ const OSL_ExTable = () => {
         {slicedProducts.map((product) => (
           <TableRow key={product.name}>
             <TableCell>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Typography
                 sx={{
                   fontSize: "15px",
                   fontWeight: "500",
+                  marginRight: "50px",
                 }}
               >
                 {product.id}
               </Typography>
+              </Box>
             </TableCell>
             <TableCell>
               <Box
@@ -217,6 +226,7 @@ const OSL_ExTable = () => {
         onPageChange={handleChangePage}
       />
     </Table>
+    </div>
   );
 };
 
