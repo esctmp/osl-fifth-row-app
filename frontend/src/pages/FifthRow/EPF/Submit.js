@@ -366,7 +366,7 @@ const EPFSubmit = () => {
   // DEFINE COMPONENTS 
   const onSubmit = (data) => console.log(data, control);
 
-  const FormInputField = ({ name }) => {
+  const FormTextField = ({ name, multiline=false }) => {
     const nameFancy = name.split('_').slice(1,).map((word) =>
       word[0].toUpperCase() + word.substring(1)
     ).join(" ");
@@ -381,6 +381,32 @@ const EPFSubmit = () => {
             label={nameFancy}
             onChange={onChange}
             value={value}
+            multiline={multiline}
+            disabled={!settings.enableInputs}
+            fullWidth
+          />
+        )}
+      />
+    );
+  };
+  
+  const FormDateTimeField = ({ name, multiline=false }) => {
+    const nameFancy = name.split('_').slice(1,).map((word) =>
+      word[0].toUpperCase() + word.substring(1)
+    ).join(" ");
+    return (
+      <Controller
+        name={name}
+        control={control}
+        defaultValue={formValues != {} ? formValues[name] : "2023-12-31T12:00"}
+        render={({ field: { onChange, value } }) => (
+          <TextField
+            id={name}
+            label={nameFancy}
+            onChange={onChange}
+            type="datetime-local"
+            value={value}
+            multiline={multiline}
             disabled={!settings.enableInputs}
             fullWidth
           />
@@ -420,11 +446,11 @@ const EPFSubmit = () => {
           <Grid item xs={9}>
             <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
             <Grid container spacing={2} sx={{ mb: 5 }}>
-              <Grid item xs={6}><FormInputField name="A_name" /></Grid>
-              <Grid item xs={6}><FormInputField name="A_student_id" /></Grid>
-              <Grid item xs={6}><FormInputField name="A_organisation" /></Grid>
-              <Grid item xs={6}><FormInputField name="A_contact_number" /></Grid>
-              <Grid item xs={12}><FormInputField name="A_email" /></Grid>
+              <Grid item xs={6}><FormTextField name="A_name" /></Grid>
+              <Grid item xs={6}><FormTextField name="A_student_id" /></Grid>
+              <Grid item xs={6}><FormTextField name="A_organisation" /></Grid>
+              <Grid item xs={6}><FormTextField name="A_contact_number" /></Grid>
+              <Grid item xs={12}><FormTextField name="A_email" /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
@@ -439,54 +465,31 @@ const EPFSubmit = () => {
     );
   };
 
-
-  const SectionB = () =>
-    <>
-      <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-        B. Event Details
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 5 }}>
-        <Grid item lg={6} md={6}>
-          <TextField
-            id="B-event-name"
-            label="Event Name"
-            fullWidth
-          />
+  const SectionB = () => {
+    return (
+      <>
+        <SectionHeader text="B. Event Details" />
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <Grid container spacing={2} sx={{ mb: 5 }}>
+              <Grid item xs={6}><FormTextField name="B_event_name" /></Grid>
+              <Grid item xs={6}><FormTextField name="B_target_audience" /></Grid>
+              <Grid item xs={6}><FormDateTimeField name="B_event_schedule" /></Grid>
+              <Grid item xs={6}><FormTextField name="B_expected_turnout" /></Grid>
+              <Grid item xs={12}><FormTextField name="B_event_objective" multiline={true} /></Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={3} >
+            {settings.showComments
+              ? <><SectionCommentHeader text="Comments for section B" />
+                <FormCommentField name="B_comments" /></> 
+              : <></>
+            }
+          </Grid>
         </Grid>
-        <Grid item lg={6} md={6}>
-          <TextField
-            id="B-target-audience"
-            label="Target Audience"
-            fullWidth
-          />
-        </Grid>
-        <Grid item lg={6} md={6}>
-          <TextField
-            id="B-event-schedule"
-            label="Event Schedule"
-            defaultValue="2023-12-31T12:00"
-            type="datetime-local"
-            fullWidth
-          />
-        </Grid>
-        <Grid item lg={6} md={6}>
-          <TextField
-            id="B-expected-turnout"
-            label="Expected Turnout"
-            fullWidth
-          />
-        </Grid>
-        <Grid item lg={12} md={12}>
-          <TextField
-            id="B-event-objective"
-            label="Event Objective"
-            fullWidth
-            multiline
-            minRows={3}
-          />
-        </Grid>
-      </Grid>
-    </>;
+      </>
+    );
+  };
 
   return (
     <Grid container spacing={0}>
@@ -509,8 +512,8 @@ const EPFSubmit = () => {
                   <form>
                     <FormGroup>
                       <SectionA />
-                      {/* <SectionB />
-                      <SectionC />
+                       <SectionB />
+                      {/*<SectionC />
                       <SectionD />
                       <SectionE />
                       <SectionF />
