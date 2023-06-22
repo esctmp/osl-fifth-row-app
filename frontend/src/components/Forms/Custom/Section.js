@@ -33,3 +33,10 @@ export const SectionBody = ({ text }) =>
             {text}
         </Typography>
     </>
+
+export const SectionCommentHeader = ({ text }) =>
+    <>
+        <Typography sx={{ mb: 1, fontStyle: 'italic'}}>
+            {text}
+        </Typography>
+    </>

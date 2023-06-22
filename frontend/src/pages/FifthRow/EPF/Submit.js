@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormHeader, SectionHeader, SectionBody, FormInputField } from "../../../components/Forms/Custom";
+import { FormHeader, SectionHeader, SectionBody, SectionCommentHeader } from "../../../components/Forms/Custom";
 import dummyEPF from '../../../assets/dummyEPF.json';
 import {
   Card,
@@ -28,55 +28,6 @@ import { Controller, useForm } from "react-hook-form";
 // TODO add plus minus field to table D11 and D2
 // TODO redo plus minius field UI
 // TODO add form field ids
-
-
-const SectionB = () =>
-  <>
-    <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-      B. Event Details
-    </Typography>
-    <Grid container spacing={2} sx={{ mb: 5 }}>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="B-event-name"
-          label="Event Name"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="B-target-audience"
-          label="Target Audience"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="B-event-schedule"
-          label="Event Schedule"
-          defaultValue="2023-12-31T12:00"
-          type="datetime-local"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="B-expected-turnout"
-          label="Expected Turnout"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={12} md={12}>
-        <TextField
-          id="B-event-objective"
-          label="Event Objective"
-          fullWidth
-          multiline
-          minRows={3}
-        />
-      </Grid>
-    </Grid>
-  </>;
 
 const TableColHeaders = ({ colNames, colConfig }) =>
   <>
@@ -393,15 +344,23 @@ const loadFormData = () => {
   return dummyEPF; // TODO integrate w api
 };
 
-// MODES = ["new", "draft", "review"];
+// MODES = ["NEW", "DRAFT", "REVIEW", "COMMENT"];
 // LOAD EXISTING FORM DATA IF MODE ISN'T "NEW"
 // DISABLE INPUT FIELDS IF MODE IS REVIEW
 // ENABLE COMMENTS IF MODE IS COMMENT
-const MODE = "review";
+
+const MODES = {
+  "NEW": { enableInputs: true, loadForm: false, showComments: false, enableComments: false },
+  "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableComments: false },
+  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableComments: false },
+  "COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableComments: true },
+}
+
+const MODE = "REVIEW";
 
 const EPFSubmit = () => {
-  const disabled = (MODE == "review") ? true : false;
-  const formValues = (MODE != "new") ? loadFormData() : null;
+  const settings = MODES[MODE];
+  const formValues = (settings.loadForm) ? loadFormData() : {};
   const { handleSubmit, reset, control } = useForm();
 
   // DEFINE COMPONENTS 
@@ -410,7 +369,7 @@ const EPFSubmit = () => {
   const FormInputField = ({ name }) => {
     const nameFancy = name.split('_').slice(1,).map((word) =>
       word[0].toUpperCase() + word.substring(1)
-    ).join(" "); 
+    ).join(" ");
     return (
       <Controller
         name={name}
@@ -422,30 +381,112 @@ const EPFSubmit = () => {
             label={nameFancy}
             onChange={onChange}
             value={value}
-            disabled={disabled}
+            disabled={!settings.enableInputs}
             fullWidth
           />
         )}
       />
     );
-  }
+  };
+
+  const FormCommentField = ({ name }) => {
+    return (
+      <Controller
+        name={name}
+        control={control}
+        defaultValue={formValues != {} ? formValues[name] : ""}
+        render={({ field: { onChange, value } }) => (
+          <TextField
+            sx={{ backgroundColor: "#ffffe1" }}
+            id={name}
+            onChange={onChange}
+            value={value}
+            disabled={!settings.enableComments}
+            multiline
+            minRows={3}
+            fullWidth
+          />
+        )}
+      />
+    );
+  };
 
   // DEFINE SECTIONS
   const SectionA = () => {
     return (
       <>
         <SectionHeader text="A. Project Director's Particulars" />
-        <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
-        <Grid container spacing={2} sx={{ mb: 5 }}>
-          <Grid item xs={6}><FormInputField name="A_name" /></Grid>
-          <Grid item xs={6}><FormInputField name="A_student_id" /></Grid>
-          <Grid item xs={6}><FormInputField name="A_organisation" /></Grid>
-          <Grid item xs={6}><FormInputField name="A_contact_number" /></Grid>
-          <Grid item xs={12}><FormInputField name="A_email" /></Grid>
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
+            <Grid container spacing={2} sx={{ mb: 5 }}>
+              <Grid item xs={6}><FormInputField name="A_name" /></Grid>
+              <Grid item xs={6}><FormInputField name="A_student_id" /></Grid>
+              <Grid item xs={6}><FormInputField name="A_organisation" /></Grid>
+              <Grid item xs={6}><FormInputField name="A_contact_number" /></Grid>
+              <Grid item xs={12}><FormInputField name="A_email" /></Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={3} >
+            {settings.showComments
+              ? <><SectionCommentHeader text="Comments for section A" />
+                <FormCommentField name="A_comments" /></> 
+              : <></>
+            }
+          </Grid>
         </Grid>
       </>
     );
   };
+
+
+  const SectionB = () =>
+    <>
+      <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
+        B. Event Details
+      </Typography>
+      <Grid container spacing={2} sx={{ mb: 5 }}>
+        <Grid item lg={6} md={6}>
+          <TextField
+            id="B-event-name"
+            label="Event Name"
+            fullWidth
+          />
+        </Grid>
+        <Grid item lg={6} md={6}>
+          <TextField
+            id="B-target-audience"
+            label="Target Audience"
+            fullWidth
+          />
+        </Grid>
+        <Grid item lg={6} md={6}>
+          <TextField
+            id="B-event-schedule"
+            label="Event Schedule"
+            defaultValue="2023-12-31T12:00"
+            type="datetime-local"
+            fullWidth
+          />
+        </Grid>
+        <Grid item lg={6} md={6}>
+          <TextField
+            id="B-expected-turnout"
+            label="Expected Turnout"
+            fullWidth
+          />
+        </Grid>
+        <Grid item lg={12} md={12}>
+          <TextField
+            id="B-event-objective"
+            label="Event Objective"
+            fullWidth
+            multiline
+            minRows={3}
+          />
+        </Grid>
+      </Grid>
+    </>;
 
   return (
     <Grid container spacing={0}>
@@ -459,7 +500,7 @@ const EPFSubmit = () => {
           >
             <FormHeader text="Event Proposal Form" />
             <Grid container spacing={0}>
-              <Grid item lg={9} md={9}>
+              <Grid item lg={12} md={12}>
                 <CardContent
                   sx={{
                     padding: "30px",
@@ -481,9 +522,6 @@ const EPFSubmit = () => {
                     </FormGroup>
                   </form>
                 </CardContent>
-              </Grid>
-              <Grid item lg={3} md={3}>
-                <FormComments />
               </Grid>
             </Grid>
           </Card>
