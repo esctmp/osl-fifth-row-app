@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from 'react';
+import { FormHeader, SectionHeader, SectionBody, FormInputField } from "../../../components/Forms/Custom";
 import {
   Card,
   CardContent,
@@ -20,75 +21,29 @@ import {
   MenuItem,
 } from "@material-ui/core";
 
-const FormHeader = () =>
-  <>
-    <Box
-      sx={{
-        padding: "15px 30px",
-      }}
-      display="flex"
-      alignItems="center"
-    >
-      <Box flexGrow={1}>
-        <Typography
-          sx={{
-            fontSize: "18px",
-            fontWeight: "500",
-          }}
-        >
-          EPF
-        </Typography>
-      </Box>
-    </Box>
-    <Divider />
-  </>;
+// TODO modularize components
+// TODO add grid lg mb ..
+// TODO add plus minus field to table D11 and D2
+// TODO redo plus minius field UI
+// TODO add form field ids
 
-const SectionA = () =>
-  <>
-    <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-      A. Project Director's Particulars
-    </Typography>
-    <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
-      The project director will be the main point of contact for SG Events and Office of Student Life.
-    </Typography>
-    <Grid container spacing={2} sx={{ mb: 5 }}>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="A-name"
-          label="Name"
-          fullWidth
-        />
+
+const SectionA = () => {
+  const section = "A";
+  return (
+    <>
+      <SectionHeader section={section} text="Project Director's Particulars" />
+      <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
+      <Grid container spacing={2} sx={{ mb: 5 }}>
+        <Grid item xs={6}><FormInputField section={section} name="Name"/></Grid>
+        <Grid item xs={6}><FormInputField section={section} name="Student ID"/></Grid>
+        <Grid item xs={6}><FormInputField section={section} name="Organisation"/></Grid>
+        <Grid item xs={6}><FormInputField section={section} name="Contact Number"/></Grid>
+        <Grid item xs={12}><FormInputField section={section} name="Email"/></Grid>
       </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="A-student-id"
-          label="Student ID"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="A-organisation"
-          label="Organisation"
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={6} md={6}>
-        <TextField
-          id="A-contact-no"
-          label="Contact No."
-          fullWidth
-        />
-      </Grid>
-      <Grid item lg={12} md={12}>
-        <TextField
-          id="A-email"
-          label="Email"
-          fullWidth
-        />
-      </Grid>
-    </Grid>
-  </>;
+    </>
+  );
+}
 
 
 const SectionB = () =>
@@ -217,45 +172,45 @@ const SectionC = () => {
       </Typography>
       <Typography sx={{ fontWeight: 'bold' }}>
         C.1 Pre-Event
-        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your pre-event set up. </i></div>
+        <br></br><div style={{ fontWeight: 'normal' }}><i>Include details regarding your pre-event set up. </i></div>
       </Typography>
       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
         <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
         {[...Array(numRows1)].map(idx =>
           <TableRow sectionName="C1" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
         )}
-        <TableDeleteRow onClickFunction={(e) => {setNumRows1(numRows1-1);}} />
-        <TableAddRow onClickFunction={(e) => {setNumRows1(numRows1+1);}} />
+        <TableDeleteRow onClickFunction={(e) => { setNumRows1(numRows1 - 1); }} />
+        <TableAddRow onClickFunction={(e) => { setNumRows1(numRows1 + 1); }} />
       </Grid>
       <Typography sx={{ fontWeight: 'bold' }}>
         C.2 Event
-        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your event and description of each activity.</i></div>
+        <br></br><div style={{ fontWeight: 'normal' }}><i>Include details regarding your event and description of each activity.</i></div>
       </Typography>
       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
         <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
         {[...Array(numRows2)].map(idx =>
           <TableRow sectionName="C2" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
         )}
-        <TableDeleteRow onClickFunction={(e) => {setNumRows2(numRows2-1);}} />
-        <TableAddRow onClickFunction={(e) => {setNumRows2(numRows2+1);}} />
+        <TableDeleteRow onClickFunction={(e) => { setNumRows2(numRows2 - 1); }} />
+        <TableAddRow onClickFunction={(e) => { setNumRows2(numRows2 + 1); }} />
       </Grid>
       <Typography sx={{ fontWeight: 'bold' }}>
         C.3 Post-Event
-        <br></br><div style={{fontWeight: 'normal'}}><i>Include details regarding your post event clean up, management of resources and waste and excess food. </i></div>
+        <br></br><div style={{ fontWeight: 'normal' }}><i>Include details regarding your post event clean up, management of resources and waste and excess food. </i></div>
       </Typography>
       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
         <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
         {[...Array(numRows3_1)].map(idx =>
           <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
         )}
-        <TableDeleteRow onClickFunction={(e) => {setNumRows3_1(numRows3_1-1);}} />
-        <TableAddRow onClickFunction={(e) => {setNumRows3_1(numRows3_1+1);}} />
+        <TableDeleteRow onClickFunction={(e) => { setNumRows3_1(numRows3_1 - 1); }} />
+        <TableAddRow onClickFunction={(e) => { setNumRows3_1(numRows3_1 + 1); }} />
         <TableColHeaders colNames={['Clean up']} colConfig={[12]} />
         {[...Array(numRows3_2)].map(idx =>
           <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
         )}
-        <TableDeleteRow onClickFunction={(e) => {setNumRows3_2(numRows3_2-1);}} />
-        <TableAddRow onClickFunction={(e) => {setNumRows3_2(numRows3_2+1);}} />
+        <TableDeleteRow onClickFunction={(e) => { setNumRows3_2(numRows3_2 - 1); }} />
+        <TableAddRow onClickFunction={(e) => { setNumRows3_2(numRows3_2 + 1); }} />
       </Grid>
     </>
   );
@@ -368,21 +323,21 @@ const TableAddRow = ({ onClickFunction }) =>
     </Grid>
   </>
 
-  
+
 const TableDeleteRow = ({ onClickFunction }) =>
-<>
-  <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-    <Button
-      id='delete-row'
-      variant='outlined'
-      color='error'
-      display='flex'
-      sx={{ fontSize: 28, height: '30px', width: '100%' }}
-      onClick={onClickFunction}
-    >
-      -
-    </Button>
-  </Grid>
+  <>
+    <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
+      <Button
+        id='delete-row'
+        variant='outlined'
+        color='error'
+        display='flex'
+        sx={{ fontSize: 28, height: '30px', width: '100%' }}
+        onClick={onClickFunction}
+      >
+        -
+      </Button>
+    </Grid>
   </>
 
 const SectionF = () => {
@@ -461,7 +416,7 @@ const EPFSubmit = () => {
               p: 0,
             }}
           >
-            <FormHeader />
+            <FormHeader text="Event Proposal Form" />
             <Grid container spacing={0}>
               <Grid item lg={9} md={9}>
                 <CardContent
