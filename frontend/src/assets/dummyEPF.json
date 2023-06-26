@@ -1,0 +1,19 @@
+{
+    "status": 3,
+    "user_id": 1,
+    "A_name": "user 1",
+    "A_student_id": 1000001,
+    "A_organisation": "organisation 1",
+    "A_contact_number": 99998888,
+    "A_comments": "Looks okay",
+    "A_email": "user_1@mymail.sutd.edu.sg",
+    "B_event_name": "event 1",
+    "B_target_audience": "target Audience 1",
+    "B_event_schedule": "2023-06-21 16:49:00",
+    "B_expected_turnout": 1,
+    "B_event_objective": "event Objective 1",
+    "C1_date": ["2023-06-21", "2023-06-22"],
+    "C1_time": ["16:49:00", "16:50:00"],
+    "C1_activity_and_description": ["activity 1 description 1", "activity 2 description 2"],
+    "C1_venue": ["venue 1", "venue 2"]
+}
