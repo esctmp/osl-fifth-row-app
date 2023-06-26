@@ -1,0 +1,79 @@
+.rectangle {
+    max-width: 1160px;
+    max-height: 800px;
+    margin: 100px auto;
+    margin-top: 100px;
+    background-color: #ffffff;
+    border: transparent;
+    border-radius: 10px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.imageContainer {   /* for logo */
+    display: flex;
+    justify-content: center;
+    height: 50px;
+}
+
+.imageContainer img {
+    margin-top: 50px;
+    height: 100%;
+    margin-bottom: 30px;
+}
+
+.welcome {
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-size: 45px;
+    color: #1E4DB7;
+    margin-top: 85px;
+}
+
+.fifthRow {
+    font-family: "DM Sans", sans-serif;
+    font-size: 30px;
+    color: #000000;
+    text-align: center;
+}
+
+.container{   /* to contain the two boxes */
+    display: flex;
+    justify-content: center;
+}
+
+.bottomTwoBox {   /* two identical boxes at the bottom*/
+    flex: 1;
+    max-width: 250px;
+    height: 130px;
+    margin: 120px;    /* space between boxes*/
+    margin-top: 130px;
+    background-color: #ffffff;
+    border: 1px solid #b0b0b0;
+    margin-bottom: 100px;
+    border-radius: 10px;
+    font-family: "DM Sans", sans-serif;
+}
+
+.clubDetailsBox {
+    font-family: "DM Sans", sans-serif;
+    margin-top: 8px;
+    font-size: 15px;
+    text-align: center;
+    
+}
+
+.remainingBudgetBox {
+    font-family: "DM Sans", sans-serif;
+    margin-top: 8px;
+    font-size: 15px;
+    text-align: center;
+    
+}
+
+.remainingAmount {
+    font-family: "DM Sans", sans-serif;
+    margin-top: 20px;
+    font-size: 30px;
+    text-align: center;
+    
+}
