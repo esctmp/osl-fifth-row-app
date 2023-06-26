@@ -28,23 +28,6 @@ const Logo = () => {
   )
 }
 
-// const ClubDetailsBox = () => {
-//   return (
-//     <div className="bottomTwoBox">
-//       <h2 className="clubDetailsBox">Club Details</h2>
-//     </div>
-//   )
-// }
-
-// const RemainingBudgetBox = () => {
-//   return (
-//     <div className="bottomTwoBox">
-//       <h2 className="remainingBudgetBox">Remaining Budget</h2>
-//       <h2 className="remainingAmount"> $345 </h2>
-//     </div>
-//   )
-// }
-
 const InformationBox = () => {
   return (
     <div className="informationBox">
@@ -53,13 +36,6 @@ const InformationBox = () => {
   )
 }
 
-// const SidebySideBoxes = () => {
-//   return (
-//     <div className="container">
-//       <ClubDetailsBox />
-//       <RemainingBudgetBox />
-//     </div>
-//   )
-// }
+
 
 export default Homepage;
