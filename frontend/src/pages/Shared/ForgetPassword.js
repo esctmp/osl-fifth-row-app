@@ -1,13 +1,14 @@
 import "./ForgetPassword.css";
-
+import { useNavigate } from "react-router-dom";
 export default function ForgetPassword() {
+    const navigate = useNavigate();
     return (
         <div>
             <div className="Name">
                 <label htmlFor="Name">OSL Fifth-Row App</label>
             </div>
-            <div className="Login">
-                <h2>Login</h2>
+            <div className="ForgetPassword">
+                <h2>Forget Password</h2>
                 <form>
                     <div>
                         <p>
@@ -29,7 +30,7 @@ export default function ForgetPassword() {
                     </div>
 
                     <div className="form-group">
-                        <button type="submit">Send</button>
+                        <button type="submit" onClick={() => navigate("/login")}>Send</button >
                     </div>
                 </form>
             </div>
