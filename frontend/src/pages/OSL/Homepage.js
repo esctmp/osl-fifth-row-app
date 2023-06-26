@@ -2,6 +2,7 @@ import React from "react";
 import test_logo from "../../assets/images/logo-short.png";
 import "./Homepage.css";
 
+//This is homepage
 const Homepage = () => {
 
   return (
