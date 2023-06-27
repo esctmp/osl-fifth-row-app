@@ -1,27 +1,26 @@
 import React from "react";
 //import { Link } from 'react-router-dom';
-import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
+///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
+//import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
 
+import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
-import Logout from "@material-ui/icons/Logout";
 
 import {
   AppBar,
+  Avatar,
   Box,
+  Button,
+  Divider,
   IconButton,
-  Toolbar,
+  ListItemIcon,
   Menu,
   MenuItem,
-  Button,
-  Avatar,
-  Divider,
-  ListItemIcon,
+  Toolbar,
 } from "@material-ui/core";
 
-import userimg from "../../../assets/images/users/user.jpg";
 
 const Header = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -70,9 +69,14 @@ const Header = (props) => {
             },
           }}
         >
-          <MenuOutlinedIcon width="20" height="20" />
+          {/* <MenuOutlinedIcon width="20" height="20" /> */}
         </IconButton>
-        <IconButton
+
+        {/* ------------------------------------------- */}
+        {/* New Page Dropdown */}
+        {/* ------------------------------------------- */}
+
+        {/* <IconButton
           aria-label="menu"
           color="inherit"
           aria-controls="dd-menu"
@@ -143,7 +147,7 @@ const Header = (props) => {
               New Component
             </Box>
           </MenuItem>
-        </Menu>
+        </Menu> */}
         <Box flexGrow={1} />
 
         {/* ------------------------------------------- */}
@@ -205,9 +209,11 @@ const Header = (props) => {
               alignItems: "center",
             }}
           >
-            <Avatar
-              src={userimg}
-              alt={userimg}
+
+            {/* Avatar for profile - now is default*/}
+            <Avatar     
+              // src={userimg}
+              // alt={userimg}
               sx={{
                 width: "30px",
                 height: "30px",
