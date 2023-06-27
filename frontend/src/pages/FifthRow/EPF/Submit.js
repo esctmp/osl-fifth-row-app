@@ -1,5 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { FormHeader, SectionHeader, SectionBody, SectionCommentHeader, TableHeader, TableDescription, TableColHeaders, TableRowName, TableAddRow, TableDeleteRow, convertFieldsToJSON, convertJSONToFields, loadFormData, TableRowsDynamicTesting } from "../../../components/Forms/Custom";
+import { 
+  SectionHeader,
+  SectionBody,
+  SectionCommentHeader,
+} from "../../../components/Forms/Custom/Section";
+
+import {
+  TableHeader,
+  TableDescription,
+  TableColHeaders,
+  TableRowsStatic,
+  TableRowsDynamic
+} from "../../../components/Forms/Custom/Table";
+import {
+  convertFieldsToJSON,
+  convertJSONToFields,
+  loadFormData,
+} from "../../../components/Forms/Custom/Utilities";
+import {
+  FormHeader,
+  FormTextField,
+  FormDateTimeField,
+  FormCommentField
+} from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 
@@ -86,9 +109,7 @@ const MODES = {
   "COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableComments: true },
 }
 
-const makeNameFancy = (name) => name.split('_').slice(1,).map((word) =>
-  word[0].toUpperCase() + word.substring(1)
-).join(" ");
+
 
 const MODE = "REVIEW";
 const settings = MODES[MODE];
@@ -98,7 +119,10 @@ const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
   const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
   const { getValues, handleSubmit, getFieldState, resetField, control, unregister, setValue } = useForm({defaultValues: values, shouldUnregister: true});
-  
+  const formControl = {
+    control: control,
+    settings: settings
+  }; // global form vars that should be passed down to imported custom component
   // useEffect(() => {
   //   if (settings.loadForm) {
   //     Object.entries(values).forEach(([k, v]) => setValue(k, v));
@@ -111,144 +135,6 @@ const EPFSubmit = () => {
     console.log("SUBMIT: ", data);
   }
 
-  const unregisterRow = (names, idx) => {
-    names.map(name => unregister(`${name}_elem_${idx}`));
-    values = getValues();
-  }
-
-  const FormTextField = ({ name, multiline = false }) => {
-    return (
-      <Controller
-        name={name}
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            id={name}
-            label={makeNameFancy(name)}
-            onChange={onChange}
-            value={value}
-            multiline={multiline}
-            disabled={!settings.enableInputs}
-            fullWidth
-          />
-        )}
-      />
-    );
-  };
-
-  const FormDateTimeField = ({ name, multiline = false }) => {
-    return (
-      <Controller
-        name={name}
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            id={name}
-            label={makeNameFancy(name)}
-            onChange={onChange}
-            type="datetime-local"
-            value={value}
-            multiline={multiline}
-            disabled={!settings.enableInputs}
-            fullWidth
-          />
-        )}
-      />
-    );
-  };
-
-  const FormCommentField = ({ name }) => {
-    return (
-      <Controller
-        name={name}
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <>
-            <SectionCommentHeader text={"Comments for section " + name.split('_')[0]} />
-            <TextField
-              sx={{ backgroundColor: "#ffffe1" }}
-              id={name}
-              onChange={onChange}
-              value={value}
-              disabled={!settings.enableComments}
-              multiline
-              minRows={3}
-              fullWidth
-            />
-          </>
-        )}
-      />
-    );
-  };
-
-  const TableTextField = ({ name, idx, minRows = 3 }) => {
-    const tmpName = `${name}_elem_${idx}`;
-    return (
-      <Controller
-        name={tmpName}
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Input
-            id={`${tmpName}`}
-            fullWidth
-            multiline
-            minRows={minRows}
-            disableUnderline='true'
-            onChange={onChange}
-            value={value}
-            disabled={!settings.enableInputs}
-            sx={{ padding: "8px" }}
-          />
-        )}
-      />
-    );
-  };
-
-  const TableRow = ({ rowName, idx, names, colConfig, rowMinHeight, rowNameAlign }) =>
-    <>
-      <Grid item display="flex" xs={colConfig[0]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-        <TableRowName rowName={rowName} />
-      </Grid>
-      {names.map((name, j) =>
-        <Grid item xs={colConfig[j + 1]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-          <TableTextField name={name} idx={idx} />
-        </Grid>
-      )}
-    </>
-
-  const TableRowNoName = ({ idx, names, colConfig, rowMinHeight, rowNameAlign }) =>
-    <>
-      {names.map((name, j) =>
-        <>
-          <Grid item xs={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-            <TableTextField name={name} idx={idx} />
-          </Grid>
-        </>
-      )}
-    </>
-
-  const TableRowsStatic = ({ names, colConfig, rowNames }) => {
-    return (
-      <>
-        {rowNames.map((rowName, idx) =>
-          <TableRow rowName={rowName} idx={idx} names={names[idx]} colConfig={colConfig} />
-        )}
-      </>
-    )
-  };
-
-  const TableRowsDynamic = (tableSettings) => {
-    const [numRows, setNumRows] = useState(getNumRows(tableSettings.names));
-    return (
-      <>
-        {[...Array(numRows).keys()].map(idx =>
-          <TableRowNoName idx={idx} {...tableSettings} />
-        )}
-        <TableDeleteRow onClickFunction={(e) => { unregisterRow(tableSettings.names, numRows - 1); setNumRows(numRows - 1); }} />
-        <TableAddRow onClickFunction={(e) => { setNumRows(numRows + 1); }} />
-      </>
-    )
-  };
 
   // DEFINE SECTIONS
   const SectionA = () => {
@@ -259,16 +145,16 @@ const EPFSubmit = () => {
           <Grid item xs={9}>
             <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
             <Grid container spacing={2} sx={{ mb: 5 }}>
-              <Grid item xs={6}><FormTextField name="A_name" /></Grid>
-              <Grid item xs={6}><FormTextField name="A_student_id" /></Grid>
-              <Grid item xs={6}><FormTextField name="A_organisation" /></Grid>
-              <Grid item xs={6}><FormTextField name="A_contact_number" /></Grid>
-              <Grid item xs={12}><FormTextField name="A_email" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_name" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_student_id" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_organisation" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_contact_number" /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="A_email" /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
             {settings.showComments
-              ? <FormCommentField name="A_comments" />
+              ? <FormCommentField {...formControl} name="A_comments" />
               : <></>
             }
           </Grid>
@@ -284,16 +170,16 @@ const EPFSubmit = () => {
         <Grid container spacing={6} >
           <Grid item xs={9}>
             <Grid container spacing={2} sx={{ mb: 5 }}>
-              <Grid item xs={6}><FormTextField name="B_event_name" /></Grid>
-              <Grid item xs={6}><FormTextField name="B_target_audience" /></Grid>
-              <Grid item xs={6}><FormDateTimeField name="B_event_schedule" /></Grid>
-              <Grid item xs={6}><FormTextField name="B_expected_turnout" /></Grid>
-              <Grid item xs={12}><FormTextField name="B_event_objective" multiline={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" /></Grid>
+              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" multiline={true} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
             {settings.showComments
-              ? <FormCommentField name="B_comments" />
+              ? <FormCommentField {...formControl} name="B_comments" />
               : <></>
             }
           </Grid>
@@ -418,12 +304,12 @@ const EPFSubmit = () => {
           <TableRowsStatic {...tableSettingsD2_2} />
         </Grid > */}
 
-        <TableHeader text="D.2. Expenditure" />
+        {/* <TableHeader text="D.2. Expenditure" />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
           <TableColHeaders {...tableSettingsD2_1} />
-          <TableRowsDynamicTesting {...tableSettingsD2_1} getFieldState={getFieldState} control={control} settings={settings} resetField={resetField} />
+          <TableRowsDynamic {...formControl} {...tableSettingsD2_1} />
           <TableRowsStatic {...tableSettingsD2_2} />
-        </Grid >
+        </Grid > */}
       </>
     );
   };

@@ -49,14 +49,14 @@ export const TableColHeaders = ({ colNames, colConfig }) =>
     )}
   </>
 
-export const TableRowName = ({ rowName, rowNameAlign = '', sx = {} }) =>
+const TableRowName = ({ rowName, rowNameAlign = '', sx = {} }) =>
   <Box display="flex" width="100%" alignItems="center" justifyContent="center" sx={{ padding: "8px" }}>
     <Typography align={rowNameAlign != '' ? rowNameAlign : "center"} sx={{ fontWeight: 'bold' }}>
       {rowName}
     </Typography>
   </Box>
 
-export const TableDeleteRow = ({ onClickFunction }) =>
+const TableDeleteRow = ({ onClickFunction }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
@@ -72,7 +72,7 @@ export const TableDeleteRow = ({ onClickFunction }) =>
     </Grid>
   </>
 
-export const TableAddRow = ({ onClickFunction }) =>
+const TableAddRow = ({ onClickFunction }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
@@ -152,6 +152,17 @@ function FieldArrayWrapper(name, control) {
   // function getLength() { return fields.length; }
 }
 
+export const TableRowsStatic = ({ names, colConfig, rowNames }) => {
+  return (
+    <>
+      {rowNames.map((rowName, idx) =>
+        <TableRow rowName={rowName} idx={idx} names={names[idx]} colConfig={colConfig} />
+      )}
+    </>
+  )
+};
+
+
 /**
  * Given a list of table form field names, return a React component consisting of table-row-like MUI controlled components 
  * @param {Object} props 
@@ -168,10 +179,10 @@ function FieldArrayWrapper(name, control) {
  * @returns {React.Component}
  */
 // should have grouped all relevent fields into one object but oh well
-export const TableRowsDynamicTesting = (props) => {
+export const TableRowsDynamic = (props) => {
   const arr = props.names.map(name => new FieldArrayWrapper(name, props.control));
   const initialNumRows = arr[0].fields.length || 1;
-  const [ numRows, setNumRows ] = useState(initialNumRows);
+  const [numRows, setNumRows] = useState(initialNumRows);
 
   function appendRow(e) {
     setNumRows(numRows + 1);
@@ -180,7 +191,7 @@ export const TableRowsDynamicTesting = (props) => {
 
   function removeLastRow(e) {
     setNumRows(numRows > 0 ? numRows - 1 : numRows);
-    arr.forEach(obj => obj.remove(obj.fields.length-1));
+    arr.forEach(obj => obj.remove(obj.fields.length - 1));
     console.log(arr[0]);
   }
 
