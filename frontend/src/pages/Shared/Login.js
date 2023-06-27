@@ -1,6 +1,8 @@
 import "./LoginPage.css";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function App() {
+    const navigate = useNavigate();
     return (
         <div>
             <div className="Name">
@@ -31,11 +33,11 @@ export default function App() {
                     </div>
                     <div className="forgetpassword">
                         <label htmlFor="forgetpassword">
-                            <u>Forget Password?</u>
+                            <nav><Link to='/forgetpassword'>Forget Password</Link></nav>
                         </label>
                     </div>
                     <div className="form-group">
-                        <button type="submit">Log in</button>
+                        <button type="submit" onClick={() => navigate("/fifthrow/epf")}>Log in</button>
                     </div>
                 </form>
             </div>
