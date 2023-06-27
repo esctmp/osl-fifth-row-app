@@ -1,15 +1,14 @@
-import React from "react";
-import { useLocation } from "react-router";
-import { Link, NavLink } from "react-router-dom";
 import {
   Box,
   Drawer,
-  useMediaQuery,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
+  useMediaQuery
 } from "@material-ui/core";
+import React from "react";
+import { useLocation } from "react-router";
+import { Link, NavLink } from "react-router-dom";
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
 import LogoIcon from "../Logo/LogoIcon";
 import Menuitems from "./data";
