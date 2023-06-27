@@ -11,7 +11,7 @@ export const convertJSONToFields = (data) => {
 
 export const loadFormData = () => {
     let data = dummyEPF;
-    data = convertJSONToFields(data);
+    //data = convertJSONToFields(data);
     return data; // TODO integrate w api
   };
 

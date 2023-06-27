@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormHeader, SectionHeader, SectionBody, SectionCommentHeader, TableHeader, TableDescription, TableColHeaders, TableRowName, TableAddRow, TableDeleteRow, convertFieldsToJSON, convertJSONToFields, loadFormData } from "../../../components/Forms/Custom";
+import { FormHeader, SectionHeader, SectionBody, SectionCommentHeader, TableHeader, TableDescription, TableColHeaders, TableRowName, TableAddRow, TableDeleteRow, convertFieldsToJSON, convertJSONToFields, loadFormData, TableRowsDynamicTesting } from "../../../components/Forms/Custom";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 
@@ -95,8 +95,15 @@ const settings = MODES[MODE];
 var values = (settings.loadForm) ? loadFormData() : {};
 
 const EPFSubmit = () => {
+  // DEFINE FORM CONTROL VARIABLES
   const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
-  const { getValues, handleSubmit, reset, control, unregister } = useForm({ defaultValues: values });
+  const { getValues, handleSubmit, getFieldState, resetField, control, unregister, setValue } = useForm({defaultValues: values, shouldUnregister: true});
+  
+  // useEffect(() => {
+  //   if (settings.loadForm) {
+  //     Object.entries(values).forEach(([k, v]) => setValue(k, v));
+  //   }
+  // })
 
   // DEFINE COMPONENTS 
   const onSubmit = (data) => {
@@ -319,7 +326,7 @@ const EPFSubmit = () => {
     }
     return (
       <>
-        <SectionHeader text="C. Programme Schedule" />
+        {/* <SectionHeader text="C. Programme Schedule" />
         <SectionBody text="Please include all the necessary details about each activity and other necessary details such as wet weather plan. The project director is incharge of ensuring the plan is followed." />
 
         <TableHeader text="C.1 Pre-Event" />
@@ -343,7 +350,7 @@ const EPFSubmit = () => {
           <TableRowsDynamic {...tableSettingsC3_1} />
           <TableColHeaders  {...tableSettingsC3_2} colConfig={[12]} />
           <TableRowsDynamic {...tableSettingsC3_2} />
-        </Grid >
+        </Grid > */}
       </>
     );
   };
@@ -389,7 +396,7 @@ const EPFSubmit = () => {
       <>
         <SectionHeader text="D. Project Finances" />
 
-        <TableHeader text="D.1 Budget: Please indicate the sources of funding for your event." />
+        {/* <TableHeader text="D.1 Budget: Please indicate the sources of funding for your event." />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
           <TableColHeaders {...tableSettingsD1A} />
           <TableRowsStatic {...tableSettingsD1A} />
@@ -402,12 +409,19 @@ const EPFSubmit = () => {
           <TableColHeaders {...tableSettingsD11_1} />
           <TableRowsDynamic {...tableSettingsD11_1} />
           <TableRowsStatic {...tableSettingsD11_2} />
-        </Grid >
+        </Grid > */}
+
+        {/* <TableHeader text="D.2. Expenditure" />
+        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+          <TableColHeaders {...tableSettingsD2_1} />
+          <TableRowsDynamic {...tableSettingsD2_1} />
+          <TableRowsStatic {...tableSettingsD2_2} />
+        </Grid > */}
 
         <TableHeader text="D.2. Expenditure" />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
           <TableColHeaders {...tableSettingsD2_1} />
-          <TableRowsDynamic {...tableSettingsD2_1} />
+          <TableRowsDynamicTesting {...tableSettingsD2_1} getFieldState={getFieldState} control={control} settings={settings} resetField={resetField} />
           <TableRowsStatic {...tableSettingsD2_2} />
         </Grid >
       </>
