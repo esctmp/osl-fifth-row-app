@@ -93,14 +93,14 @@ const TableAddRow = ({ onClickFunction }) =>
 //   colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
 // }
 
-const TableTextField = ({ settings, control, name, idx, minRows = 3 }) => {
+const TableTextField = ({ settings, control, name, idx, key, minRows = 3 }) => {
   return (
     <Controller
-      name={`${name}.${idx}`}
+      name={`${name.split('_')[0]+'_grouped'}.${idx}.${name}`}
       control={control}
       render={({ field: { onChange, value } }) => (
         <Input
-          id={`${name}.${idx}`}
+          key={key}
           fullWidth
           multiline
           minRows={minRows}
@@ -128,48 +128,50 @@ const TableRow = ({ settings, control, rowName, idx, names, colConfig, rowMinHei
     )}
   </>
 
-const TableRowNoName = ({ settings, control, idx, names, colConfig, rowMinHeight, rowNameAlign }) =>
+const TableRowNoName = ({ settings, control, idx, names, colConfig, keys, rowMinHeight, rowNameAlign }) =>
   <>
     {names.map((name, j) =>
       <>
         <Grid item xs={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-          <TableTextField name={name} idx={idx} control={control} settings={settings} />
+          <TableTextField name={name} idx={idx} control={control} settings={settings} key={keys[j]} />
         </Grid>
       </>
     )}
   </>
 
-function FieldArrayWrapper(name, control) {
-  const { fields, append, remove, reaplce, update } = useFieldArray({ control, name });
-  this.fields = fields;
-  this.append = append;
-  this.remove = remove;
-  this.update = remove;
-  this.replace = remove;
 
-  // function appendValue() { append(""); }
-  // function removeValue() { remove(fields.length-1); }
-  // function getLength() { return fields.length; }
-}
-
-export const TableRowsStatic = ({ names, colConfig, rowNames }) => {
+/**
+ * Given a list of form fields, return a React component consisting of table-row-like MUI controlled components 
+ * @param {Object} props 
+ * @param {string[][]} props.names The table form field names (map to row names)
+ * @param {int[]} props.colConfig The column config for MUI grid items
+ * @param {string[]} props.colNames The column names
+ * @param {string[]=} props.rowNames The row names
+ * @param {Control} props.control The control object from useForm()
+ * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
+ * @param {boolean} props.settings.enableInputs
+ * @param {boolean} props.settings.loadForm
+ * @param {boolean} props.settings.showComments
+ * @param {boolean} props.settings.enableComments
+ * @returns {React.Component}
+ */
+export const TableRowsStatic = ({ names, rowNames, ...rest }) => {
   return (
     <>
       {rowNames.map((rowName, idx) =>
-        <TableRow rowName={rowName} idx={idx} names={names[idx]} colConfig={colConfig} />
+        <TableRow rowName={rowName} idx={idx} names={names[idx]} {...rest} />
       )}
     </>
   )
 };
 
-
 /**
- * Given a list of table form field names, return a React component consisting of table-row-like MUI controlled components 
+ * Given a list of form array fields, return a React component consisting of table-row-like MUI controlled components that can be added/removed
  * @param {Object} props 
  * @param {string[]} props.names The table form field names (might map to row or column names)
  * @param {int[]} props.colConfig The column config for MUI grid items
  * @param {string[]} props.colNames The column names
- * @param {string[]=} props.rowNames The column names
+ * @param {string[]=} props.rowNames The row names
  * @param {Control} props.control The control object from useForm()
  * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
  * @param {boolean} props.settings.enableInputs
@@ -180,28 +182,19 @@ export const TableRowsStatic = ({ names, colConfig, rowNames }) => {
  */
 // should have grouped all relevent fields into one object but oh well
 export const TableRowsDynamic = (props) => {
-  const arr = props.names.map(name => new FieldArrayWrapper(name, props.control));
-  const initialNumRows = arr[0].fields.length || 1;
-  const [numRows, setNumRows] = useState(initialNumRows);
-
-  function appendRow(e) {
-    setNumRows(numRows + 1);
-    arr.forEach(obj => obj.append(""));
-  };
-
-  function removeLastRow(e) {
-    setNumRows(numRows > 0 ? numRows - 1 : numRows);
-    arr.forEach(obj => obj.remove(obj.fields.length - 1));
-    console.log(arr[0]);
-  }
+  const { fields, append, remove } = useFieldArray({ 
+    name: props.names[0].split('_')[0]+'_grouped',
+    control: props.control, 
+    shouldUnregister: true
+  });
 
   return (
     <>
-      {[...Array(numRows).keys()].map(idx =>
-        <TableRowNoName key={idx} idx={idx} {...props} />
+      {fields.map((field, idx) =>
+        <TableRowNoName keys={field.id} idx={idx} {...props} />
       )}
-      <TableDeleteRow onClickFunction={removeLastRow} />
-      <TableAddRow onClickFunction={appendRow} />
+      <TableDeleteRow onClickFunction={(e) => { remove(fields.length-1); }} />
+      <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} />
     </>
   )
 }

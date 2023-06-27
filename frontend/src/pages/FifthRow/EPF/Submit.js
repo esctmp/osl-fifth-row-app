@@ -118,7 +118,7 @@ var values = (settings.loadForm) ? loadFormData() : {};
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
   const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
-  const { getValues, handleSubmit, getFieldState, resetField, control, unregister, setValue } = useForm({defaultValues: values, shouldUnregister: true});
+  const { getValues, handleSubmit, getFieldState, resetField, control, unregister, setValue } = useForm({defaultValues: values });
   const formControl = {
     control: control,
     settings: settings
@@ -304,12 +304,12 @@ const EPFSubmit = () => {
           <TableRowsStatic {...tableSettingsD2_2} />
         </Grid > */}
 
-        {/* <TableHeader text="D.2. Expenditure" />
+        <TableHeader text="D.2. Expenditure" />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
           <TableColHeaders {...tableSettingsD2_1} />
           <TableRowsDynamic {...formControl} {...tableSettingsD2_1} />
-          <TableRowsStatic {...tableSettingsD2_2} />
-        </Grid > */}
+          <TableRowsStatic {...formControl} {...tableSettingsD2_2} />
+        </Grid >
       </>
     );
   };
