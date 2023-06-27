@@ -9,97 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 // TODO redo plus minius field UI
 // TODO add form field ids
 
-// const SectionD = () => {
-//   return (
-//     <>
-//       <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-//         D. Project Finances
-//       </Typography>
-//       <Typography sx={{ fontWeight: 'bold' }}>
-//         D.1 Budget: Please indicate the sources of funding for your event.
-//       </Typography>
-//       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-//         <TableColHeaders colNames={['Source', 'Amount ($)']} colConfig={[6, 6]} />
-//         <TableColHeaders colNames={["A: Existing Funds"]} colConfig={[12]} />
-//         <TableRow sectionName="D1" rowIdx={1} rowName="Club Income Fund" colConfig={[6, 6]} />
-//         <TableRow sectionName="D1" rowIdx={2} rowName="OSL Seed Fund" colConfig={[6, 6]} />
-//         <TableRow sectionName="D1" rowIdx={3} rowName="Donation" colConfig={[6, 6]} />
-//         <TableColHeaders colNames={["B: Estimated Funds Raised From This Event"]} colConfig={[12]} />
-//         <TableRow sectionName="D1" rowIdx={4} rowName="Revenue from Sales of Goods and Services (Please complete table D.1.1)" colConfig={[6, 6]} />
-//         <TableRow sectionName="D1" rowIdx={5} rowName="Donation or Scholarship" colConfig={[6, 6]} />
-//         <TableRow sectionName="D1" rowIdx={6} rowName="Total Source of Funds" colConfig={[6, 6]} />
-//       </Grid>
-//       <Typography sx={{ fontWeight: 'bold' }}>
-//         Table D.1.1
-//       </Typography>
-//       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-//         <TableColHeaders colNames={['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)']} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="D1.1" rowIdx={1} rowName="" colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="D1.1" rowIdx={2} rowName="" colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="D1.1" rowIdx={3} rowName="Total Revenue" colConfig={[6, 6]} rowMinHeight={1} />
-//       </Grid>
-//       <Typography sx={{ fontWeight: 'bold' }}>
-//         D.2. Expenditure
-//       </Typography>
-//       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-//         <TableColHeaders colNames={['Item', 'Reason for Purchase', 'Venue']} colConfig={[4, 4, 4]} />
-//         <TableRow sectionName="D2" rowIdx={1} rowName="" colConfig={[4, 4, 4]} />
-//         <TableRow sectionName="D2" rowIdx={2} rowName="" colConfig={[4, 4, 4]} />
-//         <TableRow sectionName="D2" rowIdx={3} rowName="Total Expenditure" colConfig={[6, 6]} rowMinHeight={1} />
-//       </Grid>
-//     </>
-//   );
-// };
 
-
-// const SectionE = () => {
-//   return (
-//     <>
-//       <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-//         E. Personal data protection declaration*
-//       </Typography>
-//       <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
-//         Personal data refers to data, whether true or not, about an individual who can be identified from that data; or from that data and other information to which SUTD has or is likely to have access. These include:
-//         <br></br>1. Unique identifiers: NRIC Numbers, passport numbers, student IDs.
-//         <br></br>2. Any set of data (e.g. name, age, address, telephone number, occupation, etc), which when taken together would be able to identify the individual.
-//         <br></br>3. Image of an identifiable individual (whether in photographs or videos).
-//       </Typography>
-//       <Typography sx={{ fontWeight: 'bold', color: 'red' }}>
-//         Are you collecting personal data? Please tick accordingly.
-//       </Typography>
-
-//       <FormControl component="fieldset" sx={{ mb: 3 }}>
-//         <RadioGroup
-//           name="personal-data-collection"
-//         >
-//           <FormControlLabel
-//             value="radio1"
-//             control={<Radio />}
-//             sx={{ mb: -1 }}
-//             label="Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."
-//           />
-//           <FormControlLabel
-//             value="radio2"
-//             control={<Radio />}
-//             label="No"
-//           />
-//         </RadioGroup>
-//       </FormControl>
-//       <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
-//         By submitting this form, the project director agrees to abide by the personal data protection clauses as stated below.
-//         <br></br>1. All the personal data processed** for the event are for the purposes of communications and facilitating participation in the event. The information shall not be released to any other 3rd party or person (i.e sponsors/donors) other than the organizing committee and relevant persons facilitating the event, without prior approval from OSL. The information collated cannot be used for any other purpose other than for the event itself and will be disposed appropriately upon the completion of event.
-//         <br></br>2. The personal information collected will be deleted one month after the event, or at the date as per declaration to OSL.
-//         <br></br>3. The above obligations will be communicated to the participants in the consent clause, prior to or at the point of data collection (i.e. the prescribed clause as reflected on the Microsoft Form).
-//         <br></br>4. Data platforms used for the collection of the data would be kept secure, private and accessible to only authorized persons.
-//         <br></br>5. The event team will not collect any excessive personal data from the participants other than ones necessary for the event.
-//         <br></br>6. Under no circumstances, the collected personal data is to be transferred overseas to any external parties abroad unless clearance is first sought from OSL.
-//       </Typography>
-//       <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
-//         **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).
-//       </Typography>
-//     </>
-//   );
-// };
 
 
 
@@ -186,7 +96,7 @@ var values = (settings.loadForm) ? loadFormData() : {};
 
 const EPFSubmit = () => {
   const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
-  const { getValues, handleSubmit, reset, control, unregister } = useForm({defaultValues: values});
+  const { getValues, handleSubmit, reset, control, unregister } = useForm({ defaultValues: values });
 
   // DEFINE COMPONENTS 
   const onSubmit = (data) => {
@@ -264,7 +174,7 @@ const EPFSubmit = () => {
     );
   };
 
-  const TableTextField = ({ name, idx, minRows=3 }) => {
+  const TableTextField = ({ name, idx, minRows = 3 }) => {
     const tmpName = `${name}_elem_${idx}`;
     return (
       <Controller
@@ -309,6 +219,29 @@ const EPFSubmit = () => {
         </>
       )}
     </>
+
+  const TableRowsStatic = ({ names, colConfig, rowNames }) => {
+    return (
+      <>
+        {rowNames.map((rowName, idx) =>
+          <TableRow rowName={rowName} idx={idx} names={names[idx]} colConfig={colConfig} />
+        )}
+      </>
+    )
+  };
+
+  const TableRowsDynamic = (tableSettings) => {
+    const [numRows, setNumRows] = useState(getNumRows(tableSettings.names));
+    return (
+      <>
+        {[...Array(numRows).keys()].map(idx =>
+          <TableRowNoName idx={idx} {...tableSettings} />
+        )}
+        <TableDeleteRow onClickFunction={(e) => { unregisterRow(tableSettings.names, numRows - 1); setNumRows(numRows - 1); }} />
+        <TableAddRow onClickFunction={(e) => { setNumRows(numRows + 1); }} />
+      </>
+    )
+  };
 
   // DEFINE SECTIONS
   const SectionA = () => {
@@ -364,15 +297,26 @@ const EPFSubmit = () => {
 
 
   const SectionC = () => {
-    const tableSettings1 = {
+    const tableSettingsC1 = {
       names: ['C1_date', 'C1_time', 'C1_activity_and_description', 'C1_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
     }
-    const [numRows1, setNumRows1] = useState(getNumRows(tableSettings1.names));
-    const [numRows2, setNumRows2] = useState(1);
-    const [numRows3_1, setNumRows3_1] = useState(1);
-    const [numRows3_2, setNumRows3_2] = useState(1);
+    const tableSettingsC2 = {
+      names: ['C2_date', 'C2_time', 'C2_activity_and_description', 'C2_venue'],
+      colConfig: [3, 2, 4, 3],
+      colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
+    }
+    const tableSettingsC3_1 = {
+      names: ['C3_date', 'C3_time', 'C3_activity_and_description', 'C3_venue'],
+      colConfig: [3, 2, 4, 3],
+      colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
+    };
+    const tableSettingsC3_2 = {
+      names: ['C3_cleanup_date', 'C3_cleanup_time', 'C3_cleanup_activity_and_description', 'C3_cleanup_venue'],
+      colConfig: [3, 2, 4, 3],
+      colNames: ['Clean Up']
+    }
     return (
       <>
         <SectionHeader text="C. Programme Schedule" />
@@ -381,47 +325,140 @@ const EPFSubmit = () => {
         <TableHeader text="C.1 Pre-Event" />
         <TableDescription text="Include details regarding your pre-event set up." />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettings1}/>
-          {[...Array(numRows1).keys()].map(idx =>
-            <TableRowNoName idx={idx} {...tableSettings1} />
-          )}
-          <TableDeleteRow onClickFunction={(e) => { unregisterRow(tableSettings1.names, numRows1 - 1); setNumRows1(numRows1 - 1); console.log(numRows1)}} />
-          <TableAddRow onClickFunction={(e) => { setNumRows1(numRows1 + 1); }} />
-        </Grid>
-        {/* 
-        <Typography sx={{ fontWeight: 'bold' }}>
-          C.2 Event
-          <br></br><div style={{ fontWeight: 'normal' }}><i>Include details regarding your event and description of each activity.</i></div>
-        </Typography>
+          <TableColHeaders {...tableSettingsC1} />
+          <TableRowsDynamic {...tableSettingsC1} />
+        </Grid >
+
+        <TableHeader text="C.2 Event" />
+        <TableDescription text="Include details regarding your event and description of each activity." />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
-          {[...Array(numRows2)].map(idx =>
-            <TableRow sectionName="C2" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
-          )}
-          <TableDeleteRow onClickFunction={(e) => { setNumRows2(numRows2 - 1); }} />
-          <TableAddRow onClickFunction={(e) => { setNumRows2(numRows2 + 1); }} />
-        </Grid>
-        <Typography sx={{ fontWeight: 'bold' }}>
-          C.3 Post-Event
-          <br></br><div style={{ fontWeight: 'normal' }}><i>Include details regarding your post event clean up, management of resources and waste and excess food. </i></div>
-        </Typography>
+          <TableColHeaders {...tableSettingsC2} />
+          <TableRowsDynamic {...tableSettingsC2} />
+        </Grid >
+
+        <TableHeader text="C.3 Post-Event" />
+        <TableDescription text="Include details regarding your post event clean up, management of resources and waste and excess food." />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders colNames={['Date', 'Time', 'Activity and Description', 'Venue']} colConfig={[3, 2, 4, 3]} />
-          {[...Array(numRows3_1)].map(idx =>
-            <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
-          )}
-          <TableDeleteRow onClickFunction={(e) => { setNumRows3_1(numRows3_1 - 1); }} />
-          <TableAddRow onClickFunction={(e) => { setNumRows3_1(numRows3_1 + 1); }} />
-          <TableColHeaders colNames={['Clean up']} colConfig={[12]} />
-          {[...Array(numRows3_2)].map(idx =>
-            <TableRow sectionName="C3" rowIdx={idx + 1} rowName="" colConfig={[3, 2, 4, 3]} />
-          )}
-          <TableDeleteRow onClickFunction={(e) => { setNumRows3_2(numRows3_2 - 1); }} />
-          <TableAddRow onClickFunction={(e) => { setNumRows3_2(numRows3_2 + 1); }} /> 
-      </Grid >*/}
+          <TableColHeaders {...tableSettingsC3_1} />
+          <TableRowsDynamic {...tableSettingsC3_1} />
+          <TableColHeaders  {...tableSettingsC3_2} colConfig={[12]} />
+          <TableRowsDynamic {...tableSettingsC3_2} />
+        </Grid >
       </>
     );
   };
+
+
+  const SectionD = () => {
+    const tableSettingsD1A = {
+      names: [['D1A_club_income_fund'], ["D1A_osl_seed_fund"],
+      ["D1A_donation"]],
+      rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
+      colConfig: [6, 6],
+      colNames: ['Source', 'Amount ($)']
+    };
+
+    const tableSettingsD1B = {
+      names: [['D1B_revenue'], ["D1B_donation_or_scholarship"],
+      ["D1B_total_source_of_funds"]],
+      rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
+      colConfig: [6, 6],
+      colNames: ['Source', 'Amount ($)']
+    };
+    const tableSettingsD11_1 = {
+      names: ["D11_items_goods_services", "D11_price", "D11_quantity", "D11_amount"],
+      colConfig: [3, 3, 3, 3],
+      colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)']
+    };
+    const tableSettingsD11_2 = {
+      names: [['D11_total_revenue']],
+      rowNames: ['Total Revenue'],
+      colConfig: [6, 6],
+    };
+    const tableSettingsD2_1 = {
+      names: ['D2_items', 'D2_reason_for_purchase', 'D2_venue'],
+      colConfig: [4,4,4],
+      colNames: ['Item', 'Reason for Purchase', 'Venue']
+    };
+    const tableSettingsD2_2 = {
+      names: [['D2_total_expenditure']],
+      rowNames: ['Total Expenditure'],
+      colConfig: [6, 6],
+    }
+    return (
+      <>
+        <SectionHeader text="D. Project Finances" />
+
+        <TableHeader text="D.1 Budget: Please indicate the sources of funding for your event." />
+        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+          <TableColHeaders {...tableSettingsD1A} />
+          <TableRowsStatic {...tableSettingsD1A} />
+          <TableColHeaders {...tableSettingsD1B} />
+          <TableRowsStatic {...tableSettingsD1B} />
+        </Grid >
+
+        <TableHeader text="Table D.1.1" />
+        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+          <TableColHeaders {...tableSettingsD11_1} />
+          <TableRowsDynamic {...tableSettingsD11_1} />
+          <TableRowsStatic {...tableSettingsD11_2} />
+        </Grid >
+
+        <TableHeader text="D.2. Expenditure" />
+        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+          <TableColHeaders {...tableSettingsD2_1} />
+          <TableRowsDynamic {...tableSettingsD2_1} />
+          <TableRowsStatic {...tableSettingsD2_2} />
+        </Grid >
+      </>
+    );
+  };
+
+    
+  const SectionE = () => {
+    return (
+      <>
+        <SectionHeader text="E. Personal data protection declaration" />
+        <SectionBody text={<>
+          Personal data refers to data, whether true or not, about an individual who can be identified from that data; or from that data and other information to which SUTD has or is likely to have access. These include:
+          <br></br>1. Unique identifiers: NRIC Numbers, passport numbers, student IDs.
+          <br></br>2. Any set of data (e.g. name, age, address, telephone number, occupation, etc), which when taken together would be able to identify the individual.
+          <br></br>3. Image of an identifiable individual (whether in photographs or videos).</>} />
+        <Typography sx={{ fontWeight: 'bold', color: 'red' }}>
+          Are you collecting personal data? Please tick accordingly.
+        </Typography>
+
+        <FormControl component="fieldset" sx={{ mb: 3 }}>
+          <RadioGroup
+            name="personal-data-collection"
+          >
+            <FormControlLabel
+              value="radio1"
+              control={<Radio />}
+              sx={{ mb: -1 }}
+              label="Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."
+            />
+            <FormControlLabel
+              value="radio2"
+              control={<Radio />}
+              label="No"
+            />
+          </RadioGroup>
+        </FormControl>
+        <SectionBody text={<>
+          By submitting this form, the project director agrees to abide by the personal data protection clauses as stated below.
+          <br></br>1. All the personal data processed** for the event are for the purposes of communications and facilitating participation in the event. The information shall not be released to any other 3rd party or person (i.e sponsors/donors) other than the organizing committee and relevant persons facilitating the event, without prior approval from OSL. The information collated cannot be used for any other purpose other than for the event itself and will be disposed appropriately upon the completion of event.
+          <br></br>2. The personal information collected will be deleted one month after the event, or at the date as per declaration to OSL.
+          <br></br>3. The above obligations will be communicated to the participants in the consent clause, prior to or at the point of data collection (i.e. the prescribed clause as reflected on the Microsoft Form).
+          <br></br>4. Data platforms used for the collection of the data would be kept secure, private and accessible to only authorized persons.
+          <br></br>5. The event team will not collect any excessive personal data from the participants other than ones necessary for the event.
+          <br></br>6. Under no circumstances, the collected personal data is to be transferred overseas to any external parties abroad unless clearance is first sought from OSL.</>} />
+          <SectionBody text={<>
+          **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
+      </>
+    );
+  };
+
 
   // RENDERING
   return (
@@ -447,9 +484,9 @@ const EPFSubmit = () => {
                       <SectionA />
                       <SectionB />
                       <SectionC />
-                      {/* <SectionD />
+                      <SectionD />
                       <SectionE />
-                      <SectionF />
+                      {/* <SectionF />
                       <SectionG /> */}
                       <Stack spacing={2} direction="row" justifyContent="center">
                         <Button style={{ width: 120, height: 40 }} variant="contained" onClick={handleSubmit(onSubmit)}>Submit</Button>

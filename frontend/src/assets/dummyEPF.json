@@ -12,8 +12,138 @@
     "B_event_schedule": "2023-06-21 16:49:00",
     "B_expected_turnout": 1,
     "B_event_objective": "event Objective 1",
-    "C1_date": ["2023-06-21", "2023-06-22"],
-    "C1_time": ["16:49:00", "16:50:00"],
-    "C1_activity_and_description": ["activity 1 description 1", "activity 2 description 2"],
-    "C1_venue": ["venue 1", "venue 2"]
+    "C1_date": [
+        "2023-06-21",
+        "2023-06-22"
+    ],
+    "C1_time": [
+        "16:49:00",
+        "16:50:00"
+    ],
+    "C1_activity_and_description": [
+        "activity 1 description 1",
+        "activity 2 description 2"
+    ],
+    "C1_venue": [
+        "venue 1",
+        "venue 2"
+    ],
+    "C2_date": [
+        "2023-06-21",
+        "2023-06-22"
+    ],
+    "C2_time": [
+        "16:49:00",
+        "16:50:00"
+    ],
+    "C2_activity_and_description": [
+        "activity 1 description 1",
+        "activity 2 description 2"
+    ],
+    "C2_venue": [
+        "venue 1",
+        "venue 2"
+    ],
+    "C3_date": [
+        "2023-06-21",
+        "2023-06-22"
+    ],
+    "C3_time": [
+        "16:49:00",
+        "16:50:00"
+    ],
+    "C3_activity_and_description": [
+        "activity 1 description 1",
+        "activity 2 description 2"
+    ],
+    "C3_venue": [
+        "venue 1",
+        "venue 2"
+    ],
+    "C3_cleanup_date": [
+        "2023-06-21",
+        "2023-06-22"
+    ],
+    "C3_cleanup_time": [
+        "16:49:00",
+        "16:50:00"
+    ],
+    "C3_cleanup_activity_and_description": [
+        "activity 1 description 1",
+        "activity 2 description 2"
+    ],
+    "C3_cleanup_venue": [
+        "venue 1",
+        "venue 2"
+    ],
+    "D1A_club_income_fund": 23.23,
+    "D1A_osl_seed_fund": 23.23,
+    "D1A_donation": 23.23,
+    "D1B_revenue": 23.23,
+    "D1B_donation_or_scholarship": 23.23,
+    "D1B_total_source_of_funds": 23.23,
+    "D11_items_goods_services": [
+        "item 1",
+        "item 2"
+    ],
+    "D11_price": [
+        "price 1",
+        "price 2"
+    ],
+    "D11_quantity": [
+        "quantity 1",
+        "quantity 2"
+    ],
+    "D11_amount": [
+        "amount 1",
+        "amount 2"
+    ],
+    "D11_total_revenue": 23.23,
+    "D2_items": [
+        "item 1",
+        "item 2"
+    ],
+    "D2_reason_for_purchase": [
+        "reason 1",
+        "reason 2"
+    ],
+    "D2_venue": [
+        "venue 1",
+        "venue 2"
+    ],
+    "D2_total_expenditure": 23.23,
+    "E_personal_data": 1,
+    "F_name": [
+        "name 1",
+        "name 2"
+    ],
+    "F_student_id": [
+        "student id 1",
+        "student id 2"
+    ],
+    "F_position": [
+        "position 1",
+        "position 2"
+    ],
+    "G_1_1": "blank",
+    "G_1_2": "blank",
+    "G_1_3": "blank",
+    "G_2_1": "blank",
+    "G_2_2": "blank",
+    "G_2_3": "blank",
+    "G_3_1": "blank",
+    "G_3_2": "blank",
+    "G_3_3": "blank",
+    "G_4_1": "blank",
+    "G_4_2": "blank",
+    "G_4_3": "blank",
+    "G_5_1": "blank",
+    "G_5_2": "blank",
+    "G_5_3": "blank",
+    "G_6_1": "blank",
+    "G_6_2": "blank",
+    "G_6_3": "blank",
+    "G_7_1": "blank",
+    "G_7_2": "blank",
+    "G_7_3": "blank"
 }
