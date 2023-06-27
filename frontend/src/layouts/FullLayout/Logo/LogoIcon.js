@@ -1,5 +1,6 @@
 import React from "react";
 import logoicn from "../../../assets/images/logo-full.png";
+// used for sidebar logo
 const LogoIcon = () => {
   return (
     <div>

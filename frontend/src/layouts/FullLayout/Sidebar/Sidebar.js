@@ -56,9 +56,8 @@ const Sidebar = (props) => {
                     mb: 1,
                     ...(pathDirect === item.href && {
                       color: "white",
-                      backgroundColor: "#0D99FF"
-                      // backgroundColor: (theme) =>
-                      //   `${theme.palette.primary.main}!important`,
+                      backgroundColor: (theme) =>
+                        `${theme.palette.primary.main}!important`,
                     }),
                   }}
                 >
