@@ -17,6 +17,8 @@ import {
   loadFormData,
 } from "../../../components/Forms/Custom/Utilities";
 import {
+  FORM_MODES,
+  draftButtonStyle,
   FormHeader,
   FormTextField,
   FormDateTimeField,
@@ -26,109 +28,23 @@ import {
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 
-// TODO modularize components
-// TODO add grid lg mb ..
-// TODO add plus minus field to table D11 and D2
-// TODO redo plus minius field UI
-// TODO add form field ids
-
-
-
-
-
-// const SectionF = () => {
-//   const [numRows, setNumRows] = useState(1);
-//   return (
-//     <>
-//       <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-//         F. Organising Committee Members
-//       </Typography>
-//       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-//         <TableColHeaders colNames={['Name', 'Student ID', 'Position']} colConfig={[4, 4, 4]} />
-//         {[...Array(numRows)].map(idx =>
-//           <TableRow sectionName="F" rowIdx={idx + 1} rowName="" colConfig={[4, 4, 4]} rowMinHeight={2} />
-//         )}
-//         <TableDeleteRow onClickFunction={(e) => { setNumRows(numRows - 1); }} />
-//         <TableAddRow onClickFunction={(e) => { setNumRows(numRows + 1); }} />
-//       </Grid>
-//     </>
-//   );
-// };
-
-// const SectionG = () => {
-//   return (
-//     <>
-//       <Typography variant="h4" sx={{ textDecoration: 'underline', textTransform: 'uppercase', fontWeight: 'bold', mb: 1 }}>
-//         G. Risk Assessment
-//       </Typography>
-//       <Typography sx={{ fontWeight: 'bold', mb: 3 }}>
-//         (i) Please complete Annex A Integrated Form for Risk Assessment on Work Activities for physical/physiological risks e.g. sports/trauma injuries, trip/fall hazards, poor lighting, dangerous/faulty equipment, stampede/crushing risks, hearing damage, fatigue, food poisoning, infectious diseases etc. and submit together with this Event Proposal Form.
-//         <br></br>(ii) Please also complete the following table for all other types of risks. Where no risk has been identified for any category listed below, indicate a “NIL” in the column under Potential Hazard for that risk category.
-//       </Typography>
-//       <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-//         <TableColHeaders colNames={[
-//           'Areas for Safety Consideration',
-//           <>Potential Hazard<br></br><div style={{ fontWeight: 'normal' }}><i>What could go wrong?<br></br>List in point form</i></div></>,
-//           <>Measures to Address Hazard<br></br><div style={{ fontWeight: 'normal' }}><i>What is your plan to prevent it from happening, or to reduce the potential damage? List in point form</i></div></>,
-//           <>Person-in-charge<br></br><div style={{ fontWeight: 'normal' }}><i>Who will implement the plan?<br></br>List in point form</i></div></>
-//         ]} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={1} rowName={<>Social/Emotional<br></br><div style={{ fontWeight: 'normal' }}>e.g. hazing, bullying, emotional or physical harassment, sexual harassment, insensitive jokes, disrespecting other cultures, races or religions</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={2} rowName={<>Political Agenda<br></br><div style={{ fontWeight: 'normal' }}>e.g. the event will evoke or promote a political agenda that is sensitive to different groups in the community and society at large, and/or endanger harmonious relations between different groups in the community</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={3} rowName={<>Environment<br></br><div style={{ fontWeight: 'normal' }}>e.g. fire, damage to facilities/venues, electricity trip, water/food wastage, excessive use of non-renewable resources, poor air quality etc.</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={4} rowName={<>Reputational<br></br><div style={{ fontWeight: 'normal' }}>e.g. being viewed as public nuisance, disturbance of public peace , misrepresentation of SUTD, misleading marketing content, poor management of social media campaigns etc.</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={5} rowName={<>Financial<br></br><div style={{ fontWeight: 'normal' }}>e.g. losses for events, incurring of legal/compensation fees, failure to collect payment owed to SUTD, unexpected travel/medical expenses etc.</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={6} rowName={<>Legal<br></br><div style={{ fontWeight: 'normal' }}>e.g. being sued for personal data leaks, infringement of copyrights, any illegal or unlawful actions, negligence resulting in injuries/damages/losses etc.</div></>} colConfig={[3, 3, 3, 3]} />
-//         <TableRow sectionName="G" rowNameAlign='left' rowIdx={7} rowName={<>List all Other Risks not listed in this table and not already identified in Annex A.<br></br><div style={{ fontWeight: 'normal' }}>This may include potential infringements of any University policies, core values and applicable regulations governing the organization and execution of an event. </div></>} colConfig={[3, 3, 3, 3]} />
-//       </Grid>
-//     </>
-//   );
-// };
-
-const draftButtonStyle = {
-  "&.MuiButton-contained": {
-    backgroundColor: "#B9B9B9"
-  },
-  "&:active": {
-    backgroundColor: '#818181'
-  },
-  "&:hover": {
-    backgroundColor: '#818181'
-  }
-};
-
-
-// MODES = ["NEW", "DRAFT", "REVIEW", "COMMENT"];
-// LOAD EXISTING FORM DATA IF MODE ISN'T "NEW"
-// DISABLE INPUT FIELDS IF MODE IS REVIEW
-// ENABLE COMMENTS IF MODE IS COMMENT
-
-const MODES = {
-  "NEW": { enableInputs: true, loadForm: false, showComments: false, enableComments: false },
-  "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableComments: false },
-  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableComments: false },
-  "COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableComments: true },
-}
-
-
-
-const MODE = "REVIEW";
-const settings = MODES[MODE];
+// To test this out, fill in the fields then click 'Submit' and check console for the submitted data
+const settings = FORM_MODES["NEW"];
 var values = (settings.loadForm) ? loadFormData() : {};
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const { handleSubmit, getFieldState, control } = useForm({ defaultValues: values });
+  const { handleSubmit, control } = useForm({ defaultValues: values });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings
   };
 
-  // DEFINE COMPONENTS 
+  // DEFINE HANDLES 
   const onSubmit = (data) => {
     data = convertFieldsToJSON(data);
     console.log("SUBMITTED: ", data);
   }
-
 
   // DEFINE SECTIONS
   const SectionA = () => {
@@ -147,10 +63,7 @@ const EPFSubmit = () => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            {settings.showComments
-              ? <FormCommentField {...formControl} name="A_comments" />
-              : <></>
-            }
+            <FormCommentField {...formControl} name="A_comments" />
           </Grid>
         </Grid>
       </>
@@ -172,10 +85,7 @@ const EPFSubmit = () => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            {settings.showComments
-              ? <FormCommentField {...formControl} name="B_comments" />
-              : <></>
-            }
+            <FormCommentField {...formControl} name="B_comments" />
           </Grid>
         </Grid>
       </>
@@ -238,10 +148,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-            {settings.showComments
-              ? <FormCommentField {...formControl} name="C_comments" />
-              : <></>
-            }
+            <FormCommentField {...formControl} name="C_comments" />
           </Grid>
         </Grid>
       </>
@@ -315,10 +222,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-            {settings.showComments
-              ? <FormCommentField {...formControl} name="D_comments" />
-              : <></>
-            }
+            <FormCommentField {...formControl} name="D_comments" />
           </Grid>
         </Grid>
       </>
@@ -356,10 +260,86 @@ const EPFSubmit = () => {
               **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
           </Grid>
           <Grid item xs={3} >
-            {settings.showComments
-              ? <FormCommentField {...formControl} name="E_comments" />
-              : <></>
-            }
+            <FormCommentField {...formControl} name="E_comments" />
+          </Grid>
+        </Grid>
+      </>
+    );
+  };
+
+  const SectionF = () => {
+    const tableSettingsF = {
+      names: ['F_name', 'F_student_id', 'F_position'],
+      colNames: ['Name', 'Student ID', 'Position'],
+      colConfig: [4, 4, 4]
+    }
+    return (
+      <>
+        <SectionHeader text="F. Organising Committee Members" />
+
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...formControl} {...tableSettingsF} />
+              <TableRowsDynamic {...formControl} {...tableSettingsF} />
+            </Grid >
+          </Grid>
+
+          <Grid item xs={3} >
+            <FormCommentField {...formControl} name="F_comments" />
+          </Grid>
+        </Grid>
+      </>
+    );
+  };
+
+
+  const SectionG = () => {
+    const tableSettingsG = {
+      names: [
+        ["G_1_1", "G_1_2", "G_1_3"],
+        ["G_2_1", "G_2_2", "G_2_3"],
+        ["G_3_1", "G_3_2", "G_3_3"],
+        ["G_4_1", "G_4_2", "G_4_3"],
+        ["G_5_1", "G_5_2", "G_5_3"],
+        ["G_6_1", "G_6_2", "G_6_3"],
+        ["G_7_1", "G_7_2", "G_7_3"]
+      ],
+      colNames: [
+        'Areas for Safety Consideration',
+        <>Potential Hazard<br></br><div style={{ fontWeight: 'normal' }}><i>What could go wrong?<br></br>List in point form</i></div></>,
+        <>Measures to Address Hazard<br></br><div style={{ fontWeight: 'normal' }}><i>What is your plan to prevent it from happening, or to reduce the potential damage? List in point form</i></div></>,
+        <>Person-in-charge<br></br><div style={{ fontWeight: 'normal' }}><i>Who will implement the plan?<br></br>List in point form</i></div></>
+      ],
+      colConfig: [3, 3, 3, 3],
+      rowNames: [
+        <>Social/Emotional<br></br><div style={{ fontWeight: 'normal' }}>e.g. hazing, bullying, emotional or physical harassment, sexual harassment, insensitive jokes, disrespecting other cultures, races or religions</div></>,
+        <>Political Agenda<br></br><div style={{ fontWeight: 'normal' }}>e.g. the event will evoke or promote a political agenda that is sensitive to different groups in the community and society at large, and/or endanger harmonious relations between different groups in the community</div></>,
+        <>Environment<br></br><div style={{ fontWeight: 'normal' }}>e.g. fire, damage to facilities/venues, electricity trip, water/food wastage, excessive use of non-renewable resources, poor air quality etc.</div></>,
+        <>Reputational<br></br><div style={{ fontWeight: 'normal' }}>e.g. being viewed as public nuisance, disturbance of public peace , misrepresentation of SUTD, misleading marketing content, poor management of social media campaigns etc.</div></>,
+        <>Financial<br></br><div style={{ fontWeight: 'normal' }}>e.g. losses for events, incurring of legal/compensation fees, failure to collect payment owed to SUTD, unexpected travel/medical expenses etc.</div></>,
+        <>Legal<br></br><div style={{ fontWeight: 'normal' }}>e.g. being sued for personal data leaks, infringement of copyrights, any illegal or unlawful actions, negligence resulting in injuries/damages/losses etc.</div></>,
+        <>List all Other Risks not listed in this table and not already identified in Annex A.<br></br><div style={{ fontWeight: 'normal' }}>This may include potential infringements of any University policies, core values and applicable regulations governing the organization and execution of an event. </div></>
+      ],
+    }
+    return (
+      <>
+        <SectionHeader text="G. Risk Assessment" />
+
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <SectionBody text={<>
+              (i) Please complete Annex A Integrated Form for Risk Assessment on Work Activities for physical/physiological risks e.g. sports/trauma injuries, trip/fall hazards, poor lighting, dangerous/faulty equipment, stampede/crushing risks, hearing damage, fatigue, food poisoning, infectious diseases etc. and submit together with this Event Proposal Form.
+              <br></br>(ii) Please also complete the following table for all other types of risks. Where no risk has been identified for any category listed below, indicate a “NIL” in the column under Potential Hazard for that risk category.
+            </>} />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...formControl} {...tableSettingsG} />
+              <TableRowsStatic {...formControl} {...tableSettingsG} />
+            </Grid >
+          </Grid>
+
+          <Grid item xs={3} >
+            <FormCommentField {...formControl} name="G_comments" />
           </Grid>
         </Grid>
       </>
@@ -393,8 +373,8 @@ const EPFSubmit = () => {
                       <SectionC />
                       <SectionD />
                       <SectionE />
-                      {/* <SectionF />
-                      <SectionG /> */}
+                      <SectionF />
+                      <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
                         <Button style={{ width: 120, height: 40 }} variant="contained" onClick={handleSubmit(onSubmit)}>Submit</Button>
                         <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>

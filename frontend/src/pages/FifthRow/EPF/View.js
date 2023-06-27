@@ -9,7 +9,7 @@ const EPFView = () => {
 
   return (
     <div>
-      <Box>
+      <Box>  
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h3">Archives</Typography>

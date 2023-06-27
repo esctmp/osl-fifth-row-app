@@ -87,14 +87,7 @@ const TableAddRow = ({ onClickFunction }) =>
     </Grid>
   </>
 
-// const tableSettingsC1 = {
-//   names: ['C1_date', 'C1_time', 'C1_activity_and_description', 'C1_venue'],
-//   colConfig: [3, 2, 4, 3],
-//   colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
-// }
-
-
-const TableRow = ({ settings, control, rowName, names, colConfig, minRows=3, rowMinHeight, rowNameAlign }) =>
+const TableRowStatic = ({ settings, control, rowName, names, colConfig, minRows=3, rowMinHeight, rowNameAlign }) =>
   <>
     <Grid item display="flex" xs={colConfig[0]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <TableRowName rowName={rowName} />
@@ -141,7 +134,7 @@ export const TableRowsStatic = ({ names, rowNames, ...rest }) => {
   return (
     <>
       {rowNames.map((rowName, idx) =>
-        <TableRow rowName={rowName} idx={idx} names={names[idx]} {...rest} />
+        <TableRowStatic rowName={rowName} idx={idx} names={names[idx]} {...rest} />
       )}
     </>
   )

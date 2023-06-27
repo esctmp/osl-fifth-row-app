@@ -26,6 +26,32 @@ const makeNameFancy = (name) => name.split('_').slice(1,).map((word) =>
   word[0].toUpperCase() + word.substring(1)
 ).join(" ");
 
+// MODES = ["NEW", "DRAFT", "REVIEW", "COMMENT"];
+// LOAD EXISTING FORM DATA IF MODE ISN'T "NEW"
+// DISABLE INPUT FIELDS IF MODE IS REVIEW
+// ENABLE COMMENTS IF MODE IS COMMENT
+export const FORM_MODES = {
+  "NEW": { enableInputs: true, loadForm: false, showComments: false, enableComments: false },
+  "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableComments: false },
+  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableComments: false },
+  "COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableComments: true },
+}
+
+
+export const draftButtonStyle = {
+  "&.MuiButton-contained": {
+    backgroundColor: "#B9B9B9"
+  },
+  "&:active": {
+    backgroundColor: '#818181'
+  },
+  "&:hover": {
+    backgroundColor: '#818181'
+  }
+};
+
+
+
 export const FormHeader = ({ text }) =>
   <>
     <Box
@@ -99,12 +125,14 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false }
     <Controller
       name={name}
       control={control}
+      defaultValue="2020-01-01T12:00:00"
       render={({ field: { onChange, value } }) => (
         <TextField
           id={name}
           label={makeNameFancy(name)}
           onChange={onChange}
           type="datetime-local"
+          defaultValue="2020-01-01T12:00:00"
           value={value}
           multiline={multiline}
           disabled={!settings.enableInputs}
@@ -133,17 +161,22 @@ export const FormCommentField = ({ name, control, settings }) => {
       control={control}
       render={({ field: { onChange, value } }) => (
         <>
-          <SectionCommentHeader text={"Comments for section " + name.split('_')[0]} />
-          <TextField
-            sx={{ backgroundColor: "#ffffe1" }}
-            id={name}
-            onChange={onChange}
-            value={value}
-            disabled={!settings.enableComments}
-            multiline
-            minRows={3}
-            fullWidth
-          />
+          {settings.showComments
+            ? <>
+              <SectionCommentHeader text={"Comments for section " + name.split('_')[0]} />
+              <TextField
+                sx={{ backgroundColor: "#ffffe1" }}
+                id={name}
+                onChange={onChange}
+                value={value}
+                disabled={!settings.enableComments}
+                multiline
+                minRows={3}
+                fullWidth
+              />
+            </>
+            : <></>
+          }
         </>
       )}
     />
