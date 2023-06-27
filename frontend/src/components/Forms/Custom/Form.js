@@ -149,3 +149,44 @@ export const FormCommentField = ({ name, control, settings }) => {
     />
   );
 };
+
+
+/**
+ * Given a radio field name and options, returns a MUI RadioGroup component with values 0, 1, ...
+ * @param {string} name The form field name
+ * @param {Control} control 
+ * @param {string[]} options A list of options that will be displayed
+ * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
+ * @param {boolean} props.settings.enableInputs
+ * @param {boolean} props.settings.loadForm
+ * @param {boolean} props.settings.showComments
+ * @param {boolean} props.settings.enableComments
+ * @returns {React.Component}
+ */
+export const FormRadioField = ({ name, control, options, settings }) => {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <>
+          <FormControl sx={{ mb: 3 }}>
+            <RadioGroup
+              {...field}
+              onChange={(e, value) => field.onChange(parseInt(value))}
+            >
+              {options.map((option, idx) =>
+                <FormControlLabel
+                  value={idx}
+                  control={<Radio />}
+                  sx={{ mb: -1 }}
+                  label={option}
+                />
+              )}
+            </RadioGroup>
+          </FormControl>
+        </>
+      )}
+    />
+  );
+};

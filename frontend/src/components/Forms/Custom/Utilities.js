@@ -5,10 +5,12 @@ import dummyEPF from '../../../assets/dummyEPF.json';
  * E.g. { C1_name: ["John", "Benny"], C1_activity: ["Football", "Soccer"] }
  * will be transformed into 
  * { C1_grouped: [{C1_name: "John", C1_activity: "Soccer"}, {C1_name: "Benny", C1_activity: "Soccer"}] }
+ * Replace all 'C3_cleanup' with 'C3cleanup' to not break the processing
  * @param {FormData} data 
  * @returns {FormData} 
  */
 export const convertJSONToFields = (data) => {
+    data = Object.fromEntries(Object.entries(data).map(([k,v]) => [k.replace('C3_cleanup', 'C3cleanup'), v])); // fix for EPF only
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([key, val]) => !Array.isArray(val)));
     let listObjsInitial = Object.fromEntries(Object.entries(data).filter(([key, val]) => Array.isArray(val)));
     let prefixes = [...new Set(Object.entries(listObjsInitial).map(([name, _]) => name.split('_')[0]+'_grouped'))];
@@ -24,7 +26,6 @@ export const convertJSONToFields = (data) => {
 export const loadFormData = () => {
     let data = dummyEPF;
     data = convertJSONToFields(data);
-    console.log(data);
     return data; // TODO integrate w api
   };
 
@@ -41,9 +42,11 @@ export const convertFieldsToJSON = (data) => {
     let listObjsInitial = Object.entries(data).filter(([name,_]) => name.includes('_grouped')).map(([_, v]) => v);
     let listObjs = {}; 
     for (let group of listObjsInitial) {
-        if (group == []) {continue;};
+        if (!group) {continue;};
         let names = Object.fromEntries(Object.keys(group[0]).map(name => [name,group.map(obj => obj[name])]));
         listObjs = {...listObjs, ...names};
     };
-    return  {...listObjs, ...scalarObjs};
+    let res = {...listObjs, ...scalarObjs};
+    res = Object.fromEntries(Object.entries(res).map(([k,v]) => [k.replace('C3cleanup', 'C3_cleanup'), v])); // fix for EPF only
+    return res;
 }

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   SectionHeader,
   SectionBody,
   SectionCommentHeader,
 } from "../../../components/Forms/Custom/Section";
-
 import {
   TableHeader,
   TableDescription,
   TableColHeaders,
   TableRowsStatic,
-  TableRowsDynamic
+  TableRowsDynamic,
 } from "../../../components/Forms/Custom/Table";
 import {
   convertFieldsToJSON,
@@ -21,7 +20,8 @@ import {
   FormHeader,
   FormTextField,
   FormDateTimeField,
-  FormCommentField
+  FormCommentField,
+  FormRadioField
 } from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
@@ -117,22 +117,16 @@ var values = (settings.loadForm) ? loadFormData() : {};
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
-  const { getValues, handleSubmit, getFieldState, resetField, control, unregister, setValue } = useForm({defaultValues: values });
-  const formControl = {
+  const { handleSubmit, getFieldState, control } = useForm({ defaultValues: values });
+  const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings
-  }; // global form vars that should be passed down to imported custom component
-  // useEffect(() => {
-  //   if (settings.loadForm) {
-  //     Object.entries(values).forEach(([k, v]) => setValue(k, v));
-  //   }
-  // })
+  };
 
   // DEFINE COMPONENTS 
   const onSubmit = (data) => {
     data = convertFieldsToJSON(data);
-    console.log("SUBMIT: ", data);
+    console.log("SUBMITTED: ", data);
   }
 
 
@@ -206,37 +200,50 @@ const EPFSubmit = () => {
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
     };
     const tableSettingsC3_2 = {
-      names: ['C3_cleanup_date', 'C3_cleanup_time', 'C3_cleanup_activity_and_description', 'C3_cleanup_venue'],
+      // Replace 'C3_cleanup' with 'C3cleanup' to not break processing
+      names: ['C3cleanup_date', 'C3cleanup_time', 'C3cleanup_activity_and_description', 'C3cleanup_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Clean Up']
     }
     return (
       <>
-        {/* <SectionHeader text="C. Programme Schedule" />
-        <SectionBody text="Please include all the necessary details about each activity and other necessary details such as wet weather plan. The project director is incharge of ensuring the plan is followed." />
+        <SectionHeader text="C. Programme Schedule" />
 
-        <TableHeader text="C.1 Pre-Event" />
-        <TableDescription text="Include details regarding your pre-event set up." />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsC1} />
-          <TableRowsDynamic {...tableSettingsC1} />
-        </Grid >
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <SectionBody text="Please include all the necessary details about each activity and other necessary details such as wet weather plan. The project director is incharge of ensuring the plan is followed." />
 
-        <TableHeader text="C.2 Event" />
-        <TableDescription text="Include details regarding your event and description of each activity." />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsC2} />
-          <TableRowsDynamic {...tableSettingsC2} />
-        </Grid >
+            <TableHeader text="C.1 Pre-Event" />
+            <TableDescription text="Include details regarding your pre-event set up." />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsC1} />
+              <TableRowsDynamic {...formControl} {...tableSettingsC1} />
+            </Grid >
 
-        <TableHeader text="C.3 Post-Event" />
-        <TableDescription text="Include details regarding your post event clean up, management of resources and waste and excess food." />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsC3_1} />
-          <TableRowsDynamic {...tableSettingsC3_1} />
-          <TableColHeaders  {...tableSettingsC3_2} colConfig={[12]} />
-          <TableRowsDynamic {...tableSettingsC3_2} />
-        </Grid > */}
+            <TableHeader text="C.2 Event" />
+            <TableDescription text="Include details regarding your event and description of each activity." />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsC2} />
+              <TableRowsDynamic {...formControl} {...tableSettingsC2} />
+            </Grid >
+
+            <TableHeader text="C.3 Post-Event" />
+            <TableDescription text="Include details regarding your post event clean up, management of resources and waste and excess food." />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsC3_1} />
+              <TableRowsDynamic {...formControl} {...tableSettingsC3_1} />
+              <TableColHeaders  {...tableSettingsC3_2} colConfig={[12]} />
+              <TableRowsDynamic {...formControl} {...tableSettingsC3_2} />
+            </Grid >
+          </Grid>
+
+          <Grid item xs={3} >
+            {settings.showComments
+              ? <FormCommentField {...formControl} name="C_comments" />
+              : <></>
+            }
+          </Grid>
+        </Grid>
       </>
     );
   };
@@ -270,7 +277,7 @@ const EPFSubmit = () => {
     };
     const tableSettingsD2_1 = {
       names: ['D2_items', 'D2_reason_for_purchase', 'D2_venue'],
-      colConfig: [4,4,4],
+      colConfig: [4, 4, 4],
       colNames: ['Item', 'Reason for Purchase', 'Venue']
     };
     const tableSettingsD2_2 = {
@@ -282,79 +289,79 @@ const EPFSubmit = () => {
       <>
         <SectionHeader text="D. Project Finances" />
 
-        {/* <TableHeader text="D.1 Budget: Please indicate the sources of funding for your event." />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsD1A} />
-          <TableRowsStatic {...tableSettingsD1A} />
-          <TableColHeaders {...tableSettingsD1B} />
-          <TableRowsStatic {...tableSettingsD1B} />
-        </Grid >
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <TableHeader text="D.1 Budget: Please indicate the sources of funding for your event." />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsD1A} />
+              <TableRowsStatic {...formControl} {...tableSettingsD1A} />
+              <TableColHeaders {...tableSettingsD1B} />
+              <TableRowsStatic {...formControl} {...tableSettingsD1B} />
+            </Grid >
 
-        <TableHeader text="Table D.1.1" />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsD11_1} />
-          <TableRowsDynamic {...tableSettingsD11_1} />
-          <TableRowsStatic {...tableSettingsD11_2} />
-        </Grid > */}
+            <TableHeader text="Table D.1.1" />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsD11_1} />
+              <TableRowsDynamic {...formControl} {...tableSettingsD11_1} />
+              <TableRowsStatic {...formControl} {...tableSettingsD11_2} />
+            </Grid >
 
-        {/* <TableHeader text="D.2. Expenditure" />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsD2_1} />
-          <TableRowsDynamic {...tableSettingsD2_1} />
-          <TableRowsStatic {...tableSettingsD2_2} />
-        </Grid > */}
+            <TableHeader text="D.2. Expenditure" />
+            <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
+              <TableColHeaders {...tableSettingsD2_1} />
+              <TableRowsDynamic {...formControl} {...tableSettingsD2_1} />
+              <TableRowsStatic {...formControl} {...tableSettingsD2_2} />
+            </Grid >
+          </Grid>
 
-        <TableHeader text="D.2. Expenditure" />
-        <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettingsD2_1} />
-          <TableRowsDynamic {...formControl} {...tableSettingsD2_1} />
-          <TableRowsStatic {...formControl} {...tableSettingsD2_2} />
-        </Grid >
+          <Grid item xs={3} >
+            {settings.showComments
+              ? <FormCommentField {...formControl} name="D_comments" />
+              : <></>
+            }
+          </Grid>
+        </Grid>
       </>
     );
   };
 
-    
+
   const SectionE = () => {
     return (
       <>
         <SectionHeader text="E. Personal data protection declaration" />
-        <SectionBody text={<>
-          Personal data refers to data, whether true or not, about an individual who can be identified from that data; or from that data and other information to which SUTD has or is likely to have access. These include:
-          <br></br>1. Unique identifiers: NRIC Numbers, passport numbers, student IDs.
-          <br></br>2. Any set of data (e.g. name, age, address, telephone number, occupation, etc), which when taken together would be able to identify the individual.
-          <br></br>3. Image of an identifiable individual (whether in photographs or videos).</>} />
-        <Typography sx={{ fontWeight: 'bold', color: 'red' }}>
-          Are you collecting personal data? Please tick accordingly.
-        </Typography>
 
-        <FormControl component="fieldset" sx={{ mb: 3 }}>
-          <RadioGroup
-            name="personal-data-collection"
-          >
-            <FormControlLabel
-              value="radio1"
-              control={<Radio />}
-              sx={{ mb: -1 }}
-              label="Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."
-            />
-            <FormControlLabel
-              value="radio2"
-              control={<Radio />}
-              label="No"
-            />
-          </RadioGroup>
-        </FormControl>
-        <SectionBody text={<>
-          By submitting this form, the project director agrees to abide by the personal data protection clauses as stated below.
-          <br></br>1. All the personal data processed** for the event are for the purposes of communications and facilitating participation in the event. The information shall not be released to any other 3rd party or person (i.e sponsors/donors) other than the organizing committee and relevant persons facilitating the event, without prior approval from OSL. The information collated cannot be used for any other purpose other than for the event itself and will be disposed appropriately upon the completion of event.
-          <br></br>2. The personal information collected will be deleted one month after the event, or at the date as per declaration to OSL.
-          <br></br>3. The above obligations will be communicated to the participants in the consent clause, prior to or at the point of data collection (i.e. the prescribed clause as reflected on the Microsoft Form).
-          <br></br>4. Data platforms used for the collection of the data would be kept secure, private and accessible to only authorized persons.
-          <br></br>5. The event team will not collect any excessive personal data from the participants other than ones necessary for the event.
-          <br></br>6. Under no circumstances, the collected personal data is to be transferred overseas to any external parties abroad unless clearance is first sought from OSL.</>} />
-          <SectionBody text={<>
-          **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
+        <Grid container spacing={6} >
+          <Grid item xs={9}>
+            <SectionBody text={<>
+              Personal data refers to data, whether true or not, about an individual who can be identified from that data; or from that data and other information to which SUTD has or is likely to have access. These include:
+              <br></br>1. Unique identifiers: NRIC Numbers, passport numbers, student IDs.
+              <br></br>2. Any set of data (e.g. name, age, address, telephone number, occupation, etc), which when taken together would be able to identify the individual.
+              <br></br>3. Image of an identifiable individual (whether in photographs or videos).</>} />
+            <Typography sx={{ fontWeight: 'bold', color: 'red' }}>
+              Are you collecting personal data? Please tick accordingly.
+            </Typography>
+
+            <FormRadioField {...formControl} name="E_personal_data" options={["No", "Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."]} />
+
+            <SectionBody text={<>
+              By submitting this form, the project director agrees to abide by the personal data protection clauses as stated below.
+              <br></br>1. All the personal data processed** for the event are for the purposes of communications and facilitating participation in the event. The information shall not be released to any other 3rd party or person (i.e sponsors/donors) other than the organizing committee and relevant persons facilitating the event, without prior approval from OSL. The information collated cannot be used for any other purpose other than for the event itself and will be disposed appropriately upon the completion of event.
+              <br></br>2. The personal information collected will be deleted one month after the event, or at the date as per declaration to OSL.
+              <br></br>3. The above obligations will be communicated to the participants in the consent clause, prior to or at the point of data collection (i.e. the prescribed clause as reflected on the Microsoft Form).
+              <br></br>4. Data platforms used for the collection of the data would be kept secure, private and accessible to only authorized persons.
+              <br></br>5. The event team will not collect any excessive personal data from the participants other than ones necessary for the event.
+              <br></br>6. Under no circumstances, the collected personal data is to be transferred overseas to any external parties abroad unless clearance is first sought from OSL.</>} />
+            <SectionBody text={<>
+              **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
+          </Grid>
+          <Grid item xs={3} >
+            {settings.showComments
+              ? <FormCommentField {...formControl} name="E_comments" />
+              : <></>
+            }
+          </Grid>
+        </Grid>
       </>
     );
   };
