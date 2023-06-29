@@ -29,11 +29,11 @@ import { Card, CardContent, Container, Divider, Box, Typography, TextField, Form
 import { Controller, useForm } from "react-hook-form";
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
-const settings = FORM_MODES["COMMENT"];
-var values = (settings.loadForm) ? loadFormData() : {};
 
-const EPFSubmit = () => {
+const EPFSubmit = ({ mode = "COMMENT" }) => {
   // DEFINE FORM CONTROL VARIABLES
+  const settings = FORM_MODES[mode];
+  var values = (settings.loadForm) ? loadFormData() : {};
   const { handleSubmit, control } = useForm({ defaultValues: values });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
