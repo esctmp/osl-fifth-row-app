@@ -29,11 +29,17 @@ import { Card, CardContent, Container, Divider, Box, Typography, TextField, Form
 import { Controller, useForm } from "react-hook-form";
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
-const settings = FORM_MODES["NEW"];
-var values = (settings.loadForm) ? loadFormData() : {};
+// TODO autofill
+// TODO compulsory fields 
+// TODO don't incl past dates & warning if less than 5 weeks left
+// TODO ROOT comments
+// TODO file attachment feature
+// TODO autosave
 
-const EPFSubmit = () => {
+const EPFSubmit = ({ mode = "NEW" }) => {
   // DEFINE FORM CONTROL VARIABLES
+  const settings = FORM_MODES[mode];
+  var values = (settings.loadForm) ? loadFormData() : {};
   const { handleSubmit, control } = useForm({ defaultValues: values });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
@@ -79,7 +85,7 @@ const EPFSubmit = () => {
             <Grid container spacing={2} sx={{ mb: 5 }}>
               <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" /></Grid>
-              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid>
+              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid> 
               <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" multiline={true} /></Grid>
             </Grid>
