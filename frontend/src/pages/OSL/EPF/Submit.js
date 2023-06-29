@@ -376,7 +376,8 @@ const EPFSubmit = () => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained" onClick={handleSubmit(onSubmit)}>Submit</Button>
+                        <Button style={{ width: 120, height: 40 }} color="success" variant="contained" onClick={handleSubmit(onSubmit)}>Approve</Button>
+                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained" onClick={handleSubmit(onSubmit)}>Decline</Button>
                         <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
                       </Stack>
                     </FormGroup>

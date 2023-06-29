@@ -185,6 +185,7 @@ const TableRowDynamic = ({ settings, control, idx, names, colConfig, minRows=3, 
  */
 // should have grouped all relevent fields into one object but oh well
 // TODO look at slow renders to see if can improve performance
+// TODO disable TableDeleteRow and TableAddRow in Review mode
 export const TableRowsDynamic = (props) => {
   const { fields, append, remove } = useFieldArray({
     name: props.names[0].split('_')[0] + '_grouped',

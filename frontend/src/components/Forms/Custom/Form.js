@@ -196,11 +196,13 @@ export const FormCommentField = ({ name, control, settings }) => {
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
+// TODO fix this 
 export const FormRadioField = ({ name, control, options, settings }) => {
   return (
     <Controller
       name={name}
       control={control}
+      defaultValue={0}
       render={({ field }) => (
         <>
           <FormControl sx={{ mb: 3 }}>
