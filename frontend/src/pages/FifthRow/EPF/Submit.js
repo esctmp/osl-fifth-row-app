@@ -85,7 +85,7 @@ const EPFSubmit = ({ mode = "NEW" }) => {
             <Grid container spacing={2} sx={{ mb: 5 }}>
               <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" /></Grid>
-              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid> 
+              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" multiline={true} /></Grid>
             </Grid>
