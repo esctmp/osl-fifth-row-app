@@ -22,16 +22,20 @@ export default function Login() {
                     <form
                         onSubmit={onSubmit} noValidate className="container">
                         <div className="form-group">
-                            <label htmlFor="username">Club Email:</label>
+                            <label htmlFor="email">Club Email:</label>
                             <input
-                                {...register("username", { required: "*This field is required!" })}
+                                {...register("email", { required: "*This field is required!",pattern:{
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                message: "*Invalid email address"
+            } })}
                                 type="text"
-                                id="username"
-                                name="username"
+                                id="email"
+                                name="email"
                                 placeholder="Enter your club email"
                                 required
+                                className={errors.email ? 'input-error' : ''}
                             />
-                            {errors.username && <p className="errorMessage">{errors.username.message}</p>}
+                            {errors.email && <p className="errorMessage">{errors.email.message}</p>}
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password:</label>
@@ -42,6 +46,7 @@ export default function Login() {
                                 name="password"
                                 placeholder="Enter your password"
                                 required
+                                className={errors.password ? 'input-error' : ''}
                             />
                             {errors.password && <p className="errorMessage">{errors.password.message}</p>}
                         </div>
