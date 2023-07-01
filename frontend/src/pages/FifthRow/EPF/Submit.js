@@ -186,7 +186,7 @@ var values = (settings.loadForm) ? loadFormData() : {};
 
 const EPFSubmit = () => {
   const getNumRows = (names) => settings.loadForm ? Object.keys(values).filter(name => name.includes(names[0])).length : 1;
-  const { getValues, handleSubmit, reset, control, unregister } = useForm({defaultValues: values});
+  const { getValues, handleSubmit, reset, control, unregister } = useForm({ defaultValues: values });
 
   // DEFINE COMPONENTS 
   const onSubmit = (data) => {
@@ -264,7 +264,7 @@ const EPFSubmit = () => {
     );
   };
 
-  const TableTextField = ({ name, idx, minRows=3 }) => {
+  const TableTextField = ({ name, idx, minRows = 3 }) => {
     const tmpName = `${name}_elem_${idx}`;
     return (
       <Controller
@@ -381,11 +381,11 @@ const EPFSubmit = () => {
         <TableHeader text="C.1 Pre-Event" />
         <TableDescription text="Include details regarding your pre-event set up." />
         <Grid container alignItems="stretch" spacing={0} sx={{ mb: 5, border: '1px solid', borderColor: '#B9B9B9' }} >
-          <TableColHeaders {...tableSettings1}/>
+          <TableColHeaders {...tableSettings1} />
           {[...Array(numRows1).keys()].map(idx =>
             <TableRowNoName idx={idx} {...tableSettings1} />
           )}
-          <TableDeleteRow onClickFunction={(e) => { unregisterRow(tableSettings1.names, numRows1 - 1); setNumRows1(numRows1 - 1); console.log(numRows1)}} />
+          <TableDeleteRow onClickFunction={(e) => { unregisterRow(tableSettings1.names, numRows1 - 1); setNumRows1(numRows1 - 1); console.log(numRows1) }} />
           <TableAddRow onClickFunction={(e) => { setNumRows1(numRows1 + 1); }} />
         </Grid>
         {/* 
