@@ -3,19 +3,19 @@ import React from "react";
 import { Card, CardContent, Box, Typography } from "@material-ui/core";
 
 import ExTable from "../../../components/CM_Components/views/dashboards/dashboard1-components/ExTable";
-import { DefaultButtonGroup } from "../../../components/CM_Components/DefaultButtonGroup";
+import { EXCO_DefaultButtonGroup } from "../../../components/CM_Components/EXCO_DefaultButtonGroup";
 
 const EPFView = () => {
 
   return (
     <div>
-      <Box>
+      <Box>  
       <Card variant="outlined">
         <CardContent>
           <Typography variant="h3">Archives</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ marginLeft: 'auto' }}>
-              <DefaultButtonGroup />
+              <EXCO_DefaultButtonGroup />
             </Box>
           </Box>
          
