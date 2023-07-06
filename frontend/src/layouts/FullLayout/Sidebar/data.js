@@ -1,13 +1,13 @@
 import {
-  DashboardOutlined,
   AddToPhotosOutlined,
+  AlbumOutlined,
   AspectRatioOutlined,
   AssignmentTurnedInOutlined,
-  AlbumOutlined,
+  AutoAwesomeMosaicOutlined,
+  DashboardOutlined,
+  DescriptionOutlined,
   SwitchCameraOutlined,
   SwitchLeftOutlined,
-  DescriptionOutlined,
-  AutoAwesomeMosaicOutlined,
 } from "@material-ui/icons/";
 
 const Menuitems = [
@@ -20,12 +20,12 @@ const Menuitems = [
     href: "fifthrow/epf",
   },
   {
-    title: "FifthRow_Submit",
+    title: "FifthRow_Submit Form",
     href: "fifthrow/epf/submit",
     type: "sub-heading"
   },
   {
-    title: "FifthRow_View",
+    title: "FifthRow_View Archive",
     href: "fifthrow/epf/view",
     type: "sub-heading"
   },
@@ -43,7 +43,7 @@ const Menuitems = [
     type: "sub-heading"
   },
   {
-    title: "OSL_View",
+    title: "OSL_View Archive",
     href: "osl/epf/view",
     type: "sub-heading"
   },
