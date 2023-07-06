@@ -1,5 +1,6 @@
 import React from "react";
 import TablePagination from "@material-ui/core/TablePagination";
+import { Link } from "react-router-dom";
 
 import {
   Typography,
@@ -151,7 +152,7 @@ const OSL_ExTable = () => {
                   <Typography
                     variant="h6"
                     sx={{
-                      fontWeight: "600",
+                    fontWeight: "600",
                     }}
                   >
                     {product.date}
@@ -160,10 +161,21 @@ const OSL_ExTable = () => {
               </Box>
             </TableCell>
             <TableCell>
-              <Typography color="textSecondary" variant="h6">
-                {product.epf_Name}
-              </Typography>
-            </TableCell>
+              <Typography
+                  sx={{
+                    fontWeight: "600",
+                    color: "inherit", // Set the color to inherit to avoid the default purple color
+                    textDecoration: "none", // Remove underline
+                    "&:visited": {
+                      color: "inherit", // Set the color to inherit for visited link styles
+                    },
+                  }} 
+                  variant="h6"
+                  component={Link}
+                  to="/osl/epf/submit">
+                  {product.epf_Name}
+              </Typography> 
+            </TableCell> 
             <TableCell>
               <Chip
                 sx={{
@@ -171,6 +183,7 @@ const OSL_ExTable = () => {
                   pr: "4px",
                   backgroundColor: product.pbg,
                   color: "#fff",
+                  // fontWeight: "600"
                 }}
                 size="small"
                 label={product.status}

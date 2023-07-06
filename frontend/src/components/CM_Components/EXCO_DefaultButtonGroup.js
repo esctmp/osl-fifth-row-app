@@ -4,7 +4,7 @@ import { Box, Button, ButtonGroup } from "@material-ui/core";
 
 import BaseCard from "../BaseCard/BaseCard";
 
-const DefaultButtonGroup = () => {
+const EXCO_DefaultButtonGroup = () => {
   return (
       <Box
         sx={{
@@ -15,8 +15,6 @@ const DefaultButtonGroup = () => {
           <ButtonGroup variant="text" aria-label="text button group">
             <Button>Filter By Date</Button>
             <Button>Filter By Name</Button>
-            <Button>Filter by Club</Button>
-            <Button>Export All</Button>
           </ButtonGroup>
         </Box>
       </Box>
@@ -24,4 +22,4 @@ const DefaultButtonGroup = () => {
   );
 };
 
-export { DefaultButtonGroup };
+export { EXCO_DefaultButtonGroup };
