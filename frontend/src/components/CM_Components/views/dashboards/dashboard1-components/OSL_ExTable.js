@@ -122,8 +122,10 @@ const OSL_ExTable = () => {
       </TableHead>
       <TableBody>
         {slicedProducts.map((product) => (
-          <TableRow key={product.name}>
-            <TableCell>
+          <TableRow key={product.epf_Name}>
+            <TableCell
+            sx={{ width: "10px", maxWidth: "50px" }}
+            >
             <Box
               sx={{
                 display: "flex",
@@ -131,10 +133,10 @@ const OSL_ExTable = () => {
               }}
             >
               <Typography
+                variant="h6"
                 sx={{
                   fontSize: "15px",
                   fontWeight: "500",
-                  marginRight: "50px",
                 }}
               >
                 {product.id}
