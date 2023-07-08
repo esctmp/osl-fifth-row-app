@@ -11,7 +11,7 @@ export default function ForgetPassword() {
     })
     return (
         <FormProvider{...methods}>
-        <div>
+        <div className="MainContainer">
             <div className="Name">
                 <label htmlFor="Name">OSL Fifth-Row App</label>
             </div>
@@ -51,6 +51,7 @@ export default function ForgetPassword() {
                 </form>
             </div>
         </div>
+        
         </FormProvider>
     );
 }

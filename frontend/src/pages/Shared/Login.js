@@ -12,7 +12,7 @@ export default function Login() {
     })
     return (
         <FormProvider{...methods}>
-
+            <div className= "MainContainer">
             <div>
                 <div className="Name">
                     <label htmlFor="Name">OSL Fifth-Row App</label>
@@ -62,6 +62,7 @@ export default function Login() {
                     </form>
                 </div>
             </div >
+            </div>
         </FormProvider >
     );
 }
