@@ -37,9 +37,9 @@ const FormLayouts = lazy(() => import("../views/FormLayouts/FormLayouts"));
 /*****Routes******/
 
 const ThemeRoutes = [
-  // { path: "/", element: <Navigate to="/login" replace/> },
-  { path: "/login", exact: true, element: <Login /> },
-  { path: "/forgetpassword", element: <ForgetPassword />, exact: true },
+  { path: "/", element: <Navigate to="/login" replace/> },
+  { path: "/login",  element: <Login /> },
+  { path: "/forgetpassword", element: <ForgetPassword />},
   {
     path: "/",
     element: <FullLayout />,
