@@ -4,11 +4,16 @@ import { useNavigate, Link } from "react-router-dom";
 // import input from "../../components/Forms/Custom/input.js"
 
 export default function Login() {
+    const user = "FRE";
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
     const onSubmit = methods.handleSubmit(data => {
-        navigate("/dashboards/dashboard1")
+        if(user=="OSL"){navigate("/osl/homepage")}
+        else if(user == "FRE"){navigate("/fifthrow/homepage")}
+        else{
+            navigate("/login")
+        }
     })
     return (
         <FormProvider{...methods}>

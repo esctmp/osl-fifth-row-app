@@ -47,7 +47,7 @@ const RemainingBudgetBox = () => {
 
 const SidebySideBoxes = () => {
   return (
-    <div className="container">
+    <div className="sidecontainer">
       <ClubDetailsBox />
       <RemainingBudgetBox />
     </div>

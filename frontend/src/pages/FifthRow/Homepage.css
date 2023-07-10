@@ -9,7 +9,7 @@
     font-family: "DM Sans", sans-serif;
 }
 
-.imageContainer {   /* for logo */
+.imageContainer {  
     display: flex;
     justify-content: center;
     height: 50px;
@@ -36,7 +36,7 @@
     text-align: center;
 }
 
-.container{   /* to contain the two boxes */
+.sidecontainer{   /* to contain the two boxes */
     display: flex;
     justify-content: center;
 }
