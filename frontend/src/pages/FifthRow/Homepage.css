@@ -36,25 +36,43 @@
     text-align: center;
 }
 
-.sidecontainer{   /* to contain the two boxes */
-    display: flex;
+.informationBox {
+    margin-top: 150px;
+    border: transparent;
+    height: 30px;
+    width: 100%;
     justify-content: center;
 }
 
-.bottomTwoBox {   /* two identical boxes at the bottom*/
+.informationText {
+    font-family: "DM Sans", sans-serif;
+    font-size: 25px;
+    color: #000000;
+    text-align: center;
+
+}
+
+/* to contain the two boxes */
+/* .sidecontainer{   
+    display: flex;
+    justify-content: center;
+} */
+
+/* two identical boxes at the bottom*/
+/* .bottomTwoBox {   
     flex: 1;
     max-width: 250px;
     height: 130px;
-    margin: 120px;    /* space between boxes*/
+    margin: 120px;    
     margin-top: 130px;
     background-color: #ffffff;
     border: 1px solid #b0b0b0;
     margin-bottom: 100px;
     border-radius: 10px;
     font-family: "DM Sans", sans-serif;
-}
+} */
 
-.clubDetailsBox {
+/* .clubDetailsBox {
     font-family: "DM Sans", sans-serif;
     margin-top: 8px;
     font-size: 15px;
@@ -76,4 +94,4 @@
     font-size: 30px;
     text-align: center;
     
-}
+} */
