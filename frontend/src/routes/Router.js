@@ -37,13 +37,14 @@ const FormLayouts = lazy(() => import("../views/FormLayouts/FormLayouts"));
 /*****Routes******/
 
 const ThemeRoutes = [
+  { path: "/", element: <Navigate to="/login" replace/> },
+  { path: "/login",  element: <Login /> },
+  { path: "/forgetpassword", element: <ForgetPassword />},
   {
     path: "/",
     element: <FullLayout />,
     children: [
-      { path: "/", element: <Navigate to="/login" /> },
-      { path: "/login", exact: true, element: <Login /> },
-      { path: "/forgetpassword", exact: true, element: <ForgetPassword /> },
+      
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element: <FifthRowEPF /> },
       { path: "/fifthrow/epf/submit", exact: true, element: <FifthRowEPFSubmit /> },
@@ -64,6 +65,7 @@ const ThemeRoutes = [
       { path: "/form-elements/switch", element: <ExSwitch /> },
     ],
   },
+  
 ];
 
 export default ThemeRoutes;
