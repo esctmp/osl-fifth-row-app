@@ -14,7 +14,8 @@ import {
 import {
   convertFieldsToJSON,
   convertJSONToFields,
-  loadFormData,
+  getEPF,
+  createEPF
 } from "../../../components/Forms/Custom/Utilities";
 import {
   FORM_MODES,
@@ -27,23 +28,35 @@ import {
 } from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
+import { useQuery } from "react-query";
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 
 const EPFSubmit = ({ mode = "COMMENT" }) => {
   // DEFINE FORM CONTROL VARIABLES
   const settings = FORM_MODES[mode];
-  var values = (settings.loadForm) ? loadFormData() : {};
-  const { handleSubmit, control } = useForm({ defaultValues: values });
+  const { handleSubmit, control, setValue } = useForm({});
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings
   };
 
+  useEffect(() => { 
+    if (settings.loadForm) {
+      getEPF(1).then(values => Object.entries(values).map(([k,v]) => setValue(k, v)));
+    }
+  }, []);
+
   // DEFINE HANDLES 
   const onSubmit = (data) => {
-    data = convertFieldsToJSON(data);
-    console.log("SUBMITTED: ", data);
+    data.status = "approved";
+    createEPF(data).then(response => {
+      if (response.status == 201) {
+        alert("Form submitted successfully!");
+      } else {
+        alert("Form submission failed. Please try again.");
+      };
+    });
   }
 
   // DEFINE SECTIONS
@@ -63,7 +76,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="A_comments" />
+            <FormCommentField {...formControl} name="A_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -85,7 +98,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="B_comments" />
+            <FormCommentField {...formControl} name="B_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -148,7 +161,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="C_comments" />
+            <FormCommentField {...formControl} name="C_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -222,7 +235,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="D_comments" />
+            <FormCommentField {...formControl} name="D_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -260,7 +273,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
               **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="E_comments" />
+            <FormCommentField {...formControl} name="E_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -286,7 +299,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="F_comments" />
+            <FormCommentField {...formControl} name="F_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -339,7 +352,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="G_comments" />
+            <FormCommentField {...formControl} name="G_comments_OSL" />
           </Grid>
         </Grid>
       </>

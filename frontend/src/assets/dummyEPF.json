@@ -1,17 +1,20 @@
 {
-    "status": 3,
-    "user_id": 1,
+    "status": "Pending",
+    "exco_user_id": 1,
     "A_name": "user 1",
     "A_student_id": 1000001,
     "A_organisation": "organisation 1",
     "A_contact_number": 99998888,
-    "A_comments": "Looks okay",
     "A_email": "user_1@mymail.sutd.edu.sg",
+    "A_comments_OSL": "A Comment OSL",
+    "A_comments_ROOT": "A Comment ROOT",
     "B_event_name": "event 1",
     "B_target_audience": "target Audience 1",
     "B_event_schedule": "2023-06-21 16:49:00",
     "B_expected_turnout": 1,
     "B_event_objective": "event Objective 1",
+    "B_comments_OSL": "B Comment OSL",
+    "B_comments_ROOT": "B Comment ROOT",
     "C1_date": [
         "2023-06-21",
         "2023-06-22"
@@ -76,6 +79,8 @@
         "venue 1",
         "venue 2"
     ],
+    "C_comments_OSL": "C Comment OSL",
+    "C_comments_ROOT": "C Comment ROOT",
     "D1A_club_income_fund": 23.23,
     "D1A_osl_seed_fund": 23.23,
     "D1A_donation": 23.23,
@@ -112,7 +117,11 @@
         "venue 2"
     ],
     "D2_total_expenditure": 23.23,
+    "D_comments_OSL": "D Comment OSL",
+    "D_comments_ROOT": "D Comment ROOT",
     "E_personal_data": 1,
+    "E_comments_OSL": "E Comment OSL",
+    "E_comments_ROOT": "E Comment ROOT",
     "F_name": [
         "name 1",
         "name 2"
@@ -125,6 +134,8 @@
         "position 1",
         "position 2"
     ],
+    "F_comments_OSL": "F Comment OSL",
+    "F_comments_ROOT": "F Comment ROOT",
     "G_1_1": "blank",
     "G_1_2": "blank",
     "G_1_3": "blank",
@@ -145,5 +156,7 @@
     "G_6_3": "blank",
     "G_7_1": "blank",
     "G_7_2": "blank",
-    "G_7_3": "blank"
+    "G_7_3": "blank",
+    "G_comments_OSL": "G Comment OSL",
+    "G_comments_ROOT": "G Comment ROOT"
 }
