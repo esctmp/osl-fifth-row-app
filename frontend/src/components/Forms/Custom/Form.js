@@ -80,6 +80,7 @@ export const FormHeader = ({ text }) =>
  * @param {string} name The form field name
  * @param {boolean=?} multiline Whether the field is multiline
  * @param {Control} control 
+ * @param {boolean} required Whether the field is required
  * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
  * @param {boolean} props.settings.enableInputs
  * @param {boolean} props.settings.loadForm
@@ -87,20 +88,32 @@ export const FormHeader = ({ text }) =>
  * @param {boolean} props.settings.enableComments
  * @returns  {React.Component}
  */
-export const FormTextField = ({ name, control, settings, multiline = false }) => {
+export const FormTextField = ({ name, control, settings, multiline = false, required=false }) => {
+  const [ error, setError ] = useState(false);
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value } }) => (
+      render={({ field }) => (
         <TextField
+          InputLabelProps={{
+            required: required
+          }}
           id={name}
           label={makeNameFancy(name)}
-          onChange={onChange}
-          value={value}
+          onChange={(e) => {
+            field.onChange(e.target.value);
+            (required && !e.target.value) ? setError(true) : setError(false); 
+          }}
+          onFocus={() => {(required && !field.value) ? setError(true) : setError(false);} }
+          value={field.value}
           multiline={multiline}
           disabled={!settings.enableInputs}
           fullWidth
+          error={error}
+          sx={{
+            borderColor: 'red'
+          }}
         />
       )}
     />
@@ -113,6 +126,7 @@ export const FormTextField = ({ name, control, settings, multiline = false }) =>
  * @param {string} name The form field name
  * @param {boolean=?} multiline Whether the field is multiline
  * @param {Control} control 
+ * @param {boolean} required Whether the field is required
  * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
  * @param {boolean} props.settings.enableInputs
  * @param {boolean} props.settings.loadForm
@@ -120,22 +134,40 @@ export const FormTextField = ({ name, control, settings, multiline = false }) =>
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-export const FormDateTimeField = ({ name, control, settings, multiline = false }) => {
+export const FormDateTimeField = ({ name, control, settings, multiline = false, required=false }) => {
+  const [ error, setError ] = useState(false);
+  const [ warn, setWarn ] = useState(false);
+  const today = new Date().toISOString().slice(0, 16);
+  const shouldWarn = (dateStr) => {
+    return (new Date("2023-07-18") - new Date(today.slice(0,10))) / (24 * 60 * 60 * 1000) < (7 * 5);
+  };
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue="2020-01-01T12:00:00"
-      render={({ field: { onChange, value } }) => (
+      render={({ field }) => (
         <TextField
+          InputLabelProps={{
+            required: required,
+            shrink: true,
+            min: today
+          }}
           id={name}
           label={makeNameFancy(name)}
-          onChange={onChange}
+          onChange={(e) => {
+            field.onChange(e.target.value);
+            (required && !e.target.value) ? setError(true) : setError(false); 
+            (shouldWarn(e.target.value)) ? setWarn(true) : setWarn(false); 
+          }}
+          onFocus={() => {
+            (required && !field.value) ? setError(true) : setError(false);} 
+          }
+          value={field.value}
+          helperText={(warn ? "Warning: The event date is < 5 weeks away." : "")}
           type="datetime-local"
-          defaultValue="2020-01-01T12:00:00"
-          value={value}
           multiline={multiline}
           disabled={!settings.enableInputs}
+          error={error || warn}
           fullWidth
         />
       )}
@@ -189,6 +221,7 @@ export const FormCommentField = ({ name, control, settings }) => {
  * @param {string} name The form field name
  * @param {Control} control 
  * @param {string[]} options A list of options that will be displayed
+ * @param {boolean} required Whether the field is required
  * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
  * @param {boolean} props.settings.enableInputs
  * @param {boolean} props.settings.loadForm
@@ -196,19 +229,22 @@ export const FormCommentField = ({ name, control, settings }) => {
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-// TODO fix this 
-export const FormRadioField = ({ name, control, options, settings }) => {
+// TODO fix this for error display
+export const FormRadioField = ({ name, control, options, settings, required=false }) => {
+  const [ error, setError ] = useState(false);
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={0}
       render={({ field }) => (
         <>
           <FormControl sx={{ mb: 3 }}>
             <RadioGroup
               {...field}
-              onChange={(e, value) => field.onChange(parseInt(value))}
+              onChange={(e) => {
+                field.onChange(parseInt(e.target.value));
+                (required && !e.target.value) ? setError(true) : setError(false); 
+              }}
             >
               {options.map((option, idx) =>
                 <FormControlLabel
