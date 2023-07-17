@@ -20,12 +20,12 @@ const Menuitems = [
     href: "fifthrow/epf",
   },
   {
-    title: "FifthRow_Submit Form",
-    href: "fifthrow/epf/submit",
+    title: "FifthRow_Create New EPF",
+    href: "fifthrow/epf/new",
     type: "sub-heading"
   },
   {
-    title: "FifthRow_View Archive",
+    title: "FifthRow_View EPF List",
     href: "fifthrow/epf/view",
     type: "sub-heading"
   },
@@ -43,9 +43,13 @@ const Menuitems = [
     type: "sub-heading"
   },
   {
-    title: "OSL_View Archive",
+    title: "OSL_View EPF List",
     href: "osl/epf/view",
     type: "sub-heading"
+  },
+  {
+    title: "Root_Homepage",
+    href: "root/homepage",
   },
   {
     title: "Dashboard",
