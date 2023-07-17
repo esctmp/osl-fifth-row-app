@@ -46,7 +46,7 @@ const EPFSubmit = ({ mode = "NEW" }) => {
 
   useEffect(() => {
     if (settings.loadForm) {
-      getEPF(1).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
+      getEPF(4).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
     }
   }, []);
 

@@ -12,6 +12,10 @@ import axios from 'axios';
  * @returns {FormData} 
  */
 export const convertJSONToFields = (data) => {
+    // Filter out undefined/null data
+    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || value?.length == 0)));
+
+    // Convert all ungrouped data to grouped
     data = Object.fromEntries(Object.entries(data).map(([k, v]) => [k.replace('C3_cleanup', 'C3cleanup'), v])); // fix for EPF only
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([key, val]) => !Array.isArray(val)));
     let listObjsInitial = Object.fromEntries(Object.entries(data).filter(([key, val]) => Array.isArray(val)));
@@ -25,13 +29,18 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    // let response = await axios.get("http://localhost:3000/epfs/getEPF", {
-    //     "epf_id": epf_id
-    // cancelToken: newCancelToken.token
-    // });
-    // console.log("DATA", response.data);
-    let response = { data: dummyEPF };
-    let data = convertJSONToFields(response.data);
+    let req = {
+        "epf_id": epf_id
+    };
+    let response = await axios.get("http://localhost:3000/epfs/getEPF", 
+        {
+            data: req // TODO waiting for backend to change to query params
+        }
+    ).then((res) => res, (error) => {
+        console.log(error);
+        return { data: [{}] };
+    });
+    let data = convertJSONToFields(response.data[0]);
     console.log(data);
     return data; // TODO integrate w api
 }

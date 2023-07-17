@@ -28,7 +28,6 @@ import {
 } from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 
@@ -41,22 +40,15 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
     settings: settings
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     if (settings.loadForm) {
-      getEPF(1).then(values => Object.entries(values).map(([k,v]) => setValue(k, v)));
+      getEPF(4).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
     }
   }, []);
 
   // DEFINE HANDLES 
-  const onSubmit = (data) => {
-    data.status = "approved";
-    createEPF(data).then(response => {
-      if (response.status == 201) {
-        alert("Form submitted successfully!");
-      } else {
-        alert("Form submission failed. Please try again.");
-      };
-    });
+  const submit = (data) => {
+    createEPF(data);
   }
 
   // DEFINE SECTIONS
@@ -389,9 +381,27 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} color="success" variant="contained" onClick={handleSubmit(onSubmit)}>Approve</Button>
-                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained" onClick={handleSubmit(onSubmit)}>Decline</Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
+                        <Button style={{ width: 120, height: 40 }} color="success" variant="contained" 
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Approved"; submit(data);
+                            })}>
+                          Approve
+                        </Button>
+                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained"
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Declined"; submit(data);
+                            })}>
+                          Decline
+                        </Button>
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" 
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Draft_OSL"; submit(data);
+                            })}>
+                          Save draft
+                        </Button>
                       </Stack>
                     </FormGroup>
                   </form>
