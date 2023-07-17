@@ -46,14 +46,20 @@ export async function getEPF(epf_id) {
  * @returns {FormData} Won't include empty list fields
  */
 export const convertFieldsToJSON = (data) => {
+    // Filter out undefined/null data
+    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || value?.length == 0)));
+
+    // Convert all grouped data to ungrouped
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([name, _]) => !name.includes('_grouped')));
     let listObjsInitial = Object.entries(data).filter(([name, _]) => name.includes('_grouped')).map(([_, v]) => v);
     let listObjs = {};
-    for (let group of listObjsInitial) {
-        if (!group) { continue; };
-        let names = Object.fromEntries(Object.keys(group[0]).map(name => [name, group.map(obj => obj[name])]));
-        listObjs = { ...listObjs, ...names };
-    };
+    if (listObjsInitial != []) {
+        for (let group of listObjsInitial) {
+            if (!group) { continue; };
+            let names = Object.fromEntries(Object.keys(group[0]).map(name => [name, group.map(obj => obj[name])]));
+            listObjs = { ...listObjs, ...names };
+        };
+    }
     let res = { ...listObjs, ...scalarObjs };
     res = Object.fromEntries(Object.entries(res).map(([k, v]) => [k.replace('C3cleanup', 'C3_cleanup'), v])); // fix for EPF only
     return res;
@@ -61,15 +67,18 @@ export const convertFieldsToJSON = (data) => {
 
 export async function createEPF(data) {
     data = convertFieldsToJSON(data);
-    const response = await axios.post("http://localhost:3000/epfs/createEPF",
-        JSON.stringify(data),
+    await axios.post("http://localhost:3000/epfs/createEPF",
+        data,
         {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
-    );
-    return response;
+    ).then((response) => {
+        if (response.status == 201) {
+          alert("Form uploaded successfully!");
+        }
+    }, (error) => alert("Form upload failed. Please try again."));
 }
 
 
