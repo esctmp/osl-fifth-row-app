@@ -14,7 +14,8 @@ import {
 import {
   convertFieldsToJSON,
   convertJSONToFields,
-  loadFormData,
+  getEPF,
+  createEPF
 } from "../../../components/Forms/Custom/Utilities";
 import {
   FORM_MODES,
@@ -30,8 +31,6 @@ import { Controller, useForm } from "react-hook-form";
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 // TODO autofill
-// TODO compulsory fields 
-// TODO don't incl past dates & warning if less than 5 weeks left
 // TODO ROOT comments
 // TODO file attachment feature
 // TODO autosave
@@ -39,17 +38,21 @@ import { Controller, useForm } from "react-hook-form";
 const EPFSubmit = ({ mode = "NEW" }) => {
   // DEFINE FORM CONTROL VARIABLES
   const settings = FORM_MODES[mode];
-  var values = (settings.loadForm) ? loadFormData() : {};
-  const { handleSubmit, control } = useForm({ defaultValues: values });
+  const { handleSubmit, control, setValue } = useForm({});
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings
   };
 
+  useEffect(() => {
+    if (settings.loadForm) {
+      getEPF(1).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
+    }
+  }, []);
+
   // DEFINE HANDLES 
-  const onSubmit = (data) => {
-    data = convertFieldsToJSON(data);
-    console.log("SUBMITTED: ", data);
+  const submit = (data) => {
+    createEPF(data);
   }
 
   // DEFINE SECTIONS
@@ -61,11 +64,11 @@ const EPFSubmit = ({ mode = "NEW" }) => {
           <Grid item xs={9}>
             <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
             <Grid container spacing={2} sx={{ mb: 5 }}>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_name" /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_student_id" /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_organisation" /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_contact_number" /></Grid>
-              <Grid item xs={12}><FormTextField {...formControl} name="A_email" /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_name" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_student_id" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_organisation" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_contact_number" required={true} /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="A_email" required={true} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
@@ -83,11 +86,11 @@ const EPFSubmit = ({ mode = "NEW" }) => {
         <Grid container spacing={6} >
           <Grid item xs={9}>
             <Grid container spacing={2} sx={{ mb: 5 }}>
-              <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" /></Grid>
-              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" /></Grid>
-              <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" multiline={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" required={true} /></Grid>
+              <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" required={true} /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" required={true} multiline={true} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
@@ -382,8 +385,20 @@ const EPFSubmit = ({ mode = "NEW" }) => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained" onClick={handleSubmit(onSubmit)}>Submit</Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
+                        <Button style={{ width: 120, height: 40 }} variant="contained" 
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Submitted"; submit(data);
+                            })}>
+                          Submit
+                        </Button>
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"                       
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Draft_FifthRow"; submit(data);
+                            })}>
+                          Save draft
+                        </Button>
                       </Stack>
                     </FormGroup>
                   </form>
