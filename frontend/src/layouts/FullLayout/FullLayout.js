@@ -1,14 +1,14 @@
-import React, { useState } from "react";
 import {
+  Box,
+  Container,
   experimentalStyled,
   useMediaQuery,
-  Container,
-  Box,
 } from "@material-ui/core";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header/Header";
 import Sidebar from "./Sidebar/Sidebar";
-import Footer from "./Footer/Footer";
+//import Footer from "./Footer/Footer";
 import { TopbarHeight } from "../../assets/global/Theme-variable";
 
 const MainWrapper = experimentalStyled("div")(({ theme }) => ({
@@ -64,7 +64,7 @@ const FullLayout = () => {
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
             <Outlet />
           </Box>
-          <Footer />
+          
         </Container>
       </PageWrapper>
     </MainWrapper>

@@ -151,6 +151,33 @@ const Header = (props) => {
         <Box flexGrow={1} />
 
         {/* ------------------------------------------- */}
+        {/* Username */}
+        {/* ------------------------------------------- */}
+        <Box
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          sx={{
+            height: "25px",
+            width: "auto",
+            right: 0,
+            top: "70px !important",
+            mr: 1.2,
+            mt: 0.5,
+          }}
+        >
+          <text 
+            style={{
+              color: 'black',
+              fontFamily: "DM Sans",
+            }}
+          >
+            Username
+          </text>
+        </Box>
+            
+
+
+        {/* ------------------------------------------- */}
         {/* Notifications Dropdown */}
         {/* ------------------------------------------- */}
         <IconButton

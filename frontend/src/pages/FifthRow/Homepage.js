@@ -1,5 +1,5 @@
 import React from "react";
-import test_logo from "../../assets/images/logo-short.png";
+import logo_short from "../../assets/images/logo-short.png";
 import "./Homepage.css";
 
 const Homepage = () => {
@@ -14,7 +14,7 @@ const Homepage = () => {
         <div className="fifthRow">
           <label htmlFor="fifthRow">Badminton</label>
         </div>
-        <SidebySideBoxes />
+        <InformationBox />
       </div>
     </div>
   );
@@ -23,35 +23,43 @@ const Homepage = () => {
 const Logo = () => {
   return (
     <div className="imageContainer">
-      <img src={test_logo} alt="Logo" />
+      <img src={logo_short} alt="Logo" />
     </div>
   )
 }
 
-const ClubDetailsBox = () => {
+const InformationBox = () => {
   return (
-    <div className="bottomTwoBox">
-      <h2 className="clubDetailsBox">Club Details</h2>
+    <div className="informationBox">
+      <p className="informationText">You have 3 outstanding forms to review.</p>
     </div>
   )
 }
 
-const RemainingBudgetBox = () => {
-  return (
-    <div className="bottomTwoBox">
-      <h2 className="remainingBudgetBox">Remaining Budget</h2>
-      <h2 className="remainingAmount"> $345 </h2>
-    </div>
-  )
-}
+// const ClubDetailsBox = () => {
+//   return (
+//     <div className="bottomTwoBox">
+//       <h2 className="clubDetailsBox">Club Details</h2>
+//     </div>
+//   )
+// }
 
-const SidebySideBoxes = () => {
-  return (
-    <div className="container">
-      <ClubDetailsBox />
-      <RemainingBudgetBox />
-    </div>
-  )
-}
+// const RemainingBudgetBox = () => {
+//   return (
+//     <div className="bottomTwoBox">
+//       <h2 className="remainingBudgetBox">Remaining Budget</h2>
+//       <h2 className="remainingAmount"> $345 </h2>
+//     </div>
+//   )
+// }
+
+// const SidebySideBoxes = () => {
+//   return (
+//     <div className="sidecontainer">
+//       <ClubDetailsBox />
+//       <RemainingBudgetBox />
+//     </div>
+//   )
+// }
 
 export default Homepage;
