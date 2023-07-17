@@ -19,6 +19,8 @@ const OSLEPF = lazy(() => import("../pages/OSL/EPF/EPF"));
 const OSLEPFSubmit = lazy(() => import("../pages/OSL/EPF/Submit"));
 const OSLEPFView = lazy(() => import("../pages/OSL/EPF/View"));
 
+const RootHomepage = lazy(() => import("../pages/Root/Homepage"));
+
 /*****Tables******/
 const BasicTable = lazy(() => import("../views/tables/BasicTable"));
 
@@ -47,12 +49,13 @@ const ThemeRoutes = [
       
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element: <FifthRowEPF /> },
-      { path: "/fifthrow/epf/submit", exact: true, element: <FifthRowEPFSubmit /> },
+      { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit /> },
       { path: "/fifthrow/epf/view", exact: true, element: <FifthRowEPFView /> },
       { path: "/osl/homepage", exact: true, element: <OSLHomepage /> },
       { path: "/osl/epf", exact: true, element: <OSLEPF /> },
       { path: "/osl/epf/submit", exact: true, element: <OSLEPFSubmit /> },
       { path: "/osl/epf/view", exact: true, element: <OSLEPFView /> },
+      { path: "/root/homepage", exact: true, element: <RootHomepage />},
 
       { path: "dashboards/dashboard1", exact: true, element: <Dashboard1 /> },
       { path: "tables/basic-table", element: <BasicTable /> },
