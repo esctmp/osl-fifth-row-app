@@ -14,7 +14,8 @@ import {
 import {
   convertFieldsToJSON,
   convertJSONToFields,
-  loadFormData,
+  getEPF,
+  createEPF
 } from "../../../components/Forms/Custom/Utilities";
 import {
   FORM_MODES,
@@ -33,17 +34,21 @@ import { Controller, useForm } from "react-hook-form";
 const EPFSubmit = ({ mode = "COMMENT" }) => {
   // DEFINE FORM CONTROL VARIABLES
   const settings = FORM_MODES[mode];
-  var values = (settings.loadForm) ? loadFormData() : {};
-  const { handleSubmit, control } = useForm({ defaultValues: values });
+  const { handleSubmit, control, setValue } = useForm({});
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings
   };
 
+  useEffect(() => {
+    if (settings.loadForm) {
+      getEPF(4).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
+    }
+  }, []);
+
   // DEFINE HANDLES 
-  const onSubmit = (data) => {
-    data = convertFieldsToJSON(data);
-    console.log("SUBMITTED: ", data);
+  const submit = (data) => {
+    createEPF(data);
   }
 
   // DEFINE SECTIONS
@@ -63,7 +68,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="A_comments" />
+            <FormCommentField {...formControl} name="A_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -85,7 +90,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="B_comments" />
+            <FormCommentField {...formControl} name="B_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -148,7 +153,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="C_comments" />
+            <FormCommentField {...formControl} name="C_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -222,7 +227,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="D_comments" />
+            <FormCommentField {...formControl} name="D_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -260,7 +265,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
               **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="E_comments" />
+            <FormCommentField {...formControl} name="E_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -286,7 +291,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="F_comments" />
+            <FormCommentField {...formControl} name="F_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -339,7 +344,7 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="G_comments" />
+            <FormCommentField {...formControl} name="G_comments_OSL" />
           </Grid>
         </Grid>
       </>
@@ -376,9 +381,27 @@ const EPFSubmit = ({ mode = "COMMENT" }) => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} color="success" variant="contained" onClick={handleSubmit(onSubmit)}>Approve</Button>
-                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained" onClick={handleSubmit(onSubmit)}>Decline</Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained">Save draft</Button>
+                        <Button style={{ width: 120, height: 40 }} color="success" variant="contained" 
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Approved"; submit(data);
+                            })}>
+                          Approve
+                        </Button>
+                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained"
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Declined"; submit(data);
+                            })}>
+                          Decline
+                        </Button>
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" 
+                          onClick={handleSubmit(
+                            async (data) => {
+                              data.status = "Draft_OSL"; submit(data);
+                            })}>
+                          Save draft
+                        </Button>
                       </Stack>
                     </FormGroup>
                   </form>

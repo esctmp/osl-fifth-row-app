@@ -100,6 +100,7 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, minRows=
             render={({ field: { onChange, value } }) => (
               <Input
                 id={`${name}`}
+                key={`${name}`}
                 fullWidth
                 multiline
                 minRows={minRows}
@@ -151,6 +152,7 @@ const TableRowDynamic = ({ settings, control, idx, names, colConfig, minRows=3, 
             render={({ field: { onChange, value } }) => (
               <Input
                 id={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
+                key={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
                 fullWidth
                 multiline
                 minRows={minRows}
