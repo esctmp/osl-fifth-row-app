@@ -29,6 +29,8 @@ import {
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
+import { useContext } from 'react';
+import { LevelContext } from '../../../routes/LevelContext';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 // TODO autofill
@@ -38,8 +40,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const state = useLocation();
-  console.log("STATE", state);
+  const { user_id } = useContext(LevelContext);
   const { epf_id } = useParams();
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
