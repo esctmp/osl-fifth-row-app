@@ -41,7 +41,7 @@ const ExTable = () => {
       >
         <TableHead>
           <TableRow>
-          <TableCell>
+            <TableCell>
               <Typography color="textSecondary" variant="h6">
                 Id
               </Typography>
@@ -56,7 +56,7 @@ const ExTable = () => {
                 Name
               </Typography>
             </TableCell>
-          <TableCell>
+            <TableCell>
               <Typography color="textSecondary" variant="h6">
                 Status
               </Typography>
@@ -66,7 +66,7 @@ const ExTable = () => {
         <TableBody>
           {slicedProducts.map((product) => (
             <TableRow key={product.name}>
-            <TableCell>
+              <TableCell>
                 <Typography
                   sx={{
                     fontSize: "15px",
@@ -76,7 +76,7 @@ const ExTable = () => {
                   {product.id}
                 </Typography>
               </TableCell>
-            <TableCell>
+              <TableCell>
                 <Box
                   sx={{
                     display: "flex",
@@ -95,7 +95,10 @@ const ExTable = () => {
                   </Box>
                 </Box>
               </TableCell>
-            <TableCell>
+              <TableCell>
+                <Link
+                  to={ `/fifthrow/epf/view/${product.id}`}
+                >
                   <Typography
                     sx={{
                       fontWeight: "600",
@@ -106,12 +109,14 @@ const ExTable = () => {
                       },
                     }}
                     variant="h6"
-                  component={Link}
-                  to="/osl/epf/submit">
+                  // component={Link}
+                  // to="/fifthrow/epf/submit"
+                  >
                     {product.epf_Name}
                   </Typography>
+                </Link>
               </TableCell>
-            <TableCell>
+              <TableCell>
                 <Chip
                   sx={{
                     pl: "4px",
@@ -125,17 +130,17 @@ const ExTable = () => {
               </TableCell>
             </TableRow>
           ))}
-        </TableBody>
-        <TablePagination
-          rowsPerPageOptions={[]} // Disable rows per page selection
-          component="div"
-          count={products.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-        />
-      </Table>
-    </div>
+      </TableBody>
+      <TablePagination
+        rowsPerPageOptions={[]} // Disable rows per page selection
+        component="div"
+        count={products.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+      />
+    </Table>
+    </div >
   );
 };
 

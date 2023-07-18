@@ -50,10 +50,12 @@ const ThemeRoutes = [
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element: <FifthRowEPF /> },
       { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit /> },
+      { path: "/fifthrow/epf/view/:epf_id", exact: true, element: <FifthRowEPFSubmit /> },
       { path: "/fifthrow/epf/view", exact: true, element: <FifthRowEPFView /> },
       { path: "/osl/homepage", exact: true, element: <OSLHomepage /> },
       { path: "/osl/epf", exact: true, element: <OSLEPF /> },
       { path: "/osl/epf/submit", exact: true, element: <OSLEPFSubmit /> },
+      { path: "/osl/epf/view/:epf_id", exact: true, element: <OSLEPFSubmit /> },
       { path: "/osl/epf/view", exact: true, element: <OSLEPFView /> },
       { path: "/root/homepage", exact: true, element: <RootHomepage />},
 

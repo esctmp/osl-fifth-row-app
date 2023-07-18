@@ -28,6 +28,9 @@ import {
 } from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
+import { useLocation, useParams } from 'react-router-dom';
+import { useContext } from 'react';
+import { LevelContext } from '../../../routes/LevelContext';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 // TODO autofill
@@ -35,8 +38,11 @@ import { Controller, useForm } from "react-hook-form";
 // TODO file attachment feature
 // TODO autosave
 
-const EPFSubmit = ({ mode = "NEW" }) => {
+const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
+  const { user_id } = useContext(LevelContext);
+  const { epf_id } = useParams();
+  const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
   const { handleSubmit, control, setValue } = useForm({});
   const formControl = { // global form vars that should be passed down to imported custom component
@@ -46,7 +52,7 @@ const EPFSubmit = ({ mode = "NEW" }) => {
 
   useEffect(() => {
     if (settings.loadForm) {
-      getEPF(4).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
+      getEPF(epf_id).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
     }
   }, []);
 
