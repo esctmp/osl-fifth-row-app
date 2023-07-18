@@ -139,7 +139,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
   const [ warn, setWarn ] = useState(false);
   const today = new Date().toISOString().slice(0, 16);
   const shouldWarn = (dateStr) => {
-    return (new Date("2023-07-18") - new Date(today.slice(0,10))) / (24 * 60 * 60 * 1000) < (7 * 5);
+    return ((new Date(dateStr.slice(0,10)) - new Date(today.slice(0,10))) / (24 * 60 * 60 * 1000)) < (7 * 5);
   };
   return (
     <Controller
@@ -149,7 +149,9 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
         <TextField
           InputLabelProps={{
             required: required,
-            shrink: true,
+            shrink: true
+          }}
+          inputProps={{
             min: today
           }}
           id={name}
