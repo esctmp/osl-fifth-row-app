@@ -2,18 +2,26 @@ import { FormProvider, useForm } from "react-hook-form";
 import "./LoginPage.css";
 import { useNavigate, Link } from "react-router-dom";
 // import input from "../../components/Forms/Custom/input.js"
+import { Auth } from 'aws-amplify'
 
 export default function Login() {
     const user = "FRE";
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
-    const onSubmit = methods.handleSubmit(data => {
-        if(user=="OSL"){navigate("/osl/homepage")}
-        else if(user == "FRE"){navigate("/fifthrow/homepage")}
-        else{
-            navigate("/login")
-        }
+    const onSubmit = methods.handleSubmit(async data => {
+        try {
+            await Auth.signIn(data.email, data.password);
+            if (user === "OSL") {
+              navigate("/osl/homepage");
+            } else if (user === "FRE") {
+              navigate("/fifthrow/homepage");
+            } else {
+              navigate("/login");
+            }
+          } catch (error) {
+            console.log('Error signing in:', error);
+          }
     })
     return (
         <FormProvider{...methods}>
@@ -62,7 +70,7 @@ export default function Login() {
                             </label>
                         </div>
                         <div className="form-group">
-                            <button type="submit">Log in</button>
+                        <button type="submit">Log in</button>
                         </div>
                     </form>
                 </div>
