@@ -23,6 +23,7 @@ import {
   FormHeader,
   FormTextField,
   FormDateTimeField,
+  FormNumberField,
   FormCommentField,
   FormRadioField
 } from "../../../components/Forms/Custom/Form";
@@ -38,6 +39,13 @@ import { LevelContext } from '../../../routes/LevelContext';
 // TODO file attachment feature
 // TODO autosave
 
+// TODO at least 1 row required for tables
+// TODO table cell required
+// TODO api calls
+// TODO submit validation vs draft
+// TODO radio group validation
+// TODO change everything to case sensitive
+
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
   const { user_id } = useContext(LevelContext);
@@ -47,7 +55,8 @@ const EPFSubmit = () => {
   const { handleSubmit, control, setValue } = useForm({});
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
-    settings: settings
+    settings: settings,
+    setValue: setValue
   };
 
   useEffect(() => {
@@ -71,9 +80,9 @@ const EPFSubmit = () => {
             <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
             <Grid container spacing={2} sx={{ mb: 5 }}>
               <Grid item xs={6}><FormTextField {...formControl} name="A_name" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_student_id" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="A_organisation" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="A_contact_number" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="A_contact_number" required={true} pattern={/^\d{8}$/}/></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="A_email" required={true} /></Grid>
             </Grid>
           </Grid>
@@ -95,7 +104,7 @@ const EPFSubmit = () => {
               <Grid item xs={6}><FormTextField {...formControl} name="B_event_name" required={true} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="B_target_audience" required={true} /></Grid>
               <Grid item xs={6}><FormDateTimeField {...formControl} name="B_event_schedule" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="B_expected_turnout" required={true} /></Grid>
+              <Grid item xs={6}><FormNumberField {...formControl} name="B_expected_turnout" required={true} /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="B_event_objective" required={true} multiline={true} /></Grid>
             </Grid>
           </Grid>
@@ -112,17 +121,23 @@ const EPFSubmit = () => {
     const tableSettingsC1 = {
       names: ['C1_date', 'C1_time', 'C1_activity_and_description', 'C1_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
+      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colTypes: ['date','time',,],
+      minRowsRequired: 1
     }
     const tableSettingsC2 = {
       names: ['C2_date', 'C2_time', 'C2_activity_and_description', 'C2_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
+      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colTypes: ['date','time',,],
+      minRowsRequired: 1
     }
     const tableSettingsC3_1 = {
       names: ['C3_date', 'C3_time', 'C3_activity_and_description', 'C3_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue']
+      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colTypes: ['date','time',,],
+      minRowsRequired: 1
     };
     const tableSettingsC3_2 = {
       // Replace 'C3_cleanup' with 'C3cleanup' to not break processing

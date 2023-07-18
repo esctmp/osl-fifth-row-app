@@ -29,20 +29,18 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    let req = {
-        "epf_id": epf_id
-    };
     let response = await axios.get("http://localhost:3000/epfs/getEPF", 
         {
-            data: req // TODO waiting for backend to change to query params
+            params: { epf_id }
         }
     ).then((res) => res, (error) => {
         console.log(error);
         return { data: [{}] };
     });
     let data = convertJSONToFields(response.data[0]);
+    // let data = dummyEPF;
     console.log(data);
-    return data; // TODO integrate w api
+    return data; 
 }
 
 
@@ -56,7 +54,7 @@ export async function getEPF(epf_id) {
  */
 export const convertFieldsToJSON = (data) => {
     // Filter out undefined/null data
-    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || value?.length == 0)));
+    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || (Array.isArray(value) && (value.length == 0 || value[0] == false)))));
 
     // Convert all grouped data to ungrouped
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([name, _]) => !name.includes('_grouped')));
@@ -76,6 +74,7 @@ export const convertFieldsToJSON = (data) => {
 
 export async function createEPF(data) {
     data = convertFieldsToJSON(data);
+    console.log("SUBMITTED", data);
     await axios.post("http://localhost:3000/epfs/createEPF",
         data,
         {

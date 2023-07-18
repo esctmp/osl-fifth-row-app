@@ -81,6 +81,7 @@ export const FormHeader = ({ text }) =>
  * @param {boolean=?} multiline Whether the field is multiline
  * @param {Control} control 
  * @param {boolean} required Whether the field is required
+ * @param {RegExp} pattern Specify a regex pattern that the input must follow
  * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
  * @param {boolean} props.settings.enableInputs
  * @param {boolean} props.settings.loadForm
@@ -88,8 +89,8 @@ export const FormHeader = ({ text }) =>
  * @param {boolean} props.settings.enableComments
  * @returns  {React.Component}
  */
-export const FormTextField = ({ name, control, settings, multiline = false, required=false }) => {
-  const [ error, setError ] = useState(false);
+export const FormTextField = ({ name, control, settings, multiline = false, required = false, pattern=null }) => {
+  const [error, setError] = useState(false);
   return (
     <Controller
       name={name}
@@ -103,9 +104,58 @@ export const FormTextField = ({ name, control, settings, multiline = false, requ
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            (required && !e.target.value) ? setError(true) : setError(false); 
+            (required && !e.target.value) ? setError(true) : setError(false);
+            (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
           }}
-          onFocus={() => {(required && !field.value) ? setError(true) : setError(false);} }
+          onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
+          value={field.value}
+          multiline={multiline}
+          disabled={!settings.enableInputs}
+          fullWidth
+          error={error}
+          sx={{
+            borderColor: 'red'
+          }}
+        />
+      )}
+    />
+  );
+};
+
+/**
+ * Given a form field name, returns a controlled MUI TextField component
+ * @param {string} name The form field name
+ * @param {boolean=?} multiline Whether the field is multiline
+ * @param {Control} control 
+ * @param {boolean} required Whether the field is required
+ * @param {RegExp} pattern Specify a regex pattern that the input must follow
+ * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
+ * @param {boolean} props.settings.enableInputs
+ * @param {boolean} props.settings.loadForm
+ * @param {boolean} props.settings.showComments
+ * @param {boolean} props.settings.enableComments
+ * @returns  {React.Component}
+ */
+export const FormNumberField = ({ name, control, settings, multiline = false, required = false, pattern = null }) => {
+  const [error, setError] = useState(false);
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextField
+          type="number"
+          InputLabelProps={{
+            required: required
+          }}
+          id={name}
+          label={makeNameFancy(name)}
+          onChange={(e) => {
+            field.onChange(e.target.value);
+            (required && !e.target.value) ? setError(true) : setError(false);
+            (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
+          }}
+          onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
           value={field.value}
           multiline={multiline}
           disabled={!settings.enableInputs}
@@ -134,12 +184,12 @@ export const FormTextField = ({ name, control, settings, multiline = false, requ
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-export const FormDateTimeField = ({ name, control, settings, multiline = false, required=false }) => {
-  const [ error, setError ] = useState(false);
-  const [ warn, setWarn ] = useState(false);
+export const FormDateTimeField = ({ name, control, settings, multiline = false, required = false }) => {
+  const [error, setError] = useState(false);
+  const [warn, setWarn] = useState(false);
   const today = new Date().toISOString().slice(0, 16);
   const shouldWarn = (dateStr) => {
-    return ((new Date(dateStr.slice(0,10)) - new Date(today.slice(0,10))) / (24 * 60 * 60 * 1000)) < (7 * 5);
+    return ((new Date(dateStr.slice(0, 10)) - new Date(today.slice(0, 10))) / (24 * 60 * 60 * 1000)) < (7 * 5);
   };
   return (
     <Controller
@@ -158,11 +208,12 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            (required && !e.target.value) ? setError(true) : setError(false); 
-            (shouldWarn(e.target.value)) ? setWarn(true) : setWarn(false); 
+            (required && !e.target.value) ? setError(true) : setError(false);
+            (shouldWarn(e.target.value)) ? setWarn(true) : setWarn(false);
           }}
           onFocus={() => {
-            (required && !field.value) ? setError(true) : setError(false);} 
+            (required && !field.value) ? setError(true) : setError(false);
+          }
           }
           value={field.value}
           helperText={(warn ? "Warning: The event date is < 5 weeks away." : "")}
@@ -232,8 +283,8 @@ export const FormCommentField = ({ name, control, settings }) => {
  * @returns {React.Component}
  */
 // TODO fix this for error display
-export const FormRadioField = ({ name, control, options, settings, required=false }) => {
-  const [ error, setError ] = useState(false);
+export const FormRadioField = ({ name, control, options, settings, required = false }) => {
+  const [error, setError] = useState(false);
   return (
     <Controller
       name={name}
@@ -245,7 +296,7 @@ export const FormRadioField = ({ name, control, options, settings, required=fals
               {...field}
               onChange={(e) => {
                 field.onChange(parseInt(e.target.value));
-                (required && !e.target.value) ? setError(true) : setError(false); 
+                (required && !e.target.value) ? setError(true) : setError(false);
               }}
             >
               {options.map((option, idx) =>
