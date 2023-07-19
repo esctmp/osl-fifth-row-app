@@ -1,6 +1,7 @@
 import React from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import {
   Typography,
@@ -13,59 +14,13 @@ import {
   Chip,
 } from "@material-ui/core";
 
-const products = [
-  {
-    id: "1",
-    date: "13 June 2023",
-    epf_Name: "Yonex Open Championship",
-    status: "Pending Approval",
-    pbg: "error.main",
-    club: "Badminton Club",
-    action: "EXPORT"
-  },
-  {
-    id: "2",
-    date: "5 June 2023",
-    epf_Name: "Real Homes WP Theme",
-    status: "Pending Approval",
-    pbg: "error.main",
-    club: "Badminton Club",
-    action: "EXPORT"
-  },
-  {
-    id: "3",
-    date: "3 Jun 2023",
-    epf_Name: "Roboclash 2023",
-    status: "Pending Approval",
-    pbg: "error.main",
-    club: "SOAR Club",
-    action: "EXPORT"
-  },
-  {
-    id: "4",
-    date: "25 May 2023",
-    epf_Name: "Fight Day",
-    status: "Pending Changes From Club",
-    pbg: "primary.main",
-    club: "Judo Club",
-    action: "EXPORT"
-  },
-  {
-    id: "5",
-    date: "24 May 2023",
-    epf_Name: "Where are Shadows",
-    status: "Pending Changes From Club",
-    pbg: "primary.main",
-    club: "Photography Club",
-    action: "EXPORT"
-  }
-];
-
 const OSL_ExTable = () => {
 
 
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 3; // Number of rows to display per page
+
+  const [products, setProducts] = React.useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -75,6 +30,44 @@ const OSL_ExTable = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("ARGGHHHHH")
+        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log("hi");
+        const transformedData = response.data.map((item) => {
+          let pbg;
+  
+          if (item.status === "Approved") {
+            pbg = "success.main";
+          } else if (item.status === "Need Changes"||"Pending Changes From Club") {
+            pbg = "primary.main";
+          } else if (item.status === "Pending Approval") {
+            pbg = "error.main";
+          }
+  
+          return {
+            id: item.epf_id.toString(),
+            date: new Date(item.date_created).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+            epf_Name: item.b_event_name,
+            status: item.status,
+            pbg: pbg,
+          };
+        });
+        setProducts(transformedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
 
   return (
@@ -90,7 +83,7 @@ const OSL_ExTable = () => {
         <TableRow>
           <TableCell>
             <Typography color="textSecondary" variant="h6">
-              Id
+              EPF Id
             </Typography>
           </TableCell>
           <TableCell>
@@ -122,7 +115,7 @@ const OSL_ExTable = () => {
       </TableHead>
       <TableBody>
         {slicedProducts.map((product) => (
-          <TableRow key={product.epf_Name}>
+          <TableRow key={product.name}>
             <TableCell
             sx={{ width: "10px", maxWidth: "50px" }}
             >
@@ -163,20 +156,25 @@ const OSL_ExTable = () => {
               </Box>
             </TableCell>
             <TableCell>
-              <Typography
-                  sx={{
-                    fontWeight: "600",
-                    color: "inherit", // Set the color to inherit to avoid the default purple color
-                    textDecoration: "none", // Remove underline
-                    "&:visited": {
-                      color: "inherit", // Set the color to inherit for visited link styles
-                    },
-                  }} 
-                  variant="h6"
-                  component={Link}
-                  to="/osl/epf/submit">
-                  {product.epf_Name}
-              </Typography> 
+            <Link
+                  to={ `/osl/epf/view/${product.id}`}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: "600",
+                      color: "inherit", // Set the color to inherit to avoid the default purple color
+                      textDecoration: "none", // Remove underline
+                      "&:visited": {
+                        color: "inherit", // Set the color to inherit for visited link styles
+                      },
+                    }}
+                    variant="h6"
+                  // component={Link}
+                  // to="/fifthrow/epf/submit"
+                  >
+                    {product.epf_Name}
+                  </Typography>
+                </Link>
             </TableCell> 
             <TableCell>
               <Chip
