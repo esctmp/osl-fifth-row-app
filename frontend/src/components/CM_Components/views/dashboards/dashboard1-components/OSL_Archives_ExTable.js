@@ -57,6 +57,8 @@ const OSL_ExTable = () => {
             epf_Name: item.b_event_name,
             status: item.status,
             pbg: pbg,
+            club:item.a_organisation,
+            action:"EXPORT"
           };
         });
         setProducts(transformedData);
