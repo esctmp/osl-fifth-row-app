@@ -1,7 +1,9 @@
 import React from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
-import products from "./Data.json"
+// import products from "./Data.json"
+import axios from "axios";
+
 
 import {
   Typography,
@@ -21,6 +23,8 @@ const ExTable = () => {
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 5; // Number of rows to display per page
 
+  const [products, setProducts] = React.useState([]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -29,6 +33,57 @@ const ExTable = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("ARGGHHHHH")
+        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log("hi");
+        const transformedData = response.data.map((item) => {
+          let pbg;
+  
+          if (item.status === "Approved") {
+            pbg = "success.main";
+          } else if (item.status === "Need Changes") {
+            pbg = "primary.main";
+          } else if (item.status === "Pending Approval") {
+            pbg = "error.main";
+          }
+  
+          return {
+            id: item.epf_id.toString(),
+            date: new Date(item.date_created).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+            epf_Name: item.b_event_name,
+            status: item.status,
+            pbg: pbg,
+          };
+        });
+        // const transformedData = response.data.map((item) => ({
+        //   id: item.epf_id.toString(),
+        //   date: new Date(item.date_created).toLocaleDateString("en-US", {
+        //     year: "numeric",
+        //     month: "long",
+        //     day: "numeric",
+        //   }),
+        //   epf_Name: item.b_event_name,
+        //   status: item.status,
+        //   pbg: "error.main", // Set the desired value for pbg
+        // }));
+        setProducts(transformedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to ensure the effect runs only once on component mount
+
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
@@ -43,7 +98,7 @@ const ExTable = () => {
           <TableRow>
             <TableCell>
               <Typography color="textSecondary" variant="h6">
-                Id
+                EPF Id
               </Typography>
             </TableCell>
             <TableCell>
