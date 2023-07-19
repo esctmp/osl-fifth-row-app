@@ -46,7 +46,7 @@ const ExTable = () => {
   
           if (item.status === "Approved") {
             pbg = "success.main";
-          } else if (item.status === "Need Changes") {
+          } else if (item.status === "Need Changes"||"Pending Changes From Club") {
             pbg = "primary.main";
           } else if (item.status === "Pending Approval") {
             pbg = "error.main";
