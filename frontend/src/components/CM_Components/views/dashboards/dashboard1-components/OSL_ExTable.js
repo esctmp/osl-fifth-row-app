@@ -72,7 +72,6 @@ const OSL_ExTable = () => {
     fetchData();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
-
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
     <Table
