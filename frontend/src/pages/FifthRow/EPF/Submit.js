@@ -192,7 +192,8 @@ const EPFSubmit = () => {
       ["D1A_donation"]],
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
-      colNames: ['Source', 'Amount ($)']
+      colNames: ['Source', 'Amount ($)'],
+      colTypes: [,"float"]
     };
 
     const tableSettingsD1B = {
@@ -200,17 +201,21 @@ const EPFSubmit = () => {
       ["D1B_total_source_of_funds"]],
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
-      colNames: ['Source', 'Amount ($)']
+      colNames: ['Source', 'Amount ($)'],
+      colTypes: [,"float"]
     };
     const tableSettingsD11_1 = {
       names: ["D11_items_goods_services", "D11_price", "D11_quantity", "D11_amount"],
       colConfig: [3, 3, 3, 3],
-      colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)']
+      colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
+      colTypes: [,"float","number", "float"]
     };
     const tableSettingsD11_2 = {
       names: [['D11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
+      colTypes: [,'float'],
+      rowRequired: [true]
     };
     const tableSettingsD2_1 = {
       names: ['D2_items', 'D2_reason_for_purchase', 'D2_venue'],
@@ -221,6 +226,8 @@ const EPFSubmit = () => {
       names: [['D2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
+      colTypes: [,'float'],
+      rowRequired: [true]
     }
     return (
       <>

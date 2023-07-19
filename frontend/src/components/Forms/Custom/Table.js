@@ -59,6 +59,72 @@ const TableRowName = ({ rowName, rowNameAlign = '', sx = {} }) =>
     </Typography>
   </Box>
 
+const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
+  const getInputComponent = (name, field, type) => {
+    const props = {
+      name: name,
+      field: field,
+      settings: settings,
+      minRows: minRows,
+      required: required || false,
+    };
+    if (type == "number") {
+      return <TableRowNumberInput {...props} />
+    } else if (type == "float") {
+      return <TableRowFloatInput {...props} />
+    } else if (type == "date") {
+      return <TableRowDateInput {...props} />
+    } else if (type == "time") {
+      return <TableRowTimeInput {...props} />
+    } else {
+      return <TableRowTextInput {...props} />
+    };
+  };
+  return (
+    <>
+      <Grid item display="flex" xs={colConfig[0]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
+        <TableRowName rowName={rowName + (required ? " *" : "")} />
+      </Grid>
+      {names.map((name, j) =>
+        <Grid item xs={colConfig[j + 1]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
+          <Controller
+            name={`${name}`}
+            control={control}
+            render={({ field }) => (
+              getInputComponent(name, field, colTypes[j + 1])
+            )}
+          />
+        </Grid>
+      )}
+    </>)
+}
+
+/**
+ * Given a list of form fields corr. to row names, return a React component consisting of table-row-like MUI controlled components 
+ * @param {Object} props 
+ * @param {string[][]} props.names The table form field names (map to row names)
+ * @param {int[]} props.colConfig The column config for MUI grid items
+ * @param {string[]} props.rowNames The row names
+ * @param {string[]=} props.colTypes Input types: "number", "date", "time" or "float"
+ * @param {boolean[]=} props.rowRequired Whether a row is required or not
+ * @param {Control} props.control The control object from useForm()
+ * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
+ * @param {boolean} props.settings.enableInputs
+ * @param {boolean} props.settings.loadForm
+ * @param {boolean} props.settings.showComments
+ * @param {boolean} props.settings.enableComments
+ * @returns {React.Component}
+ */
+export const TableRowsStatic = ({ names, rowNames, rowRequired=[], ...rest }) => {
+  return (
+    <>
+      {rowNames.map((rowName, idx) =>
+        <TableRowStatic rowName={rowName} idx={idx} names={names[idx]} {...rest} required={rowRequired[idx]} />
+      )}
+    </>
+  )
+};
+
 const TableDeleteRow = ({ onClickFunction, settings }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
@@ -92,61 +158,7 @@ const TableAddRow = ({ onClickFunction, settings }) =>
     </Grid>
   </>
 
-const TableRowStatic = ({ settings, control, rowName, names, colConfig, minRows = 3, rowMinHeight, rowNameAlign }) =>
-  <>
-    <Grid item display="flex" xs={colConfig[0]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-      <TableRowName rowName={rowName} />
-    </Grid>
-    {names.map((name, j) =>
-      <Grid item xs={colConfig[j + 1]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-        <Controller
-          name={`${name}`}
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <Input
-              id={`${name}`}
-              key={`${name}`}
-              fullWidth
-              multiline
-              minRows={minRows}
-              disableUnderline='true'
-              onChange={onChange}
-              value={value}
-              disabled={!settings.enableInputs}
-              sx={{ padding: "8px" }}
-            />
-          )}
-        />
-      </Grid>
-    )}
-  </>
-
-
-/**
- * Given a list of form fields corr. to row names, return a React component consisting of table-row-like MUI controlled components 
- * @param {Object} props 
- * @param {string[][]} props.names The table form field names (map to row names)
- * @param {int[]} props.colConfig The column config for MUI grid items
- * @param {string[]} props.rowNames The row names
- * @param {Control} props.control The control object from useForm()
- * @param {Object} props.settings The settings corresponding to the form's mode e.g. "DRAFT"
- * @param {boolean} props.settings.enableInputs
- * @param {boolean} props.settings.loadForm
- * @param {boolean} props.settings.showComments
- * @param {boolean} props.settings.enableComments
- * @returns {React.Component}
- */
-export const TableRowsStatic = ({ names, rowNames, ...rest }) => {
-  return (
-    <>
-      {rowNames.map((rowName, idx) =>
-        <TableRowStatic rowName={rowName} idx={idx} names={names[idx]} {...rest} />
-      )}
-    </>
-  )
-};
-
-const TableRowDynamicTextInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowTextInput = ({ name, field, settings, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
@@ -174,7 +186,7 @@ const TableRowDynamicTextInput = ({ name, field, settings, minRows = 3, required
   )
 }
 
-const TableRowDynamicNumberInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowNumberInput = ({ name, field, settings, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
@@ -185,7 +197,7 @@ const TableRowDynamicNumberInput = ({ name, field, settings, minRows = 3, requir
         onChange={(e) => {
           field.onChange(parseInt(e.target.value));
           (required && !e.target.value) ? setError(true) : setError(false);
-          (/[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
+          (e.target.value && /[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
         }}
         onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
         error={error}
@@ -203,7 +215,7 @@ const TableRowDynamicNumberInput = ({ name, field, settings, minRows = 3, requir
   )
 }
 
-const TableRowDynamicFloatInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowFloatInput = ({ name, field, settings, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
@@ -212,11 +224,14 @@ const TableRowDynamicFloatInput = ({ name, field, settings, minRows = 3, require
           required: required
         }}
         onChange={(e) => {
+          field.onChange(e.target.value);
+          (e.target.value && !/^[0-9]*[.]?[0-9]*$/.test(e.target.value)) ? setError(true) : setError(false);
           (required && !e.target.value) ? setError(true) : setError(false);
-          (/([0-9]+[.])?[0-9]+/.test(e.target.value)) ? setError(true) : setError(false);
-          field.onChange(parseFloat(e.target.value));
         }}
-        onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
+        onFocus={() => {
+          (field.value && !/^[0-9]*[.]?[0-9]*$/.test(field.value)) ? setError(true) : setError(false);
+          (required && !field.value) ? setError(true) : setError(false);
+        }}
         error={error}
         id={name}
         key={name}
@@ -232,7 +247,7 @@ const TableRowDynamicFloatInput = ({ name, field, settings, minRows = 3, require
   )
 }
 
-const TableRowDynamicDateInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowDateInput = ({ name, field, settings, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
@@ -242,12 +257,12 @@ const TableRowDynamicDateInput = ({ name, field, settings, minRows = 3, required
         }}
         onChange={(e) => {
           field.onChange(e.target.value);
+          (e.target.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value) || isNaN(Date.parse(e.target.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
           (required && !e.target.value) ? setError(true) : setError(false);
-          (!/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value) || isNaN(Date.parse(e.target.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
         }}
         onFocus={() => {
+          (field.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(field.value) || isNaN(Date.parse(field.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
           (required && !field.value) ? setError(true) : setError(false);
-          (!/^\d\d\/\d\d\/\d\d\d\d$/.test(field.value) || isNaN(Date.parse(field.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
         }}
         error={error}
         id={name}
@@ -266,7 +281,7 @@ const TableRowDynamicDateInput = ({ name, field, settings, minRows = 3, required
 }
 
 
-const TableRowDynamicTimeInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowTimeInput = ({ name, field, settings, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
@@ -277,12 +292,12 @@ const TableRowDynamicTimeInput = ({ name, field, settings, minRows = 3, required
         }}
         onChange={(e) => {
           field.onChange(e.target.value);
+          (e.target.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.target.value)) ? setError(true) : setError(false);
           (required && !e.target.value) ? setError(true) : setError(false);
-          (!/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.target.value)) ? setError(true) : setError(false);
         }}
         onFocus={() => {
+          (field.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(field.value)) ? setError(true) : setError(false);
           (required && !field.value) ? setError(true) : setError(false);
-          (!/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(field.value)) ? setError(true) : setError(false);
         }}
         error={error}
         id={name}
@@ -302,21 +317,23 @@ const TableRowDynamicTimeInput = ({ name, field, settings, minRows = 3, required
 
 const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
   const getInputComponent = (name, field, type) => {
+    const props = {
+      name: `${name.split('_')[0] + '_grouped'}.${idx}.${name}`,
+      field: field,
+      settings: settings,
+      minRows: minRows,
+      required: required || false,
+    }
     if (type == "number") {
-      return <TableRowDynamicNumberInput name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-        field={field} settings={settings} minRows={minRows} required={required} />
+      return <TableRowNumberInput {...props} />
     } else if (type == "float") {
-      return <TableRowDynamicFloatInput name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-        field={field} settings={settings} minRows={minRows} required={required} />
+      return <TableRowFloatInput {...props} />
     } else if (type == "date") {
-      return <TableRowDynamicDateInput name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-        field={field} settings={settings} minRows={minRows} required={required} />
+      return <TableRowDateInput {...props} />
     } else if (type == "time") {
-      return <TableRowDynamicTimeInput name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-        field={field} settings={settings} minRows={minRows} required={required} />
+      return <TableRowTimeInput {...props} />
     } else {
-      return <TableRowDynamicTextInput name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-        field={field} settings={settings} minRows={minRows} required={required} />
+      return <TableRowTextInput {...props} />
     };
   };
   return (
@@ -380,7 +397,7 @@ export const TableRowsDynamic = (props) => {
           : <TableRowDynamic keys={field.id} idx={idx} {...props} />
       }
       )}
-      <TableDeleteRow onClickFunction={(e) => { if (fields.length > props?.minRowsRequired) { remove(fields.length - 1) } }} {...props} />
+      <TableDeleteRow onClickFunction={(e) => { if (fields.length > (props?.minRowsRequired || 0)) { remove(fields.length - 1) } }} {...props} />
       <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} {...props} />
     </>
   )
