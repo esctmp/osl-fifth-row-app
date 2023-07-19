@@ -279,11 +279,8 @@ const EPFSubmit = () => {
               <br></br>1. Unique identifiers: NRIC Numbers, passport numbers, student IDs.
               <br></br>2. Any set of data (e.g. name, age, address, telephone number, occupation, etc), which when taken together would be able to identify the individual.
               <br></br>3. Image of an identifiable individual (whether in photographs or videos).</>} />
-            <Typography sx={{ fontWeight: 'bold', color: 'red' }}>
-              Are you collecting personal data? Please tick accordingly.
-            </Typography>
 
-            <FormRadioField {...formControl} name="E_personal_data" options={["No", "Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."]} />
+            <FormRadioField {...formControl} name="E_personal_data" label="Are you collecting personal data? Please tick accordingly*." options={["No", "Yes. Please complete the Microsoft Form: https://forms.office.com/r/RzNvq976m9."]} required={true} />
 
             <SectionBody text={<>
               By submitting this form, the project director agrees to abide by the personal data protection clauses as stated below.
@@ -308,7 +305,8 @@ const EPFSubmit = () => {
     const tableSettingsF = {
       names: ['F_name', 'F_student_id', 'F_position'],
       colNames: ['Name', 'Student ID', 'Position'],
-      colConfig: [4, 4, 4]
+      colConfig: [4, 4, 4],
+      minRowsRequired: 1
     }
     return (
       <>

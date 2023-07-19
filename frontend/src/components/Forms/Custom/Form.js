@@ -16,6 +16,7 @@ import {
   RadioGroup,
   Radio,
   FormControl,
+  FormLabel,
   Stack,
   MenuItem,
 } from "@material-ui/core";
@@ -272,6 +273,7 @@ export const FormCommentField = ({ name, control, settings }) => {
 /**
  * Given a radio field name and options, returns a MUI RadioGroup component with values 0, 1, ...
  * @param {string} name The form field name
+ * @param {string} label The question asked
  * @param {Control} control 
  * @param {string[]} options A list of options that will be displayed
  * @param {boolean} required Whether the field is required
@@ -283,18 +285,22 @@ export const FormCommentField = ({ name, control, settings }) => {
  * @returns {React.Component}
  */
 // TODO fix this for error display
-export const FormRadioField = ({ name, control, options, settings, required = false }) => {
+export const FormRadioField = ({ name, label, control, options, settings, required = false }) => {
   const [error, setError] = useState(false);
   return (
     <Controller
       name={name}
       control={control}
+      defaultValue={0}
       render={({ field }) => (
         <>
-          <FormControl sx={{ mb: 3 }}>
+          <FormControl sx={{ mb: 3 }} error={error}>
+            <FormLabel>{label}</FormLabel>
             <RadioGroup
-              {...field}
+              name={name}
+              value={field.value}
               onChange={(e) => {
+                console.log(e.target.value);
                 field.onChange(parseInt(e.target.value));
                 (required && !e.target.value) ? setError(true) : setError(false);
               }}

@@ -52,10 +52,10 @@ export const TableColHeaders = ({ colNames, colConfig }) =>
     )}
   </>
 
-const TableRowName = ({ rowName, rowNameAlign = '', sx = {} }) =>
+const TableRowName = ({ rowName, rowNameAlign = '', sx = {}, required = false }) =>
   <Box display="flex" width="100%" alignItems="center" justifyContent="center" sx={{ padding: "8px" }}>
     <Typography align={rowNameAlign != '' ? rowNameAlign : "center"} sx={{ fontWeight: 'bold' }}>
-      {rowName}
+      {rowName}{required ? "*" : ""}
     </Typography>
   </Box>
 
@@ -83,7 +83,7 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
   return (
     <>
       <Grid item display="flex" xs={colConfig[0]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-        <TableRowName rowName={rowName + (required ? " *" : "")} />
+        <TableRowName rowName={rowName} required={required} />
       </Grid>
       {names.map((name, j) =>
         <Grid item xs={colConfig[j + 1]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
