@@ -20,6 +20,9 @@ const OSLEPFSubmit = lazy(() => import("../pages/OSL/EPF/Submit"));
 const OSLEPFView = lazy(() => import("../pages/OSL/EPF/View"));
 
 const RootHomepage = lazy(() => import("../pages/Root/Homepage"));
+const RootEPF = lazy(() => import("../pages/Root/EPF/EPF"));
+const RootEPFSubmit = lazy(() => import("../pages/Root/EPF/Submit"));
+const RootEPFView = lazy(() => import("../pages/Root/EPF/View"));
 
 /*****Tables******/
 const BasicTable = lazy(() => import("../views/tables/BasicTable"));
@@ -58,6 +61,10 @@ const ThemeRoutes = [
       { path: "/osl/epf/view/:epf_id", exact: true, element: <OSLEPFSubmit /> },
       { path: "/osl/epf/view", exact: true, element: <OSLEPFView /> },
       { path: "/root/homepage", exact: true, element: <RootHomepage />},
+      { path: "/root/epf", exact: true, element: <RootEPF />},
+      { path: "/root/epf/submit", exact: true, element: <RootEPFSubmit   />},
+      { path: "/root/epf/view/:epf_id", exact: true, element: <RootEPFSubmit />},
+      { path: "/root/epf/view", exact: true, element: <RootEPFView />},
 
       { path: "dashboards/dashboard1", exact: true, element: <Dashboard1 /> },
       { path: "tables/basic-table", element: <BasicTable /> },
