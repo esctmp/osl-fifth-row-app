@@ -1,7 +1,6 @@
 import React from "react";
 //import { Link } from 'react-router-dom';
 ///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 //import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
 
 import Logout from "@material-ui/icons/Logout";
@@ -161,7 +160,7 @@ const Header = (props) => {
             width: "auto",
             right: 0,
             top: "70px !important",
-            mr: 1.2,
+            mr: 1,
             mt: 0.5,
           }}
         >
@@ -180,7 +179,7 @@ const Header = (props) => {
         {/* ------------------------------------------- */}
         {/* Notifications Dropdown */}
         {/* ------------------------------------------- */}
-        <IconButton
+        {/* <IconButton
           aria-label="menu"
           color="inherit"
           aria-controls="notification-menu"
@@ -208,7 +207,7 @@ const Header = (props) => {
           <MenuItem onClick={handleClose}>Action</MenuItem>
           <MenuItem onClick={handleClose}>Action Else</MenuItem>
           <MenuItem onClick={handleClose}>Another Action</MenuItem>
-        </Menu>
+        </Menu> */}
         {/* ------------------------------------------- */}
         {/* End Notifications Dropdown */}
         {/* ------------------------------------------- */}
@@ -218,7 +217,7 @@ const Header = (props) => {
         <Box
           sx={{
             width: "1px",
-            backgroundColor: "rgba(0,0,0,0.1)",
+            backgroundColor: "rgba(0,0,0,0.0)",
             height: "25px",
             ml: 1,
           }}

@@ -1,8 +1,13 @@
 import React from "react";
 import logo_short from "../../assets/images/logo-short.png";
+import data from "../../components/HomepageData/Data.json";
 import "./Homepage.css";
 
 const Homepage = () => {
+  const user_id = "3";
+
+  const user = data.find((item) => item.user_id === user_id);
+  const name = user ? user.name : "";  // extract name, otherwise empty string
 
   return (
     <div>
@@ -12,7 +17,7 @@ const Homepage = () => {
           <label htmlFor="welcome">WELCOME</label>
         </div>
         <div className="fifthRow">
-          <label htmlFor="fifthRow">Badminton</label>
+          <label htmlFor="fifthRow">{name}</label>
         </div>
         <InformationBox />
       </div>
@@ -29,9 +34,13 @@ const Logo = () => {
 }
 
 const InformationBox = () => {
+  const user_id = "3";
+
+  const user = data.find((item) => item.user_id === user_id);
+  const count = user ? user.outstanding_epf : "";  // extract outstanding_epf count, otherwise empty string
   return (
     <div className="informationBox">
-      <p className="informationText">You have 3 outstanding forms to review.</p>
+      <p className="informationText">You have {count} outstanding forms to review.</p>
     </div>
   )
 }
