@@ -31,13 +31,11 @@ import { Card, CardContent, Container, Divider, Box, Typography, TextField, Form
 import { Controller, useForm } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
-import { LevelContext } from '../../../routes/LevelContext';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const { user_id } = useContext(LevelContext);
   const { epf_id } = useParams();
   const mode = "OSL_COMMENT";
   const settings = FORM_MODES[mode];
