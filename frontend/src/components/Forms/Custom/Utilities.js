@@ -7,7 +7,7 @@ import axios from 'axios';
  * E.g. { C1_name: ["John", "Benny"], C1_activity: ["Football", "Soccer"] }
  * will be transformed into 
  * { C1_grouped: [{C1_name: "John", C1_activity: "Soccer"}, {C1_name: "Benny", C1_activity: "Soccer"}] }
- * Replace all 'C3_cleanup' with 'C3cleanup' to not break the processing
+ * Replace all 'c3_cleanup' with 'c3cleanup' to not break the processing
  * @param {FormData} data 
  * @returns {FormData} 
  */
@@ -16,7 +16,7 @@ export const convertJSONToFields = (data) => {
     data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || value?.length == 0)));
 
     // Convert all ungrouped data to grouped
-    data = Object.fromEntries(Object.entries(data).map(([k, v]) => [k.replace('C3_cleanup', 'C3cleanup'), v])); // fix for EPF only
+    data = Object.fromEntries(Object.entries(data).map(([k, v]) => [k.replace('c3_cleanup', 'c3cleanup'), v])); // fix for EPF only
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([key, val]) => !Array.isArray(val)));
     let listObjsInitial = Object.fromEntries(Object.entries(data).filter(([key, val]) => Array.isArray(val)));
     let prefixes = [...new Set(Object.entries(listObjsInitial).map(([name, _]) => name.split('_')[0] + '_grouped'))];
@@ -31,7 +31,7 @@ export const convertJSONToFields = (data) => {
 export async function getEPF(epf_id) {
     let response = await axios.get("http://localhost:3000/epfs/getEPF", 
         {
-            params: { epf_id }
+            params: { epf_id: epf_id }
         }
     ).then((res) => res, (error) => {
         console.log(error);
@@ -68,7 +68,7 @@ export const convertFieldsToJSON = (data) => {
         };
     }
     let res = { ...listObjs, ...scalarObjs };
-    res = Object.fromEntries(Object.entries(res).map(([k, v]) => [k.replace('C3cleanup', 'C3_cleanup'), v])); // fix for EPF only
+    res = Object.fromEntries(Object.entries(res).map(([k, v]) => [k.replace('c3cleanup', 'c3_cleanup'), v])); // fix for EPF only
     return res;
 }
 
@@ -86,7 +86,7 @@ export async function createEPF(data) {
         if (response.status == 201) {
           alert("Form uploaded successfully!");
         }
-    }, (error) => alert("Form upload failed. Please try again."));
+    }, (err) => alert("Form upload failed. Please try again."));
 }
 
 

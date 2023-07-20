@@ -32,11 +32,27 @@ const makeNameFancy = (name) => name.split('_').slice(1,).map((word) =>
 // DISABLE INPUT FIELDS IF MODE IS REVIEW
 // ENABLE COMMENTS IF MODE IS COMMENT
 export const FORM_MODES = {
-  "NEW": { enableInputs: true, loadForm: false, showComments: false, enableComments: false },
-  "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableComments: false },
-  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableComments: false },
-  "COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableComments: true },
+  // Fifth Row
+  "NEW": { enableInputs: true, loadForm: false, showComments: false, enableOSLComments: false, enableROOTComments: false },
+  "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
+  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "SUBMITTED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+
+  // OSL
+  "OSL_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: true, enableROOTComments: false },
+  "OSL_SUBMITTED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+
+  // ROOT
+  "ROOT_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: true },
+  "ROOT_SUBMITTED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 }
+
+export const STATUS = {
+  Draft: Symbol("Draft"), // access for fifthrow only
+  Submitted: Symbol("Pending Approval"), // disable input access for fifth row, enable access for OSL & ROOT
+  Approved: Symbol("Approved"), // disable input access for all
+  Declined: Symbol("Declined"), // disable input access for all
+};
 
 
 export const draftButtonStyle = {
@@ -96,6 +112,9 @@ export const FormTextField = ({ name, control, settings, multiline = false, requ
     <Controller
       name={name}
       control={control}
+      rules={{
+        validate: () => { return error; }
+      }}
       render={({ field }) => (
         <TextField
           InputLabelProps={{
@@ -109,7 +128,7 @@ export const FormTextField = ({ name, control, settings, multiline = false, requ
             (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
-          value={field.value}
+          value={field.value || ""}
           multiline={multiline}
           disabled={!settings.enableInputs}
           fullWidth
@@ -157,7 +176,7 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
             (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
-          value={field.value}
+          value={field.value || ''}
           multiline={multiline}
           disabled={!settings.enableInputs}
           fullWidth
@@ -216,7 +235,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
             (required && !field.value) ? setError(true) : setError(false);
           }
           }
-          value={field.value}
+          value={(field.value || '').replace('Z','')}
           helperText={(warn ? "Warning: The event date is < 5 weeks away." : "")}
           type="datetime-local"
           multiline={multiline}
@@ -240,7 +259,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-export const FormCommentField = ({ name, control, settings }) => {
+export const FormCommentField = ({ name, control, settings, owner }) => {
   return (
     <Controller
       name={name}
@@ -249,13 +268,13 @@ export const FormCommentField = ({ name, control, settings }) => {
         <>
           {settings.showComments
             ? <>
-              <SectionCommentHeader text={"Comments for section " + name.split('_')[0]} />
+              <SectionCommentHeader text={owner + " comments for section " + name.split('_')[0].toUpperCase()} />
               <TextField
                 sx={{ backgroundColor: "#ffffe1" }}
                 id={name}
                 onChange={onChange}
                 value={value}
-                disabled={!settings.enableComments}
+                disabled={!settings[`enable${owner}Comments`]}
                 multiline
                 minRows={3}
                 fullWidth

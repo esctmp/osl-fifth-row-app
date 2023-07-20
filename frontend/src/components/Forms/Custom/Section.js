@@ -20,7 +20,7 @@ export const SectionBody = ({ text, sx = {} }) =>
 
 export const SectionCommentHeader = ({ text }) =>
     <>
-        <Typography sx={{ mb: 1, fontStyle: 'italic' }}>
+        <Typography sx={{ mt: 1, mb: 1, fontStyle: 'italic' }}>
             {text}
         </Typography>
     </>
