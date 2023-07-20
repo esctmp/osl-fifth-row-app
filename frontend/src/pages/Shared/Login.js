@@ -24,7 +24,10 @@ export default function Login() {
                         setUserId(user_id);
                     }
                 }  
-            })
+            }).catch(error =>{
+                console.error("Error fetching EXCO: ",error);
+            });
+
             // let user = await Auth.currentAuthenticatedUser();
             if (role === "OSL") {
               navigate("/osl/homepage");
@@ -33,7 +36,8 @@ export default function Login() {
             } else {
               navigate("/login");
             }
-          } catch (error) {
+          } 
+          catch (error) {
             console.log('Error signing in:', error);
           }
     })
