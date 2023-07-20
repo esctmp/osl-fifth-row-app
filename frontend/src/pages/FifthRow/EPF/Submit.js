@@ -30,7 +30,7 @@ import { Card, CardContent, Container, Divider, Box, Typography, TextField, Form
 import { Controller, useForm } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
-import { LevelContext } from '../../../routes/LevelContext';
+import { UserID } from '../../../routes/UserID';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 // TODO autofill
@@ -40,7 +40,7 @@ import { LevelContext } from '../../../routes/LevelContext';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const { user_id } = useContext(LevelContext);
+  const { userId,setUserId } = useContext(UserID);
   const { epf_id } = useParams();
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];

@@ -2,18 +2,44 @@ import { FormProvider, useForm } from "react-hook-form";
 import "./LoginPage.css";
 import { useNavigate, Link } from "react-router-dom";
 // import input from "../../components/Forms/Custom/input.js"
+import { Auth } from 'aws-amplify'
+import { useContext } from 'react'
+import {UserID} from "../../routes/UserID"
+import axios from "axios"
 
 export default function Login() {
-    const user = "FRE";
+    const role = "FRE"; 
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
-    const onSubmit = methods.handleSubmit(data => {
-        if(user=="OSL"){navigate("/osl/homepage")}
-        else if(user == "FRE"){navigate("/fifthrow/homepage")}
-        else{
-            navigate("/login")
-        }
+    const {userId,setUserId} = useContext(UserID);
+    const onSubmit = methods.handleSubmit(async data => {
+        try {
+            let response = await Auth.signIn(data.email, data.password);
+            // console.log(response);
+            axios.get("http://localhost:3000/users/getEXCOs").then(function(response){
+                for(let i=0;i<(response.data.length);i++)  {
+                    if(response.data[i].email==data.email){
+                        const user_id = response.data[i].user_id;
+                        setUserId(user_id);
+                    }
+                }  
+            }).catch(error =>{
+                console.error("Error fetching EXCO: ",error);
+            });
+
+            // let user = await Auth.currentAuthenticatedUser();
+            if (role === "OSL") {
+              navigate("/osl/homepage");
+            } else if (role === "FRE") {
+              navigate("/fifthrow/homepage");
+            } else {
+              navigate("/login");
+            }
+          } 
+          catch (error) {
+            console.log('Error signing in:', error);
+          }
     })
     return (
         <FormProvider{...methods}>
@@ -62,7 +88,7 @@ export default function Login() {
                             </label>
                         </div>
                         <div className="form-group">
-                            <button type="submit">Log in</button>
+                        <button type="submit">Log in</button>
                         </div>
                     </form>
                 </div>

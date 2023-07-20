@@ -14,7 +14,7 @@ import {
   Chip,
 } from "@material-ui/core";
 
-const OSL_ExTable = () => {
+const Root_Archives = () => {
 
 
   const [page, setPage] = React.useState(0);
@@ -159,7 +159,7 @@ const OSL_ExTable = () => {
             </TableCell>
             <TableCell>
             <Link
-                  to={ `/osl/epf/view/${product.id}`}
+                  to={ `/root/epf/view/${product.id}`}
                 >
                   <Typography
                     sx={{
@@ -245,4 +245,4 @@ const OSL_ExTable = () => {
   );
 };
 
-export default OSL_ExTable;
+export default Root_Archives;

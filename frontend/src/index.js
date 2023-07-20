@@ -3,8 +3,14 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { HashRouter } from "react-router-dom";
 
+
+
 //import reportWebVitals from './reportWebVitals';
 import Spinner from "./views/Spinner/Spinner";
+import { Amplify } from 'aws-amplify'
+import config from './aws-exports'
+Amplify.configure(config)
+
 ReactDOM.render(
   
     <Suspense fallback={<Spinner />}>

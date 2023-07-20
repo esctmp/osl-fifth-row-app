@@ -57,6 +57,8 @@ const OSL_ExTable = () => {
             epf_Name: item.b_event_name,
             status: item.status,
             pbg: pbg,
+            club:item.a_organisation,
+            action:"EXPORT"
           };
         });
         setProducts(transformedData);
@@ -68,6 +70,7 @@ const OSL_ExTable = () => {
     fetchData();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
+  
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
     <Table

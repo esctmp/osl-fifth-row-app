@@ -1,20 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo_short from "../../assets/images/logo-short.png";
 import data from "../../components/HomepageData/Data.json";
+import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
-
 const Homepage = () => {
-  const user_id = "3";
-
-  const user = data.find((item) => item.user_id === user_id);
-  const name = user ? user.name : "";  // extract name, otherwise empty string
-
+  const {userId,setUserId} = useContext(UserID);
   return (
     <div>
       <div className="rectangle">
         <Logo />
         <div className="welcome">
-          <label htmlFor="welcome">WELCOME</label>
+          <label htmlFor="welcome">Welcome</label>
         </div>
         <div className="fifthRow">
           <label htmlFor="fifthRow">{name}</label>
