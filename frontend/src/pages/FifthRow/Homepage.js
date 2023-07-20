@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo_short from "../../assets/images/logo-short.png";
 import "./Homepage.css";
-
+import {UserID} from "../../routes/UserID"
 const Homepage = () => {
-
+  const {userId,setUserId} = useContext(UserID);
   return (
     <div>
       <div className="rectangle">
         <Logo />
         <div className="welcome">
-          <label htmlFor="welcome">WELCOME</label>
+          <label htmlFor="welcome">Welcome</label>
         </div>
         <div className="fifthRow">
           <label htmlFor="fifthRow">Badminton</label>
