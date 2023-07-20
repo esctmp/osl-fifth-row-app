@@ -422,7 +422,7 @@ const EPFSubmit = () => {
                         <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" 
                           onClick={handleSubmit(
                             async (data) => {
-                              data.status = "Draft_OSL"; submit(data);
+                              submit(data);
                             })}>
                           Save draft
                         </Button>

@@ -162,6 +162,9 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
     <Controller
       name={name}
       control={control}
+      rules={{
+        validate: () => { return error; }
+      }}
       render={({ field }) => (
         <TextField
           type="number"
@@ -215,6 +218,9 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
     <Controller
       name={name}
       control={control}
+      rules={{
+        validate: () => { return error; }
+      }}
       render={({ field }) => (
         <TextField
           InputLabelProps={{
@@ -311,6 +317,9 @@ export const FormRadioField = ({ name, label, control, options, settings, requir
       name={name}
       control={control}
       defaultValue={0}
+      rules={{
+        validate: () => { return error; }
+      }}
       render={({ field }) => (
         <>
           <FormControl sx={{ mb: 3 }} error={error}>

@@ -46,11 +46,11 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const { userId,setUserId } = useContext(UserID);
+  const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
-  const { handleSubmit, control, setValue, clearErrors } = useForm({ shouldFocusError: true });
+  const { handleSubmit, control, setValue, getValues } = useForm({ shouldFocusError: true });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings,
@@ -63,17 +63,13 @@ const EPFSubmit = () => {
       getEPF(epf_id).then(values => {
         Object.entries(values).map(([k, v]) => setValue(k, v));
         if (values?.status == STATUS.Declined) { formControl.settings = FORM_MODES["REVIEW"]; }
-    })}
+      })
+    }
   }, []);
 
   // DEFINE HANDLES 
-  const submit = (data) => {
+  async function submit(data) {
     createEPF(data);
-  }
-
-  const submitError = (err) => {
-    console.log(err);
-    alert("Form validation failed. Please edit and upload form again.")
   }
 
   // DEFINE SECTIONS
@@ -88,12 +84,12 @@ const EPFSubmit = () => {
               <Grid item xs={6}><FormTextField {...formControl} name="a_name" required={true} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_organisation" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/}/></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/} /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="a_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="a_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="a_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -116,7 +112,7 @@ const EPFSubmit = () => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="b_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="b_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="b_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -130,21 +126,21 @@ const EPFSubmit = () => {
       names: ['c1_date', 'c1_time', 'c1_activity_and_description', 'c1_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC2 = {
       names: ['c2_date', 'c2_time', 'c2_activity_and_description', 'c2_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC3_1 = {
       names: ['c3_date', 'c3_time', 'c3_activity_and_description', 'c3_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     };
     const tableSettingsC3_2 = {
@@ -186,7 +182,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="c_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="c_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="c_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -202,7 +198,7 @@ const EPFSubmit = () => {
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [,"float"]
+      colTypes: [, "float"]
     };
 
     const tableSettingsD1B = {
@@ -211,19 +207,19 @@ const EPFSubmit = () => {
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [,"float"]
+      colTypes: [, "float"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [,"float","number", "float"]
+      colTypes: [, "float", "number", "float"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [,'float'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -235,7 +231,7 @@ const EPFSubmit = () => {
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [,'float'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     }
     return (
@@ -268,7 +264,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="d_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="d_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="d_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -304,7 +300,7 @@ const EPFSubmit = () => {
               **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
           </Grid>
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="e_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="e_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="e_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -332,7 +328,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="f_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -386,7 +382,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="f_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -424,18 +420,32 @@ const EPFSubmit = () => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained" 
+                        <Button style={{ width: 120, height: 40 }} variant="contained"
                           onClick={handleSubmit(
-                            async (data) => {
-                              data.status = STATUS.Submitted; submit(data);
-                            }, submitError)}>
+                            async (data) => { // onValid
+                              data.status = STATUS.Submitted.description; submit(data);
+                            },
+                            async (err) => { // onInvalid
+                              console.log(err);
+                              alert("Form is invalid. Please fix and submit it again.");
+                            }
+                          )}>
                           Submit
                         </Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"                       
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"
                           onClick={handleSubmit(
-                            async (data) => {
-                              data.status = STATUS.Draft; clearErrors(); submit(data);
-                            }, submitError)}>
+                            async (data) => { // onValid
+                              data.status = STATUS.Draft.description; submit(data);
+                            },
+                            async (err) => { // onInvalid
+                              let data = getValues();
+                              if (data?.b_event_name) {
+                                data.status = STATUS.Draft.description; submit(data);
+                              } else {
+                                alert("You must fill in the Event Name before saving this form as draft.");
+                              };
+                            }
+                          )}>
                           Save draft
                         </Button>
                       </Stack>
