@@ -1,9 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect,useState } from "react";
 import logo_short from "../../assets/images/logo-short.png";
 import "./Homepage.css";
-import {UserID} from "../../routes/UserID"
+import {UserID} from "../../routes/UserID";
+import axios from "axios";
+
 const Homepage = () => {
+  const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
+  console.log(userId);
+  useEffect(()=>
+  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+    console.log(response.data[0].name);
+    setFRname(response.data[0].name);
+    }).catch(error =>{
+        console.error("Error fetching EXCO: ",error);
+    }))
+
   return (
     <div>
       <div className="rectangle">
@@ -12,7 +24,7 @@ const Homepage = () => {
           <label htmlFor="welcome">Welcome</label>
         </div>
         <div className="fifthRow">
-          <label htmlFor="fifthRow">Badminton</label>
+          <label htmlFor="fifthRow">{FRname}</label>
         </div>
         <InformationBox />
       </div>
