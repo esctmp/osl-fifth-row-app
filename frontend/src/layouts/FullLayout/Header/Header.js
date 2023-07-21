@@ -7,6 +7,7 @@ import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneO
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
+import { Auth } from 'aws-amplify';
 
 import {
   AppBar,
@@ -54,7 +55,15 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
+  const handleLogout = async () => {
+    try {
+      await Auth.signOut();
+      window.location.reload(); 
+    } catch (error) {
+      console.log('Error during logout:', error);
+    }
 
+  }
   return (
     <AppBar sx={props.sx} elevation={0} className={props.customClass}>
       <Toolbar>
@@ -292,7 +301,7 @@ const Header = (props) => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
