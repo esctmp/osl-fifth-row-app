@@ -8,6 +8,7 @@ import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
 import { useNavigate, Link } from "react-router-dom";
+
 import { Auth } from 'aws-amplify';
 
 import {
@@ -57,10 +58,9 @@ const Header = (props) => {
     setAnchorEl5(null);
   };
   const handleLogout = async () => {
-    const navigate = useNavigate();
     try {
       await Auth.signOut();
-      navigate("/login"); 
+      navigate("/#/login"); 
     
     } catch (error) {
       console.log('Error during logout:', error);
