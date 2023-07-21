@@ -10,22 +10,12 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = methods;
     const onSubmit = handleSubmit(async (data) => {
         try {
-          const user = await Auth.signIn(data.email, data.password);
+          const user =  await Auth.currentAuthenticatedUser();
           console.log("user")
           console.log(user)
-          // Check if the user object contains the necessary properties
-          if (!user || !user.signInUserSession || !user.signInUserSession.accessToken || !user.signInUserSession.accessToken.payload) {
-            console.log(user)
-            console.log(user.signInUserSession)
-            console.log(user.signInUserSession.accessToken)
-            console.log(user.signInUserSession.accessToken.payload)
-
-            throw new Error('Invalid user object or missing data.');
-          }
-      
-          // Get the user's groups (roles) from the accessToken payload
-          const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
-      
+  
+          const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
+          console.log(groups)
           if (groups.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (groups.includes('EXCO')) {
