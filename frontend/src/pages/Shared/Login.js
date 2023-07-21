@@ -5,24 +5,28 @@ import { useNavigate, Link } from "react-router-dom";
 import { Auth } from 'aws-amplify'
 
 export default function Login() {
-    const user = "FRE";
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
-    const onSubmit = methods.handleSubmit(async data => {
-        try {
-            await Auth.signIn(data.email, data.password);
-            if (user === "OSL") {
-              navigate("/osl/homepage");
-            } else if (user === "FRE") {
-              navigate("/fifthrow/homepage");
-            } else {
-              navigate("/login");
-            }
-          } catch (error) {
-            console.log('Error signing in:', error);
-          }
-    })
+    const onSubmit = handleSubmit(async (data) => {
+      try {
+        const user = await Auth.signIn(data.email, data.password);
+        // Get the user's groups (roles) from the accessToken payload
+        const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
+  
+        if (groups.includes('OSL')) {
+          navigate("/osl/homepage");
+        } 
+        else if (groups.includes('EXCO')) {
+          navigate("/fifthrow/homepage");
+        } 
+        else {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.log('Error signing in:', error);
+      }
+    });
     return (
         <FormProvider{...methods}>
             <div className= "MainContainer">
