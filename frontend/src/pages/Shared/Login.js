@@ -11,9 +11,15 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user = await Auth.signIn(data.email, data.password);
-      
+          console.log("user")
+          console.log(user)
           // Check if the user object contains the necessary properties
           if (!user || !user.signInUserSession || !user.signInUserSession.accessToken || !user.signInUserSession.accessToken.payload) {
+            console.log(user)
+            console.log(user.signInUserSession)
+            console.log(user.signInUserSession.accessToken)
+            console.log(user.signInUserSession.accessToken.payload)
+
             throw new Error('Invalid user object or missing data.');
           }
       
