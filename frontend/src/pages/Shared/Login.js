@@ -11,17 +11,25 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user = await Auth.signIn(data.email, data.password);
-          // ... rest of the code ...
+      
+          // Check if the user object contains the necessary properties
+          if (!user || !user.signInUserSession || !user.signInUserSession.accessToken || !user.signInUserSession.accessToken.payload) {
+            throw new Error('Invalid user object or missing data.');
+          }
+      
+          // Get the user's groups (roles) from the accessToken payload
+          const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
+      
+          if (groups.includes('OSL')) {
+            navigate("/osl/homepage");
+          } else if (groups.includes('EXCO')) {
+            navigate("/fifthrow/homepage");
+          } else {
+            navigate("/login");
+          }
         } catch (error) {
           console.log('Error signing in:', error);
-          // Add additional logic to handle different types of errors
-          if (error.code === 'UserNotConfirmedException') {
-            // Handle the case when the user is not confirmed
-          } else if (error.code === 'NotAuthorizedException') {
-            // Handle the case when the credentials are not authorized (incorrect username/password)
-          } else {
-            // Handle other error cases
-          }
+          // Handle the error appropriately (e.g., display an error message to the user)
         }
       });
     return (
