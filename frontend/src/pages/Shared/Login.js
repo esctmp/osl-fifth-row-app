@@ -11,19 +11,16 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
-
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
-          console.log(groups)
           if (groups.includes('OSL')) {
             navigate("/osl/homepage");
-          } else if (groups.includes('EXCO')) {
+          } else if (groups.includes('FRE')) {
             navigate("/fifthrow/homepage");
           } else {
             navigate("/login");
           }
         } catch (error) {
           console.log('Error signing in:', error);
-          // Handle the error appropriately (e.g., display an error message to the user)
         }
       });
     return (
