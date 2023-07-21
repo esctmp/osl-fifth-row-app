@@ -7,6 +7,7 @@ import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneO
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
+import { useNavigate, Link } from "react-router-dom";
 import { Auth } from 'aws-amplify';
 
 import {
@@ -58,7 +59,7 @@ const Header = (props) => {
   const handleLogout = async () => {
     try {
       await Auth.signOut();
-      window.location.href = "/login"; // Redirect to the login page
+      navigate("/login"); 
     
     } catch (error) {
       console.log('Error during logout:', error);
