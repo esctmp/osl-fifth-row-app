@@ -10,7 +10,7 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = methods;
     const onSubmit = handleSubmit(async (data) => {
         try {
-          const user =  await Auth.currentAuthenticatedUser();
+          const user =  await Auth.signIn(data.email,data.password);
           console.log("user")
           console.log(user)
   
