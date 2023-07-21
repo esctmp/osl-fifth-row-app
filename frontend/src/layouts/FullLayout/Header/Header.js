@@ -57,6 +57,7 @@ const Header = (props) => {
     setAnchorEl5(null);
   };
   const handleLogout = async () => {
+    const navigate = useNavigate();
     try {
       await Auth.signOut();
       navigate("/login"); 
