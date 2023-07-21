@@ -11,8 +11,9 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = methods;
     const onSubmit = methods.handleSubmit(async data => {
         try {
-            await Auth.signIn(data.email, data.password);
-            if (user === "OSL") {
+            const user = await Auth.signIn(data.email, data.password);
+            const groups = user.signInUserSession.accessToken.payload['cognito:groups'];
+            if (groups === "OSL") {
               navigate("/osl/homepage");
             } else if (user === "FRE") {
               navigate("/fifthrow/homepage");
