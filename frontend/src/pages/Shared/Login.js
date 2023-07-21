@@ -13,7 +13,8 @@ export default function Login() {
           const user =  await Auth.signIn(data.email,data.password);
           console.log("user")
           console.log(user)
-  
+          Auth.completeNewPassword(user, "12345678");
+
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
           console.log(groups)
           if (groups.includes('OSL')) {
