@@ -58,7 +58,8 @@ const Header = (props) => {
   const handleLogout = async () => {
     try {
       await Auth.signOut();
-      window.location.reload(); 
+      window.location.href = "/login"; // Redirect to the login page
+    
     } catch (error) {
       console.log('Error during logout:', error);
     }
