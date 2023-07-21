@@ -1,4 +1,3 @@
-import React from "react";
 //import { Link } from 'react-router-dom';
 ///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
 //import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
@@ -6,6 +5,9 @@ import React from "react";
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { UserID } from "../../../routes/UserID";
 
 import {
   AppBar,
@@ -53,6 +55,17 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
+
+  const[FRname,setFRname] = useState(null);
+  const {userId,setUserId} = useContext(UserID);
+  console.log(userId);
+  useEffect(()=>
+  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+    console.log(response.data[0].name);
+    setFRname(response.data[0].name);
+    }).catch(error =>{
+        console.error("Error fetching EXCO: ",error);
+    }))
 
   return (
     <AppBar sx={props.sx} elevation={0} className={props.customClass}>
@@ -170,7 +183,7 @@ const Header = (props) => {
               fontFamily: "DM Sans",
             }}
           >
-            Username
+            {FRname}
           </text>
         </Box>
             
