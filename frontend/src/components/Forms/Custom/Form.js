@@ -240,7 +240,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
             ((required && !e.target.value) || (shouldWarn(e.target.value))) ? setError(true) : setError(false);
           }}
           onFocus={() => {
-            (required && !field.value) ? setError(true) : setError(false);
+            ((required && !e.target.value) || (shouldWarn(e.target.value))) ? setError(true) : setError(false);
           }
           }
           value={(field.value || '').replace('Z', '')}
