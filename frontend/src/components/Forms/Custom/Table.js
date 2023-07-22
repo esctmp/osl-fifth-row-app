@@ -60,12 +60,12 @@ const TableRowName = ({ rowName, rowNameAlign = '', sx = {}, required = false })
   </Box>
 
 const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
-  const getInputComponent = (name, field, type) => {
+  const getInputComponent = (name, type) => {
     const props = {
       name: name,
-      field: field,
       settings: settings,
       minRows: minRows,
+      control: control,
       required: required || false,
     };
     if (type == "number") {
@@ -87,13 +87,7 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
       </Grid>
       {names.map((name, j) =>
         <Grid item xs={colConfig[j + 1]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-          <Controller
-            name={`${name}`}
-            control={control}
-            render={({ field }) => (
-              getInputComponent(name, field, colTypes[j + 1])
-            )}
-          />
+          {getInputComponent(name, colTypes[j + 1])}
         </Grid>
       )}
     </>)
@@ -115,7 +109,7 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-export const TableRowsStatic = ({ names, rowNames, rowRequired=[], ...rest }) => {
+export const TableRowsStatic = ({ names, rowNames, rowRequired = [], ...rest }) => {
   return (
     <>
       {rowNames.map((rowName, idx) =>
@@ -158,170 +152,214 @@ const TableAddRow = ({ onClickFunction, settings }) =>
     </Grid>
   </>
 
-const TableRowTextInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowTextInput = ({ name, settings, control, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
-    <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
-      <OutlinedInput
-        InputLabelProps={{
-          required: required
-        }}
-        onChange={(e) => {
-          field.onChange(e.target.value);
-          (required && !e.target.value) ? setError(true) : setError(false);
-        }}
-        onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
-        error={error}
-        id={name}
-        key={name}
-        fullWidth
-        multiline
-        minRows={minRows}
-        value={field.value}
-        disabled={!settings.enableInputs}
-        sx={{ height: '100%' }} // TODO make error border a bit thicker
-        display='flex'
-      />
-    </Box>
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <OutlinedInput
+            InputLabelProps={{
+              required: required
+            }}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              (required && !e.target.value) ? setError(true) : setError(false);
+            }}
+            onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
   )
 }
 
-const TableRowNumberInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
-    <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
-      <OutlinedInput
-        InputLabelProps={{
-          required: required
-        }}
-        onChange={(e) => {
-          field.onChange(parseInt(e.target.value));
-          (required && !e.target.value) ? setError(true) : setError(false);
-          (e.target.value && /[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
-        }}
-        onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
-        error={error}
-        id={name}
-        key={name}
-        fullWidth
-        multiline
-        minRows={minRows}
-        value={field.value}
-        disabled={!settings.enableInputs}
-        sx={{ height: '100%' }} // TODO make error border a bit thicker
-        display='flex'
-      />
-    </Box>
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <OutlinedInput
+            InputLabelProps={{
+              required: required
+            }}
+            onChange={(e) => {
+              field.onChange(parseInt(e.target.value));
+              (required && !e.target.value) ? setError(true) : setError(false);
+              (e.target.value && /[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
+            }}
+            onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
   )
 }
 
-const TableRowFloatInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowFloatInput = ({ name, settings, control, minRows = 3, required = false }) => { // allow for '$' sign to match SQL Money input fields
   const [error, setError] = useState(false);
   return (
-    <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
-      <OutlinedInput
-        InputLabelProps={{
-          required: required
-        }}
-        onChange={(e) => {
-          field.onChange(e.target.value);
-          (e.target.value && !/^[0-9]*[.]?[0-9]*$/.test(e.target.value)) ? setError(true) : setError(false);
-          (required && !e.target.value) ? setError(true) : setError(false);
-        }}
-        onFocus={() => {
-          (field.value && !/^[0-9]*[.]?[0-9]*$/.test(field.value)) ? setError(true) : setError(false);
-          (required && !field.value) ? setError(true) : setError(false);
-        }}
-        error={error}
-        id={name}
-        key={name}
-        fullWidth
-        multiline
-        minRows={minRows}
-        value={field.value}
-        disabled={!settings.enableInputs}
-        sx={{ height: '100%' }} // TODO make error border a bit thicker
-        display='flex'
-      />
-    </Box>
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <OutlinedInput
+            InputLabelProps={{
+              required: required
+            }}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              ((e.target.value && !/^[$]?[0-9]*[\.]?[0-9]*$/.test(e.target.value)) || (required && !e.target.value)) ? setError(true) : setError(false);
+            }}
+            onFocus={() => {
+              ((required && !field.value) || (field.value && !/^[$]?[0-9]*[.]?[0-9]*$/.test(field.value))) ? setError(true) : setError(false);
+            }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
   )
 }
 
-const TableRowDateInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowDateInput = ({ name, settings, control, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
-    <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
-      <TextField
-        InputLabelProps={{
-          required: required
-        }}
-        onChange={(e) => {
-          field.onChange(e.target.value);
-          (e.target.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value) || isNaN(Date.parse(e.target.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
-          (required && !e.target.value) ? setError(true) : setError(false);
-        }}
-        onFocus={() => {
-          (field.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(field.value) || isNaN(Date.parse(field.value, "MM/DD/YYYY"))) ? setError(true) : setError(false);
-          (required && !field.value) ? setError(true) : setError(false);
-        }}
-        error={error}
-        id={name}
-        key={name}
-        fullWidth
-        multiline
-        minRows={minRows}
-        value={field.value}
-        placeholder="MM/DD/YYYY"
-        disabled={!settings.enableInputs}
-        sx={{ height: '100%' }} // TODO make error border a bit thicker
-        display='flex'
-      />
-    </Box>
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <TextField
+            InputLabelProps={{
+              required: required
+            }}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              ((e.target.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value)) || isNaN(Date.parse(e.target.value, "MM/DD/YYYY")) || (required && !e.target.value)) ? setError(true) : setError(false);
+            }}
+            onFocus={() => {
+              ((field.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(field.value)) || isNaN(Date.parse(field.value, "MM/DD/YYYY")) || (required && !field.value)) ? setError(true) : setError(false);
+            }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            placeholder="MM/DD/YYYY"
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
   )
 }
 
 
-const TableRowTimeInput = ({ name, field, settings, minRows = 3, required = false }) => {
+const TableRowTimeInput = ({ name, settings, control, minRows = 3, required = false }) => {
   const [error, setError] = useState(false);
   return (
-    <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
-      <OutlinedInput
-        type="time"
-        InputLabelProps={{
-          required: required
-        }}
-        onChange={(e) => {
-          field.onChange(e.target.value);
-          (e.target.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.target.value)) ? setError(true) : setError(false);
-          (required && !e.target.value) ? setError(true) : setError(false);
-        }}
-        onFocus={() => {
-          (field.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(field.value)) ? setError(true) : setError(false);
-          (required && !field.value) ? setError(true) : setError(false);
-        }}
-        error={error}
-        id={name}
-        key={name}
-        fullWidth
-        multiline
-        minRows={minRows}
-        value={field.value}
-        placeholder="HH:mm"
-        disabled={!settings.enableInputs}
-        sx={{ height: '100%' }} // TODO make error border a bit thicker
-        display='flex'
-      />
-    </Box>
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <OutlinedInput
+            type="time"
+            InputLabelProps={{
+              required: required
+            }}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              ((required && !e.target.value) || (e.target.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.target.value))) ? setError(true) : setError(false);
+            }}
+            onFocus={() => {
+              ((required && !field.value) || (field.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(field.value))) ? setError(true) : setError(false);
+            }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            placeholder="HH:mm"
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
   )
 }
 
 const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
-  const getInputComponent = (name, field, type) => {
+  const getInputComponent = (name, type) => {
     const props = {
       name: `${name.split('_')[0] + '_grouped'}.${idx}.${name}`,
-      field: field,
       settings: settings,
       minRows: minRows,
+      control: control,
       required: required || false,
     }
     if (type == "number") {
@@ -341,13 +379,7 @@ const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = 
       {names.map((name, j) =>
         <>
           <Grid item xs={colConfig[j]} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
-            <Controller
-              name={`${name.split('_')[0] + '_grouped'}.${idx}.${name}`}
-              control={control}
-              render={({ field }) => (
-                getInputComponent(name, field, colTypes[j])
-              )}
-            />
+            {getInputComponent(name, colTypes[j])}
           </Grid>
         </>
       )}
