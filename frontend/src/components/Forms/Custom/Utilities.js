@@ -38,8 +38,8 @@ export async function getEPF(epf_id) {
         return { data: [{}] };
     });
     let data = convertJSONToFields(response.data[0]);
-    // let data = dummyEPF;
-    console.log(data);
+    //let data = convertJSONToFields(dummyEPF);
+    console.log("LOADED", data);
     return data;
 }
 
@@ -55,7 +55,7 @@ export async function getEPF(epf_id) {
 export const convertFieldsToJSON = (data) => {
     // Filter out undefined/null data
     data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(
-        value == undefined
+        !value
         || (Array.isArray(value) && (value.length == 0 || value[0] == false))
         || (Array.isArray(value) && (Object.entries(value[0]).filter(([k, v]) => v).length == 0))
     )));
@@ -80,6 +80,24 @@ export async function createEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("SUBMITTED", data);
     await axios.post("http://localhost:3000/epfs/createEPF",
+        data,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then((response) => {
+        if (response.status == 201) {
+            alert("Form uploaded successfully!");
+        }
+    }, (err) => alert("Form upload failed. Please try again."));
+}
+
+
+export async function updateEPF(data) {
+    data = convertFieldsToJSON(data);
+    console.log("UPDATED", data);
+    await axios.put("http://localhost:3000/epfs/updateEPF",
         data,
         {
             headers: {

@@ -1,5 +1,4 @@
 {
-    "epf_id": 4,
     "status": "Pending",
     "exco_user_id": 1,
     "date_created": "2023-07-13T11:55:09.016Z",
@@ -18,12 +17,12 @@
     "b_comments_osl": "B Comment OSL",
     "b_comments_root": "B Comment ROOT",
     "c1_date": [
-      "2023-06-21",
-      "2023-06-22"
+      "06/21/2023",
+      "06/22/2023"
     ],
     "c1_time": [
-      "16:49:00",
-      "16:50:00"
+      "16:49",
+      "16:50"
     ],
     "c1_activity_and_description": [
       "activity 1 description 1",
@@ -34,12 +33,12 @@
       "venue 2"
     ],
     "c2_date": [
-      "2023-06-21",
-      "2023-06-22"
+      "06/21/2023",
+      "06/22/2023"
     ],
     "c2_time": [
-      "16:49:00",
-      "16:50:00"
+      "16:49",
+      "16:50"
     ],
     "c2_activity_and_description": [
       "activity 1 description 1",
@@ -50,12 +49,12 @@
       "venue 2"
     ],
     "c3_date": [
-      "2023-06-21",
-      "2023-06-22"
+      "06/21/2023",
+      "06/22/2023"
     ],
     "c3_time": [
-      "16:49:00",
-      "16:50:00"
+      "16:49",
+      "16:50"
     ],
     "c3_activity_and_description": [
       "activity 1 description 1",
@@ -83,12 +82,12 @@
     ],
     "c_comments_osl": "C Comment OSL",
     "c_comments_root": "C Comment ROOT",
-    "d1a_club_income_fund": "$23.23",
-    "d1a_osl_seed_fund": "$23.23",
-    "d1a_donation": "$23.23",
-    "d1b_revenue": "$23.23",
-    "d1b_donation_or_scholarship": "$23.23",
-    "d1b_total_source_of_funds": "$23.23",
+    "d1a_club_income_fund": "23.23",
+    "d1a_osl_seed_fund": "23.23",
+    "d1a_donation": "23.23",
+    "d1b_revenue": "23.23",
+    "d1b_donation_or_scholarship": "23.23",
+    "d1b_total_source_of_funds": "23.23",
     "d11_items_goods_services": [
       "item 1",
       "item 2"
@@ -105,7 +104,7 @@
       "amount 1",
       "amount 2"
     ],
-    "d11_total_revenue": "$23.23",
+    "d11_total_revenue": "23.23",
     "d2_items": [
       "item 1",
       "item 2"
@@ -118,7 +117,7 @@
       "venue 1",
       "venue 2"
     ],
-    "d2_total_expenditure": "$23.23",
+    "d2_total_expenditure": "23.23",
     "d_comments_osl": "D Comment OSL",
     "d_comments_root": "D Comment ROOT",
     "e_personal_data": 1,

@@ -15,7 +15,8 @@ import {
   convertFieldsToJSON,
   convertJSONToFields,
   getEPF,
-  createEPF
+  createEPF,
+  updateEPF
 } from "../../../components/Forms/Custom/Utilities";
 import {
   FORM_MODES,
@@ -40,7 +41,6 @@ import { UserID } from '../../../routes/UserID';
 // TODO autosave
 
 // TODO api calls
-// TODO submit validation vs draft
 // TODO create ROOT page
 // TODO backend remove validation?
 
@@ -50,7 +50,7 @@ const EPFSubmit = () => {
   const { epf_id } = useParams();
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
-  const { handleSubmit, control, setValue, getValues } = useForm({ shouldFocusError: true });
+  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings,
@@ -69,7 +69,11 @@ const EPFSubmit = () => {
 
   // DEFINE HANDLES 
   async function submit(data) {
-    createEPF(data);
+    if (epf_id != undefined) {
+      updateEPF(data);
+    } else {
+      createEPF(data);
+    }
   }
 
   // DEFINE SECTIONS
@@ -85,7 +89,7 @@ const EPFSubmit = () => {
               <Grid item xs={6}><FormTextField {...formControl} name="a_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_organisation" required={true} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/} /></Grid>
-              <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} pattern={/\@mymail.sutd.edu.sg$/} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >

@@ -106,26 +106,27 @@ export const FormHeader = ({ text }) =>
  * @param {boolean} props.settings.enableComments
  * @returns  {React.Component}
  */
-export const FormTextField = ({ name, control, settings, multiline = false, required = false, pattern=null }) => {
+export const FormTextField = ({ name, control, settings, multiline = false, required = false, pattern = null, autoFocus = false }) => {
   const [error, setError] = useState(false);
   return (
     <Controller
       name={name}
       control={control}
       rules={{
-        validate: () => { return error; }
+        required: required,
+        validate: () => { return !error; }
       }}
       render={({ field }) => (
         <TextField
           InputLabelProps={{
             required: required
           }}
+          autoFocus={autoFocus}
           id={name}
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            (required && !e.target.value) ? setError(true) : setError(false);
-            (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
+            ((required && !e.target.value) || (pattern && !pattern.test(e.target.value))) ? setError(true) : setError(false);
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
           value={field.value || ""}
@@ -163,7 +164,8 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
       name={name}
       control={control}
       rules={{
-        validate: () => { return error; }
+        required: required,
+        validate: () => { return !error; }
       }}
       render={({ field }) => (
         <TextField
@@ -175,8 +177,7 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            (required && !e.target.value) ? setError(true) : setError(false);
-            (pattern && !pattern.test(e.target.value)) ? setError(true) : setError(false);
+            ((required && !e.target.value) || (pattern && !pattern.test(e.target.value))) ? setError(true) : setError(false);
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
           value={field.value || ''}
@@ -219,7 +220,8 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
       name={name}
       control={control}
       rules={{
-        validate: () => { return error; }
+        required: required,
+        validate: () => { return !error; }
       }}
       render={({ field }) => (
         <TextField
@@ -234,14 +236,13 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            (required && !e.target.value) ? setError(true) : setError(false);
-            (shouldWarn(e.target.value)) ? setWarn(true) : setWarn(false);
+            ((required && !e.target.value) || (shouldWarn(e.target.value))) ? setError(true) : setError(false);
           }}
           onFocus={() => {
             (required && !field.value) ? setError(true) : setError(false);
           }
           }
-          value={(field.value || '').replace('Z','')}
+          value={(field.value || '').replace('Z', '')}
           helperText={(warn ? "Warning: The event date is < 5 weeks away." : "")}
           type="datetime-local"
           multiline={multiline}
@@ -318,7 +319,8 @@ export const FormRadioField = ({ name, label, control, options, settings, requir
       control={control}
       defaultValue={0}
       rules={{
-        validate: () => { return error; }
+        required: required,
+        validate: () => { return !error; }
       }}
       render={({ field }) => (
         <>
