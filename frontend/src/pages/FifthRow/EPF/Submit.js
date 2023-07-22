@@ -62,7 +62,8 @@ const EPFSubmit = () => {
     if (settings.loadForm) {
       getEPF(epf_id).then(values => {
         Object.entries(values).map(([k, v]) => setValue(k, v));
-        if (values?.status == STATUS.Declined) { formControl.settings = FORM_MODES["REVIEW"]; }
+        if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
+        if (values?.status == STATUS.Approved.description) { formControl.settings = FORM_MODES["ARCHIVED"]; }
       })
     }
   }, []);

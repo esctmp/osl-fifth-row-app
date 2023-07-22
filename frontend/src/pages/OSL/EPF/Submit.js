@@ -15,7 +15,8 @@ import {
   convertFieldsToJSON,
   convertJSONToFields,
   getEPF,
-  createEPF
+  createEPF,
+  updateEPF
 } from "../../../components/Forms/Custom/Utilities";
 import {
   FORM_MODES,
@@ -23,38 +24,49 @@ import {
   FormHeader,
   FormTextField,
   FormDateTimeField,
-  FormCommentField,
   FormNumberField,
-  FormRadioField
+  FormCommentField,
+  FormRadioField,
+  STATUS
 } from "../../../components/Forms/Custom/Form";
 import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useFormState } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
+import { UserID } from '../../../routes/UserID';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 
 const EPFSubmit = () => {
-  // DEFINE FORM CONTROL VARIABLES
+  // DEFINE FORM CONTROL VARIABLE
+  const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
-  const mode = "OSL_COMMENT";
+  const mode = (epf_id != undefined) ? "OSL_COMMENT" : "NEW";
   const settings = FORM_MODES[mode];
-  const { handleSubmit, control, setValue } = useForm({});
+  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
     settings: settings,
     setValue: setValue
   };
+  console.log("RE-RENDERED");
 
   useEffect(() => {
     if (settings.loadForm) {
-      getEPF(epf_id).then(values => Object.entries(values).map(([k, v]) => setValue(k, v)));
+      getEPF(epf_id).then(values => {
+        if (values?.status == STATUS.Approved.description || values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["ARCHIVED"]; } // TODO fix
+        Object.entries(values).map(([k, v]) => setValue(k, v));
+      })
     }
   }, []);
 
   // DEFINE HANDLES 
-  const submit = (data) => {
-    createEPF(data);
+  async function submit(data) {
+    if (epf_id != undefined) {
+      updateEPF(data);
+    } else {
+      createEPF(data);
+    }
   }
 
   // DEFINE SECTIONS
@@ -69,12 +81,12 @@ const EPFSubmit = () => {
               <Grid item xs={6}><FormTextField {...formControl} name="a_name" required={true} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_organisation" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/}/></Grid>
-              <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/} /></Grid>
+              <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} pattern={/\@mymail.sutd.edu.sg$/} /></Grid>
             </Grid>
           </Grid>
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="a_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="a_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="a_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -97,7 +109,7 @@ const EPFSubmit = () => {
             </Grid>
           </Grid>
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="b_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="b_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="b_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -111,21 +123,21 @@ const EPFSubmit = () => {
       names: ['c1_date', 'c1_time', 'c1_activity_and_description', 'c1_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC2 = {
       names: ['c2_date', 'c2_time', 'c2_activity_and_description', 'c2_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC3_1 = {
       names: ['c3_date', 'c3_time', 'c3_activity_and_description', 'c3_venue'],
       colConfig: [3, 2, 4, 3],
       colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date','time',,],
+      colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     };
     const tableSettingsC3_2 = {
@@ -167,7 +179,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="c_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="c_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="c_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -183,7 +195,7 @@ const EPFSubmit = () => {
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [,"float"]
+      colTypes: [, "float"]
     };
 
     const tableSettingsD1B = {
@@ -192,19 +204,19 @@ const EPFSubmit = () => {
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [,"float"]
+      colTypes: [, "float"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [,"float","number", "float"]
+      colTypes: [, "float", "number", "float"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [,'float'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -216,7 +228,7 @@ const EPFSubmit = () => {
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [,'float'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     }
     return (
@@ -249,7 +261,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="d_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="d_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="d_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -285,7 +297,7 @@ const EPFSubmit = () => {
               **The Personal Data Protection Act (PDPA) defines ‘processing’ as ‘the carrying out of any operation or set of operations in relation to the personal data, and it includes recording, holding and transmission’ (non-exhaustive list of operations which forms part of collection, use or disclosure).</>} />
           </Grid>
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="e_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="e_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="e_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -313,7 +325,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="f_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -367,7 +379,7 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-          <FormCommentField {...formControl} name="f_comments_osl" owner="OSL"/>
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
             <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
@@ -408,14 +420,14 @@ const EPFSubmit = () => {
                         <Button style={{ width: 120, height: 40 }} color="success" variant="contained" 
                           onClick={handleSubmit(
                             async (data) => {
-                              data.status = "Approved"; submit(data);
+                              data.status = STATUS.Approved.description;; submit(data);
                             })}>
                           Approve
                         </Button>
                         <Button style={{ width: 120, height: 40 }} color="error" variant="contained"
                           onClick={handleSubmit(
                             async (data) => {
-                              data.status = "Declined"; submit(data);
+                              data.status = STATUS.Declined.description;; submit(data);
                             })}>
                           Decline
                         </Button>

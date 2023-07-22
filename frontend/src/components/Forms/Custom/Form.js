@@ -40,11 +40,12 @@ export const FORM_MODES = {
 
   // OSL
   "OSL_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: true, enableROOTComments: false },
-  "OSL_SUBMITTED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 
   // ROOT
   "ROOT_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: true },
-  "ROOT_SUBMITTED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+
+  // All
+  "ARCHIVED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 }
 
 export const STATUS = {

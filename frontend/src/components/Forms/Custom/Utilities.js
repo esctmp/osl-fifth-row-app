@@ -105,7 +105,7 @@ export async function updateEPF(data) {
             }
         }
     ).then((response) => {
-        if (response.status == 201) {
+        if (response.status == 200) {
             alert("Form uploaded successfully!");
         }
     }, (err) => alert("Form upload failed. Please try again."));
