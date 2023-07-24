@@ -1,5 +1,5 @@
 //import { Link } from 'react-router-dom';
-///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
+import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
 //import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
 
 import Logout from "@material-ui/icons/Logout";
@@ -7,6 +7,7 @@ import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { UserID } from "../../../routes/UserID";
 
 import {
@@ -81,7 +82,7 @@ const Header = (props) => {
             },
           }}
         >
-          {/* <MenuOutlinedIcon width="20" height="20" /> */}
+          <MenuOutlinedIcon width="20" height="20" />
         </IconButton>
 
         {/* ------------------------------------------- */}
@@ -160,7 +161,7 @@ const Header = (props) => {
             </Box>
           </MenuItem>
         </Menu> */}
-        <Box flexGrow={1} />
+        <Box flexGrow={1} />  
 
         {/* ------------------------------------------- */}
         {/* Username */}
@@ -304,12 +305,14 @@ const Header = (props) => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleClose4}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
+          <Link to="/">
+            <MenuItem>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Link>
         </Menu>
       </Toolbar>
     </AppBar>
