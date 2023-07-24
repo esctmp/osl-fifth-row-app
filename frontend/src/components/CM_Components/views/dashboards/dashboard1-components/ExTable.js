@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 // import products from "./Data.json"
 import axios from "axios";
+import { UserID } from "../../../../../routes/UserID";
 
 
 import {
@@ -19,7 +20,7 @@ import {
 
 const ExTable = () => {
 
-
+  const {userId,setUserId} = useContext(UserID);
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 5; // Number of rows to display per page
 
@@ -28,7 +29,7 @@ const ExTable = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  
   const slicedProducts = products.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -39,17 +40,19 @@ const ExTable = () => {
     const fetchData = async () => {
       try {
         console.log("ARGGHHHHH")
-        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log(userId)
+        console.log("UID")
+        const response = await axios.get(`http://localhost:3000/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
         console.log("hi");
         const transformedData = response.data.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
-            pbg = "success.main";
-          } else if (item.status === "Need Changes"||"Pending Changes From Club") {
-            pbg = "primary.main";
-          } else if (item.status === "Pending Approval") {
-            pbg = "error.main";
+            pbg = "#66FF00";
+          } else if (item.status === "Pending") {
+            pbg = "#FF6600";
+          } else if (item.status === "Declined") {
+            pbg = "#CC0000";
           }
   
           return {

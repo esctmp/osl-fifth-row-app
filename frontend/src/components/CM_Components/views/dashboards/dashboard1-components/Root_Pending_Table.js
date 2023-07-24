@@ -37,15 +37,18 @@ const Root_Pending_Table = () => {
         console.log("ARGGHHHHH")
         const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
-        const transformedData = response.data.map((item) => {
+
+        const approvedData = response.data.filter(item => item.status !== "Approved");
+
+        const transformedData = approvedData.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
-            pbg = "success.main";
-          } else if (item.status === "Need Changes"||"Pending Changes From Club") {
-            pbg = "primary.main";
-          } else if (item.status === "Pending Approval") {
-            pbg = "error.main";
+            pbg = "#66FF00";
+          } else if (item.status === "Pending") {
+            pbg = "#FF6600";
+          } else if (item.status === "Declined") {
+            pbg = "#CC0000";
           }
   
           return {
@@ -60,7 +63,6 @@ const Root_Pending_Table = () => {
             pbg: pbg,
             club:item.a_organisation,
             action:"EXPORT"
-
           };
         });
         setProducts(transformedData);
