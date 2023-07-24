@@ -1,7 +1,3 @@
-//import { Link } from 'react-router-dom';
-///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
-//import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
-
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
