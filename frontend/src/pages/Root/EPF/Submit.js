@@ -36,19 +36,12 @@ import { useContext } from 'react';
 import { UserID } from '../../../routes/UserID';
 
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
-// TODO autofill
-// TODO file attachment feature
-// TODO autosave
-
-// TODO api calls
-// TODO create ROOT page
-// TODO backend remove validation?
 
 const EPFSubmit = () => {
-  // DEFINE FORM CONTROL VARIABLES
+  // DEFINE FORM CONTROL VARIABLE
   const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
-  const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
+  const mode = (epf_id != undefined) ? "ROOT_COMMENT" : "NEW";
   const settings = FORM_MODES[mode];
   const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
   const formControl = { // global form vars that should be passed down to imported custom component
@@ -61,9 +54,8 @@ const EPFSubmit = () => {
   useEffect(() => {
     if (settings.loadForm) {
       getEPF(epf_id).then(values => {
+        if (values?.status == STATUS.Approved.description || values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["ARCHIVED"]; } // TODO fix
         Object.entries(values).map(([k, v]) => setValue(k, v));
-        if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
-        if (values?.status == STATUS.Approved.description) { formControl.settings = FORM_MODES["ARCHIVED"]; }
       })
     }
   }, []);
@@ -425,32 +417,18 @@ const EPFSubmit = () => {
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained"
+                        <Button style={{ width: 120, height: 40 }} variant="contained" 
                           onClick={handleSubmit(
-                            async (data) => { // onValid
-                              data.status = STATUS.Submitted.description; submit(data);
-                            },
-                            async (err) => { // onInvalid
-                              console.log(err);
-                              alert("Form is invalid. Please fix and submit it again.");
-                            }
-                          )}>
+                            async (data) => {
+                              submit(data);
+                            })}>
                           Submit
                         </Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" 
                           onClick={handleSubmit(
-                            async (data) => { // onValid
-                              data.status = STATUS.Draft.description; submit(data);
-                            },
-                            async (err) => { // onInvalid
-                              let data = getValues();
-                              if (data?.b_event_name) {
-                                data.status = STATUS.Draft.description; submit(data);
-                              } else {
-                                alert("You must fill in the Event Name before saving this form as draft.");
-                              };
-                            }
-                          )}>
+                            async (data) => {
+                              submit(data);
+                            })}>
                           Save draft
                         </Button>
                       </Stack>

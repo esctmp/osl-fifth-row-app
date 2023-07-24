@@ -1,20 +1,25 @@
-import React, { useContext,useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo_short from "../../assets/images/logo-short.png";
-import "./Homepage.css";
-import {UserID} from "../../routes/UserID";
+//import data from "../../components/HomepageData/Data.json";
 import axios from "axios";
-
+import { UserID } from "../../routes/UserID";
+import "./Homepage.css";
+import {UserID} from "../../routes/UserID"
 const Homepage = () => {
   const[FRname,setFRname] = useState(null);
+  const[EPFcount, setEPFcount] = useState(null);
   const {userId,setUserId} = useContext(UserID);
   console.log(userId);
   useEffect(()=>
   axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
-    console.log(response.data[0].name);
+    // console.log(response.data[0].name);
+    // console.log(response.data[0].outstanding_epf);
+    setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
         console.error("Error fetching EXCO: ",error);
     }))
+ 
 
   return (
     <div>
@@ -26,7 +31,9 @@ const Homepage = () => {
         <div className="fifthRow">
           <label htmlFor="fifthRow">{FRname}</label>
         </div>
-        <InformationBox />
+        <div className="informationBox">
+          <p className="informationText">You have {EPFcount} outstanding forms to review.</p>
+        </div>
       </div>
     </div>
   );
@@ -40,13 +47,14 @@ const Logo = () => {
   )
 }
 
-const InformationBox = () => {
-  return (
-    <div className="informationBox">
-      <p className="informationText">You have 3 outstanding forms to review.</p>
-    </div>
-  )
-}
+// const InformationBox = () => {
+  
+//   return (
+//     <div className="informationBox">
+//       <p className="informationText">You have {EPFcount} outstanding forms to review.</p>
+//     </div>
+//   )
+// }
 
 // const ClubDetailsBox = () => {
 //   return (

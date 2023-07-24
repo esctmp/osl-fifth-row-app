@@ -14,7 +14,7 @@ import {
   Chip,
 } from "@material-ui/core";
 
-const OSL_ExTable = () => {
+const Root_Archives = () => {
 
 
   const [page, setPage] = React.useState(0);
@@ -37,7 +37,7 @@ const OSL_ExTable = () => {
         console.log("ARGGHHHHH")
         const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
-        var transformedData = response.data.map((item) => {
+        const transformedData = response.data.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
@@ -63,9 +63,6 @@ const OSL_ExTable = () => {
 
           };
         });
-        console.log("HUH", transformedData);
-        transformedData = transformedData.filter((item) => item?.status != "Draft");
-        console.log("AFTER", transformedData);
         setProducts(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -162,7 +159,7 @@ const OSL_ExTable = () => {
             </TableCell>
             <TableCell>
             <Link
-                  to={ `/osl/epf/view/${product.id}`}
+                  to={ `/root/epf/view/${product.id}`}
                 >
                   <Typography
                     sx={{
@@ -248,4 +245,4 @@ const OSL_ExTable = () => {
   );
 };
 
-export default OSL_ExTable;
+export default Root_Archives;

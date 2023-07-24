@@ -1,13 +1,12 @@
-import React from "react";
-//import { Link } from 'react-router-dom';
-///import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-//import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
-
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
-import { Auth } from 'aws-amplify';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import logo_short from "../../assets/images/logo-short.png";
+//import data from "../../components/HomepageData/Data.json";
+import { UserID } from "../../routes/UserID";
+import "./Homepage.css";
 
 import {
   AppBar,
@@ -55,32 +54,13 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
-  const handleLogout = async () => {
-    try {
-      await Auth.signOut();
-      window.location.href = "/#/login"; 
-    
-    } catch (error) {
-      console.log('Error during logout:', error);
-    }
 
-  }
   return (
-    <AppBar sx={props.sx} elevation={0} className={props.customClass}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={props.toggleMobileSidebar}
-          sx={{
-            display: {
-              lg: "none",
-              xs: "inline",
-            },
-          }}
-        >
-          {/* <MenuOutlinedIcon width="20" height="20" /> */}
-        </IconButton>
+    <div className="imageContainer">
+      <img src={logo_short} alt="Logo" />
+    </div>
+  )
+}
 
         {/* ------------------------------------------- */}
         {/* New Page Dropdown */}
@@ -171,7 +151,7 @@ const Header = (props) => {
             width: "auto",
             right: 0,
             top: "70px !important",
-            mr: 1.2,
+            mr: 1,
             mt: 0.5,
           }}
         >
@@ -181,7 +161,7 @@ const Header = (props) => {
               fontFamily: "DM Sans",
             }}
           >
-            Username
+            {FRname}
           </text>
         </Box>
             
@@ -190,7 +170,7 @@ const Header = (props) => {
         {/* ------------------------------------------- */}
         {/* Notifications Dropdown */}
         {/* ------------------------------------------- */}
-        <IconButton
+        {/* <IconButton
           aria-label="menu"
           color="inherit"
           aria-controls="notification-menu"
@@ -218,7 +198,7 @@ const Header = (props) => {
           <MenuItem onClick={handleClose}>Action</MenuItem>
           <MenuItem onClick={handleClose}>Action Else</MenuItem>
           <MenuItem onClick={handleClose}>Another Action</MenuItem>
-        </Menu>
+        </Menu> */}
         {/* ------------------------------------------- */}
         {/* End Notifications Dropdown */}
         {/* ------------------------------------------- */}
@@ -228,7 +208,7 @@ const Header = (props) => {
         <Box
           sx={{
             width: "1px",
-            backgroundColor: "rgba(0,0,0,0.1)",
+            backgroundColor: "rgba(0,0,0,0.0)",
             height: "25px",
             ml: 1,
           }}
