@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { useLocation } from "react-router";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
 import LogoIcon from "../Logo/LogoIcon";
 import Menuitems from "./data";
@@ -29,11 +29,11 @@ const Sidebar = (props) => {
 
   const SidebarContent = (
     <Box sx={{ p: 3, height: "calc(100vh - 40px)" }}>
-      <Link to="/">
+      {/* <Link to="/"> */}
         <Box sx={{ display: "flex", alignItems: "Center" }}>
           <LogoIcon />
         </Box>
-      </Link>
+      {/* </Link> */}
 
       <Box>
         <List
