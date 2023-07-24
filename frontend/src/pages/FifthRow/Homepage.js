@@ -5,8 +5,6 @@ import axios from "axios";
 import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
-
-
 const Homepage = () => {
   const[FRname,setFRname] = useState("User");
   const[EPFcount, setEPFcount] = useState("_");

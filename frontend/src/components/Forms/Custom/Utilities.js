@@ -29,7 +29,7 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    let response = await axios.get("http://localhost:3000/epfs/getEPF", 
+    let response = await axios.get("http://localhost:3000/epfs/getEPF",
         {
             params: { epf_id: epf_id }
         }
@@ -38,9 +38,9 @@ export async function getEPF(epf_id) {
         return { data: [{}] };
     });
     let data = convertJSONToFields(response.data[0]);
-    // let data = dummyEPF;
-    console.log(data);
-    return data; 
+    //let data = convertJSONToFields(dummyEPF);
+    console.log("LOADED", data);
+    return data;
 }
 
 
@@ -54,7 +54,11 @@ export async function getEPF(epf_id) {
  */
 export const convertFieldsToJSON = (data) => {
     // Filter out undefined/null data
-    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || (Array.isArray(value) && (value.length == 0 || value[0] == false)))));
+    data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(
+        !value
+        || (Array.isArray(value) && (value.length == 0 || value[0] == false))
+        || (Array.isArray(value) && (Object.entries(value[0]).filter(([k, v]) => v).length == 0))
+    )));
 
     // Convert all grouped data to ungrouped
     let scalarObjs = Object.fromEntries(Object.entries(data).filter(([name, _]) => !name.includes('_grouped')));
@@ -84,7 +88,25 @@ export async function createEPF(data) {
         }
     ).then((response) => {
         if (response.status == 201) {
-          alert("Form uploaded successfully!");
+            alert("Form uploaded successfully!");
+        }
+    }, (err) => alert("Form upload failed. Please try again."));
+}
+
+
+export async function updateEPF(data) {
+    data = convertFieldsToJSON(data);
+    console.log("UPDATED", data);
+    await axios.put("http://localhost:3000/epfs/updateEPF",
+        data,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then((response) => {
+        if (response.status == 200) {
+            alert("Form uploaded successfully!");
         }
     }, (err) => alert("Form upload failed. Please try again."));
 }

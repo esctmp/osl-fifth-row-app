@@ -37,7 +37,7 @@ const OSL_ExTable = () => {
         console.log("ARGGHHHHH")
         const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
-        const transformedData = response.data.map((item) => {
+        var transformedData = response.data.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
@@ -63,6 +63,9 @@ const OSL_ExTable = () => {
 
           };
         });
+        console.log("HUH", transformedData);
+        transformedData = transformedData.filter((item) => item?.status != "Draft");
+        console.log("AFTER", transformedData);
         setProducts(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
