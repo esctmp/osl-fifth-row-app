@@ -6,6 +6,7 @@ import { Auth } from 'aws-amplify'
 import { useContext } from 'react'
 import {UserID} from "../../routes/UserID"
 import axios from "axios"
+import { responsiveFontSizes } from "@material-ui/core";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -16,6 +17,14 @@ export default function Login() {
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
+          axios.get("http://localhost:3000/users/getEXCOs").then(function(response){
+            for(let i =0; i<(response.data.length);i++){
+                if(response.data[i].email==data.email){
+                    const user_id = response.data[i].user_id;
+                    setUserId(user_id);
+                }
+            }
+          })
           if (groups.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (groups.includes('FRE')) {

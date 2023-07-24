@@ -3,10 +3,7 @@ import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import logo_short from "../../assets/images/logo-short.png";
-//import data from "../../components/HomepageData/Data.json";
-import { UserID } from "../../routes/UserID";
-import "./Homepage.css";
+import { UserID } from "../../../routes/UserID";
 
 import {
   AppBar,
@@ -55,12 +52,33 @@ const Header = (props) => {
     setAnchorEl5(null);
   };
 
+  const[FRname,setFRname] = useState(null);
+  const {userId,setUserId} = useContext(UserID);
+  console.log(userId);
+  useEffect(()=>
+  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+    console.log(response.data[0].name);
+    setFRname(response.data[0].name);
+    }).catch(error =>{
+        console.error("Error fetching EXCO: ",error);
+    }))
+
   return (
-    <div className="imageContainer">
-      <img src={logo_short} alt="Logo" />
-    </div>
-  )
-}
+    <AppBar sx={props.sx} elevation={0} className={props.customClass}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="menu"
+          onClick={props.toggleMobileSidebar}
+          sx={{
+            display: {
+              lg: "none",
+              xs: "inline",
+            },
+          }}
+        >
+          {/* <MenuOutlinedIcon width="20" height="20" /> */}
+        </IconButton>
 
         {/* ------------------------------------------- */}
         {/* New Page Dropdown */}
@@ -282,7 +300,7 @@ const Header = (props) => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleLogout}>
+          <MenuItem onClick={handleClose4}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
