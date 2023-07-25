@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 // import products from "./Data.json"
@@ -15,22 +15,54 @@ import {
   TableHead,
   TableRow,
   Chip,
+  InputBase,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 
 
 const ExTable = () => {
-
-  const {userId,setUserId} = useContext(UserID);
   const [page, setPage] = React.useState(0);
-  const rowsPerPage = 5; // Number of rows to display per page
-
+  const rowsPerPage = 3; // Number of rows to display per page
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchBy, setSearchBy] = useState("EPF ID");
   const [products, setProducts] = React.useState([]);
+  const {userId} = useContext(UserID);
+  
+  // Function to handle search input change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset page when the search term changes
+  };
+
+  // Function to handle search by dropdown change
+  const handleSearchByChange = (event) => {
+    setSearchBy(event.target.value);
+    setSearchTerm(""); // Reset the search term when changing the search by option
+    setPage(0); // Reset page when the search by option changes
+  };
+
+  // Filter products based on search term and selected search by option
+  const filteredProducts = products.filter((product) => {
+    if (searchTerm === "") return true;
+
+    switch (searchBy) {
+      case "EPF ID":
+        return product.id.includes(searchTerm);
+      case "Name":
+        return product.epf_Name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      default:
+        return true;
+    }
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
   
-  const slicedProducts = products.slice(
+  const slicedProducts = filteredProducts.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -67,17 +99,6 @@ const ExTable = () => {
             pbg: pbg,
           };
         });
-        // const transformedData = response.data.map((item) => ({
-        //   id: item.epf_id.toString(),
-        //   date: new Date(item.date_created).toLocaleDateString("en-US", {
-        //     year: "numeric",
-        //     month: "long",
-        //     day: "numeric",
-        //   }),
-        //   epf_Name: item.b_event_name,
-        //   status: item.status,
-        //   pbg: "error.main", // Set the desired value for pbg
-        // }));
         setProducts(transformedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -90,6 +111,19 @@ const ExTable = () => {
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
+      <Box mb={3}>
+        <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+          <Select value={searchBy} onChange={handleSearchByChange}>
+            <MenuItem value="EPF ID">EPF ID</MenuItem>
+            <MenuItem value="Name">Name</MenuItem>
+          </Select>
+        </FormControl>
+        <InputBase
+          placeholder={`Search by ${searchBy}`}
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </Box>
       <Table
         aria-label="simple table"
         sx={{
@@ -192,7 +226,7 @@ const ExTable = () => {
       <TablePagination
         rowsPerPageOptions={[]} // Disable rows per page selection
         component="div"
-        count={products.length}
+        count={filteredProducts.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
