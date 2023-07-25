@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -12,21 +12,56 @@ import {
   TableHead,
   TableRow,
   Chip,
+  InputBase,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 
 const OSL_ExTable = () => {
-
-
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 3; // Number of rows to display per page
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchBy, setSearchBy] = useState("EPF ID");
   const [products, setProducts] = React.useState([]);
+  
+
+  
+  // Function to handle search input change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset page when the search term changes
+  };
+
+  // Function to handle search by dropdown change
+  const handleSearchByChange = (event) => {
+    setSearchBy(event.target.value);
+    setSearchTerm(""); // Reset the search term when changing the search by option
+    setPage(0); // Reset page when the search by option changes
+  };
+
+  // Filter products based on search term and selected search by option
+  const filteredProducts = products.filter((product) => {
+    if (searchTerm === "") return true;
+
+    switch (searchBy) {
+      case "EPF ID":
+        return product.id.includes(searchTerm);
+      case "Club":
+        return product.club.toLowerCase().includes(searchTerm.toLowerCase());
+      case "Name":
+        return product.epf_Name.toLowerCase().includes(searchTerm.toLowerCase());
+
+      default:
+        return true;
+    }
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const slicedProducts = products.slice(
+  const slicedProducts = filteredProducts.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -76,6 +111,20 @@ const OSL_ExTable = () => {
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
+    <Box mb={3}>
+        <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+          <Select value={searchBy} onChange={handleSearchByChange}>
+            <MenuItem value="EPF ID">EPF ID</MenuItem>
+            <MenuItem value="Club">Club</MenuItem>
+            <MenuItem value="Name">Name</MenuItem>
+          </Select>
+        </FormControl>
+        <InputBase
+          placeholder={`Search by ${searchBy}`}
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </Box>
     <Table
       aria-label="simple table"
       sx={{
@@ -237,7 +286,7 @@ const OSL_ExTable = () => {
       <TablePagination
         rowsPerPageOptions={[]} // Disable rows per page selection
         component="div"
-        count={products.length}
+        count={filteredProducts.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
