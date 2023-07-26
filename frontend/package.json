@@ -13,9 +13,6 @@
     "@material-ui/icons": "5.0.0-alpha.37",
     "@material-ui/lab": "5.0.0-alpha.38",
     "@material-ui/system": "5.0.0-alpha.34",
-    "@testing-library/jest-dom": "^5.11.10",
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^12.8.3",
     "apexcharts": "^3.23.1",
     "aws-amplify": "^5.3.5",
     "axios": "^1.4.0",
@@ -32,7 +29,14 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.18.1"
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "axios-mock-adapter": "^1.18.1",
+    "babel-jest": "^29.6.1"
   },
   "scripts": {
     "start": "react-scripts start",

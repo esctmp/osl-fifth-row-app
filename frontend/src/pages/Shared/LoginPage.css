@@ -2,6 +2,7 @@
     .Login {
         width: 300px;
         margin: 10px auto;
+        transform: scale(1.3);
         background-color: #ffffff;
         border: 1px solid #1b1818;
         border-radius: 10px;
