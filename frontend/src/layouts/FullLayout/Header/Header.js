@@ -9,6 +9,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserID } from "../../../routes/UserID";
+import { Auth } from 'aws-amplify';
+import { useNavigate } from "react-router-dom";
 
 import {
   AppBar,
@@ -23,8 +25,8 @@ import {
   Toolbar,
 } from "@material-ui/core";
 
-
 const Header = (props) => {
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -306,7 +308,11 @@ const Header = (props) => {
             Settings
           </MenuItem>
           <Link to="/">
-            <MenuItem>
+            <MenuItem onClick={()=>{
+              Auth.signOut()
+              .then(data => console.log(data))
+              .catch(err => console.log(err));
+            }}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
