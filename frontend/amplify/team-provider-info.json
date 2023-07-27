@@ -23,6 +23,20 @@
       "StackName": "amplify-frontend-staging-172614",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:710995195828:stack/amplify-frontend-staging-172614/a398cf00-2c5f-11ee-bfcf-026b9d98a442",
       "AmplifyAppId": "dta2y13etkzgu"
+    },
+    "categories": {
+      "auth": {
+        "frontend7f29125d": {}
+      },
+      "function": {
+        "CreateEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/CreateEPF-7a727451694a63367071-build.zip"
+        }
+      },
+      "api": {
+        "EPF": {}
+      }
     }
   }
 }
