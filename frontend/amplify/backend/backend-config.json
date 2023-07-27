@@ -1,56 +1,48 @@
 {
-  "api": {
-    "EPF": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "CreateEPF"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    }
-  },
+  "api": {},
   "auth": {
-    "frontend7f29125d": {
+    "frontend4bc2862d": {
       "customAuth": false,
       "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito"
+      "service": "Cognito",
+      "serviceType": "imported"
     }
   },
-  "function": {
-    "CreateEPF": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
+  "function": {},
   "parameters": {
+    "AMPLIFY_auth_frontend4bc2862d_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
     "AMPLIFY_function_CreateEPF_deploymentBucketName": {
       "usedBy": [
         {

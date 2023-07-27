@@ -25,9 +25,6 @@
       "AmplifyAppId": "dta2y13etkzgu"
     },
     "categories": {
-      "auth": {
-        "frontend7f29125d": {}
-      },
       "function": {
         "CreateEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
@@ -36,6 +33,14 @@
       },
       "api": {
         "EPF": {}
+      },
+      "auth": {
+        "frontend4bc2862d": {
+          "userPoolId": "ap-southeast-1_tmUYT7okV",
+          "userPoolName": "OSL",
+          "webClientId": "7eircm4uhqtgevci5610qnhopq",
+          "nativeClientId": "7eircm4uhqtgevci5610qnhopq"
+        }
       }
     }
   }
