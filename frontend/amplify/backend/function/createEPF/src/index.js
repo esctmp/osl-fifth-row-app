@@ -43,27 +43,28 @@ exports.handler = async (event) => {
       $64, $65, $66, $67, $68)`;
 
     const values = [
-      event.status, event.user_id,
-      event.A_name, event.A_student_id, event.A_organisation, event.A_contact_number, event.A_email,
-      event.B_event_name, event.B_target_audience, event.B_event_schedule, event.B_expected_turnout, event.B_event_objective,
-      event.C1_date, event.C1_time, event.C1_activity_and_description, event.C1_venue,
-      event.C2_date, event.C2_time, event.C2_activity_and_description, event.C2_venue,
-      event.C3_date, event.C3_time, event.C3_activity_and_description, event.C3_venue,
-      event.C3_cleanup_date, event.C3_cleanup_time, event.C3_cleanup_activity_and_description, event.C3_cleanup_venue,
-      event.D1A_club_income_fund, event.D1A_osl_seed_fund, event.D1A_donation,
-      event.D1B_revenue, event.D1B_donation_or_scholarship, event.D1B_total_source_of_funds,
-      event.D11_items_goods_services, event.D11_price, event.D11_quantity, event.D11_amount, event.D11_total_revenue,
-      event.D2_items, event.D2_reason_for_purchase, event.D2_venue, event.D2_total_expenditure,
-      event.E_personal_data,
-      event.F_name, event.F_student_id, event.F_position,
-      event.G_1_1, event.G_1_2, event.G_1_3,
-      event.G_2_1, event.G_2_2, event.G_2_3,
-      event.G_3_1, event.G_3_2, event.G_3_3,
-      event.G_4_1, event.G_4_2, event.G_4_3,
-      event.G_5_1, event.G_5_2, event.G_5_3,
-      event.G_6_1, event.G_6_2, event.G_6_3,
-      event.G_7_1, event.G_7_2, event.G_7_3
+      event.status, event.exco_user_id,
+      event.a_name, event.a_student_id, event.a_organisation, event.a_contact_number, event.a_email,
+      event.b_event_name, event.b_target_audience, event.b_event_schedule, event.b_expected_turnout, event.b_event_objective,
+      event.c1_date, event.c1_time, event.c1_activity_and_description, event.c1_venue,
+      event.c2_date, event.c2_time, event.c2_activity_and_description, event.c2_venue,
+      event.c3_date, event.c3_time, event.c3_activity_and_description, event.c3_venue,
+      event.c3_cleanup_date, event.c3_cleanup_time, event.c3_cleanup_activity_and_description, event.c3_cleanup_venue,
+      event.d1a_club_income_fund, event.d1a_osl_seed_fund, event.d1a_donation,
+      event.d1b_revenue, event.d1b_donation_or_scholarship, event.d1b_total_source_of_funds,
+      event.d11_items_goods_services, event.d11_price, event.d11_quantity, event.d11_amount, event.d11_total_revenue,
+      event.d2_items, event.d2_reason_for_purchase, event.d2_venue, event.d2_total_expenditure,
+      event.e_personal_data,
+      event.f_name, event.f_student_id, event.f_position,
+      event.g_1_1, event.g_1_2, event.g_1_3,
+      event.g_2_1, event.g_2_2, event.g_2_3,
+      event.g_3_1, event.g_3_2, event.g_3_3,
+      event.g_4_1, event.g_4_2, event.g_4_3,
+      event.g_5_1, event.g_5_2, event.g_5_3,
+      event.g_6_1, event.g_6_2, event.g_6_3,
+      event.g_7_1, event.g_7_2, event.g_7_3
     ];
+
 
     await client.query(insertQuery, values);
     await client.query('COMMIT');
