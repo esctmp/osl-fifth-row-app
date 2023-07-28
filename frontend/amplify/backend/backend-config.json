@@ -1,5 +1,20 @@
 {
-  "api": {},
+  "api": {
+    "EPF": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "frontend4bc2862d": {
       "customAuth": false,
@@ -9,7 +24,13 @@
       "serviceType": "imported"
     }
   },
-  "function": {},
+  "function": {
+    "createEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "parameters": {
     "AMPLIFY_auth_frontend4bc2862d_nativeClientId": {
       "usedBy": [
@@ -56,6 +77,22 @@
         {
           "category": "function",
           "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
         }
       ]
     }

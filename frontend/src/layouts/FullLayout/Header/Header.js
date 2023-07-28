@@ -56,6 +56,9 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
+  const handleCreateUser = () => {
+    window.location.href = '/#/osl/Createuser';
+  };
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
