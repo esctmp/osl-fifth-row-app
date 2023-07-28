@@ -8,6 +8,7 @@ const pool = new Pool({
     port: 5432,
 });
 
+
 exports.handler = async (event) => {
 
     const client = await pool.connect();
@@ -66,7 +67,41 @@ exports.handler = async (event) => {
 
     await client.query(insertQuery, values);
     await client.query('COMMIT');
-  } catch (e) {
+
+    // UPDATE OUTSTANDING EPF COUNT //
+
+    try {
+      await client.query("BEGIN");
+      const exco_user_ids = await client.query(`SELECT user_id FROM users WHERE user_type=$1`, ["EXCO"]);
+      for (let i in exco_user_ids["rows"]) {
+        let result = await client.query(
+          `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND exco_user_id=$2 AND is_deleted = false`,
+          ["Approved", exco_user_ids["rows"][i]["user_id"]]
+        );
+  
+        await client.query(`UPDATE users SET outstanding_epf=$1 WHERE user_id=$2`, [
+          result["rows"][0]["count"],
+          exco_user_ids["rows"][i]["user_id"],
+        ]);
+      }
+  
+      const result = await client.query(
+        `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND is_deleted = false`,
+        ["Approved"]
+      );
+  
+      await client.query(`UPDATE users SET outstanding_epf = $1 WHERE user_type != $2`, [
+        result["rows"][0]["count"], "EXCO"
+      ]);
+      await client.query("COMMIT");
+    } catch (e) { // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
+      await client.query("ROLLBACK");
+      throw e;
+    }
+
+    // END UPDATE OUTSTANDING EPF COUNT //
+
+  } catch (e) { // ERROR HANDLING FOR CREATE EPF QUERY
     await client.query('ROLLBACK');
     throw e;
   } finally {
@@ -75,6 +110,6 @@ exports.handler = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify('New EPF created!'),
+    body: JSON.stringify('New EPF created!, EPF count updated!'),
   };
 };
