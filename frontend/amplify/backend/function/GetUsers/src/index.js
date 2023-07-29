@@ -15,11 +15,21 @@ exports.handler = async (event) => {
     const result = await client.query("SELECT * FROM users WHERE is_deleted = false;");
     return {
       statusCode: 200,
+      "headers": {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        "Access-Control-Allow-Origin": "*",
+    },
       body: JSON.stringify(result.rows),
     };
   } catch (error) {
     return {
       statusCode: 500,
+      "headers": {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        "Access-Control-Allow-Origin": "*",
+    },
       body: JSON.stringify({ error: "Internal server error" }),
     };
   } finally {
