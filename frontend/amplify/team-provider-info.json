@@ -20,8 +20,7 @@
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
           "s3Key": "amplify-builds/createEPF-613068335a5a7743444c-build.zip"
-        },
-        "getUser": {}
+        }
       },
       "api": {
         "EPF": {},
