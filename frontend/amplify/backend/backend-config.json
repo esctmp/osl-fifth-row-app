@@ -114,22 +114,6 @@
           "resourceName": "createEPF"
         }
       ]
-    },
-    "AMPLIFY_function_getUser_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getUser"
-        }
-      ]
-    },
-    "AMPLIFY_function_getUser_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "getUser"
-        }
-      ]
     }
   }
 }
