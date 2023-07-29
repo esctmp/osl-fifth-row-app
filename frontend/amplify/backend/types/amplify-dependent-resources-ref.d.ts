@@ -12,6 +12,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "GetUser": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "GetUsers": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -20,6 +27,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "createEPF": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "getEXCOEPFs": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

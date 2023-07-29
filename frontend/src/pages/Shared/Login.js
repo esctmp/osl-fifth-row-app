@@ -17,7 +17,7 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
-          console.log("logged In")
+        console.log("logged In")
           console.log('User attributes:', user.attributes);
           const groups = user.attributes['custom:user_type'];
           axios.get("https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUsers").then(function(response){

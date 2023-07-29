@@ -64,7 +64,7 @@ const Header = (props) => {
   const {userId,setUserId} = useContext(UserID);
   console.log(userId);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
     console.log(response.data[0].name);
     setFRname(response.data[0].name);
     }).catch(error =>{

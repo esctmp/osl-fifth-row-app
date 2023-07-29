@@ -23,7 +23,15 @@
         },
         "GetUsers": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUsers-322b58654c5a6b2f4857-build.zip"
+          "s3Key": "amplify-builds/GetUsers-2f65745361636c4f426e-build.zip"
+        },
+        "getEXCOEPFs": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/getEXCOEPFs-4e444437306e2b736472-build.zip"
+        },
+        "GetUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUser-3233315a4f486161324c-build.zip"
         }
       },
       "api": {

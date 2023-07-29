@@ -7,6 +7,20 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/users/getEXCOEPFs": {
+      "name": "/users/getEXCOEPFs",
+      "lambdaFunction": "getEXCOEPFs",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users/GetUser": {
+      "name": "/users/GetUser",
+      "lambdaFunction": "GetUser",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

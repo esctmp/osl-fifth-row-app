@@ -15,7 +15,7 @@ exports.handler = async (event) => {
     const result = await client.query("SELECT * FROM users WHERE is_deleted = false;");
     return {
       statusCode: 200,
-      "headers": {
+      headers: {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Access-Control-Allow-Origin": "*",
@@ -25,7 +25,7 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      "headers": {
+      headers: {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Access-Control-Allow-Origin": "*",

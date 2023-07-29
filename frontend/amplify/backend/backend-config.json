@@ -23,6 +23,22 @@
           ],
           "category": "function",
           "resourceName": "GetUsers"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GetUser"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -39,12 +55,22 @@
     }
   },
   "function": {
+    "GetUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "GetUsers": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "createEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEXCOEPFs": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -99,6 +125,22 @@
         }
       ]
     },
+    "AMPLIFY_function_GetUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
     "AMPLIFY_function_GetUsers_deploymentBucketName": {
       "usedBy": [
         {
@@ -128,6 +170,22 @@
         {
           "category": "function",
           "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
         }
       ]
     }
