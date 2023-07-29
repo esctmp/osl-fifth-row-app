@@ -19,7 +19,11 @@
         },
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-613068335a5a7743444c-build.zip"
+          "s3Key": "amplify-builds/createEPF-2f38386e2b392b415143-build.zip"
+        },
+        "GetUsers": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUsers-4d76747a5943714d6662-build.zip"
         }
       },
       "api": {

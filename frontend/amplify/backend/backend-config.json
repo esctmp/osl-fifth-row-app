@@ -13,6 +13,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "users": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -25,6 +39,11 @@
     }
   },
   "function": {
+    "GetUsers": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "createEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -77,6 +96,22 @@
         {
           "category": "function",
           "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
         }
       ]
     },
