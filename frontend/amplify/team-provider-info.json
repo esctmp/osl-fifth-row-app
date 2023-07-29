@@ -23,7 +23,7 @@
         },
         "GetUsers": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUsers-4d76747a5943714d6662-build.zip"
+          "s3Key": "amplify-builds/GetUsers-563048694a6e686d454a-build.zip"
         }
       },
       "api": {

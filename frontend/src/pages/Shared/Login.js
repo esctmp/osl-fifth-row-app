@@ -18,7 +18,7 @@ export default function Login() {
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const groups = user.signInUserSession.accessToken.payload["cognito:user_type"];
-          axios.get("http://localhost:3000/users/getUsers").then(function(response){
+          axios.get("https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
                 if(response.data[i].email==data.email){
                     const user_id = response.data[i].user_id;
