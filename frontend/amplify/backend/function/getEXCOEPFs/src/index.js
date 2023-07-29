@@ -20,12 +20,22 @@ exports.handler = async (event) => {
     const result = await getEXCOEPFs(user_id);
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+    },
       body: JSON.stringify(result),
     };
   } catch (err) {
     console.error(err);
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+    },
       body: JSON.stringify({ error: 'Server Error' }),
     };
   }

@@ -39,6 +39,14 @@
           ],
           "category": "function",
           "resourceName": "GetUser"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "updateUser"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -71,6 +79,11 @@
       "service": "Lambda"
     },
     "getEXCOEPFs": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateUser": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -186,6 +199,22 @@
         {
           "category": "function",
           "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
         }
       ]
     }

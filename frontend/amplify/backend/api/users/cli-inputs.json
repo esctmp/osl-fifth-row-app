@@ -21,6 +21,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/users/updateUser": {
+      "name": "/users/updateUser",
+      "lambdaFunction": "updateUser",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
