@@ -19,7 +19,7 @@ const Homepage = () => {
     }).catch(error =>{
         console.error("Error fetching EXCO: ",error);
     }))
- 
+  
 
   return (
     <div>
