@@ -240,10 +240,11 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
           label={makeNameFancy(name)}
           onChange={(e) => {
             field.onChange(e.target.value);
-            ((required && !e.target.value) || (shouldWarn(e.target.value))) ? setError(true) : setError(false);
+            ((required && !e.target.value)) ? setError(true) : setError(false);
+            ((shouldWarn(e.target.value))) ? setWarn(true) : setWarn(false);
           }}
           onFocus={() => {
-            ((required && !field.value) || (shouldWarn(field.value))) ? setError(true) : setError(false);
+            ((required && !field.value)) ? setError(true) : setError(false);
           }
           }
           value={(field.value || '').replace('Z', '')}
@@ -251,7 +252,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
           type="datetime-local"
           multiline={multiline}
           disabled={!settings.enableInputs}
-          error={error || warn}
+          error={error}
           fullWidth
         />
       )}
