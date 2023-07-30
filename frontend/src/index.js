@@ -9,7 +9,7 @@ import App from "./App";
 import { Amplify } from 'aws-amplify';
 import config from './aws-exports';
 import Spinner from "./views/Spinner/Spinner";
-// Amplify.configure(config)
+Amplify.configure(config)
 
 ReactDOM.render(
   
