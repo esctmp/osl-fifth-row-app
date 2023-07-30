@@ -48,13 +48,12 @@ const ThemeRoutes = [
   { path: "/", element: <Navigate to="/login" replace/> },
   { path: "/login",  element: <Login /> },
   { path: "/forgetpassword", element: <ForgetPassword />},
-  { path: "/Setting", element: <Setting />},
   { path: "/reset-password", element: <Reset/>},
   {
     path: "/",
     element: <FullLayout />,
     children: [
-      
+      { path: "/Setting", element: <Setting />},
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element: <FifthRowEPF /> },
       { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit /> },

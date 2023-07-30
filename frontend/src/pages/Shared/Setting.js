@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"; // Import useContext
+import React, { useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { UserID } from "../../routes/UserID";
 
@@ -8,7 +8,10 @@ const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [activeTab, setActiveTab] = useState("password");
-  const { userId } = useContext(UserID); 
+  const { userId } = useContext(UserID);
+  const [newName, setNewName] = useState("");
+  const [nameUpdateError, setNameUpdateError] = useState("");
+
   const handleChangePassword = async () => {
     try {
       if (newPassword !== confirmPassword) {
@@ -16,8 +19,8 @@ const Settings = () => {
         return;
       }
 
-      const userId = await Auth.currentAuthenticatedUser();
-      const data = await Auth.changePassword(userId, currentPassword, newPassword);
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.changePassword(user, currentPassword, newPassword);
 
       alert("Password changed successfully!");
 
@@ -28,6 +31,23 @@ const Settings = () => {
     } catch (error) {
       console.error("Error changing password:", error.message);
       setErrorMessage(error.message);
+    }
+  };
+
+  const handleChangeName = async (event) => {
+    event.preventDefault();
+    try {
+      await Auth.updateUserAttributes(userId, {
+        name: newName,
+      });
+
+      alert("Name updated successfully!");
+
+      setNewName("");
+      setNameUpdateError("");
+    } catch (error) {
+      console.error("Error updating name:", error.message);
+      setNameUpdateError(error.message);
     }
   };
 
@@ -88,9 +108,22 @@ const Settings = () => {
       )}
       {activeTab === "profile" && (
         <div>
-          {/* Add profile section content here */}
           <h3 style={styles.subHeading}>Profile Settings</h3>
-          {/* Example: Profile Picture, Name, Email */}
+          <form onSubmit={handleChangeName} style={styles.form}>
+            {nameUpdateError && <div style={styles.error}>{nameUpdateError}</div>}
+            <div style={styles.formField}>
+              <label>New Name:</label>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                style={styles.input}
+              />
+            </div>
+            <button type="submit" style={styles.button}>
+              Update Name
+            </button>
+          </form>
         </div>
       )}
     </div>
