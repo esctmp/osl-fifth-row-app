@@ -130,7 +130,6 @@ dist
 .pnp.*
 
 #amplify-do-not-edit-begin
-frontend/amplify/*
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs

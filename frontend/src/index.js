@@ -1,13 +1,14 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import { HashRouter } from "react-router-dom";
+import App from "./App";
 
 
 
 //import reportWebVitals from './reportWebVitals';
+import { Amplify } from 'aws-amplify';
+import config from './aws-exports';
 import Spinner from "./views/Spinner/Spinner";
-import { Amplify } from 'aws-amplify'
 import config from './aws-exports'
 Amplify.configure(config)
 

@@ -5,15 +5,13 @@ import axios from "axios";
 import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
-
-
 const Homepage = () => {
-  const[FRname,setFRname] = useState(null);
-  const[EPFcount, setEPFcount] = useState(null);
+  const[FRname,setFRname] = useState("User");
+  const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
-  console.log(userId);
+  //console.log(userId);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     // console.log(response.data[0].name);
     // console.log(response.data[0].outstanding_epf);
     setEPFcount(response.data[0].outstanding_epf);
@@ -28,7 +26,7 @@ const Homepage = () => {
       <div className="rectangle">
         <Logo />
         <div className="welcome">
-          <label htmlFor="welcome">Welcome</label>
+          <label htmlFor="welcome">WELCOME</label>
         </div>
         <div className="fifthRow">
           <label htmlFor="fifthRow">{FRname}</label>
