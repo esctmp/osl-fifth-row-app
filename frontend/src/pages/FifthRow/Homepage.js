@@ -9,11 +9,8 @@ const Homepage = () => {
   const[FRname,setFRname] = useState("User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
-  //console.log(userId);
   useEffect(()=>
   axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
-    // console.log(response.data[0].name);
-    // console.log(response.data[0].outstanding_epf);
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
