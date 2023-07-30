@@ -8,6 +8,7 @@ const FullLayout = lazy(() => import("../layouts/FullLayout/FullLayout.js"));
 /*****Pages******/
 const Dashboard1 = lazy(() => import("../views/dashboards/Dashboard1"));
 const Login = lazy(() => import("../pages/Shared/Login.js"));
+const Setting = lazy(() => import("../pages/Shared/Setting.js"));
 const OSLCreateUser = lazy(() => import("../pages/OSL/CreateUser.js"));
 const ForgetPassword = lazy(() => import("../pages/Shared/ForgetPassword.js"));
 const FifthRowHomepage = lazy(() => import("../pages/FifthRow/Homepage"));
@@ -46,6 +47,7 @@ const ThemeRoutes = [
   { path: "/", element: <Navigate to="/login" replace/> },
   { path: "/login",  element: <Login /> },
   { path: "/forgetpassword", element: <ForgetPassword />},
+  { path: "/Setting", element: <Setting />},
   {
     path: "/",
     element: <FullLayout />,

@@ -59,13 +59,16 @@ const Header = (props) => {
   const handleCreateUser = () => {
     window.location.href = '/#/osl/Createuser';
   };
+  const handleSetting = () => {
+    window.location.href = '/#/Setting';
+  };
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
   console.log(userId);
   useEffect(()=>
   axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
-    console.log(response.data[0].name);
+    console.log(response);
     setFRname(response.data[0].name);
     }).catch(error =>{
         console.error("Error fetching EXCO: ",error);
@@ -296,13 +299,13 @@ const Header = (props) => {
             </Box>
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleCreateUser}>
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Add another account
           </MenuItem>
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleSetting}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>

@@ -15,6 +15,7 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = methods;
     const {userId,setUserId} = useContext(UserID);
     const onSubmit = handleSubmit(async (data) => {
+
         try {
           const user =  await Auth.signIn(data.email,data.password);
         console.log("logged In")

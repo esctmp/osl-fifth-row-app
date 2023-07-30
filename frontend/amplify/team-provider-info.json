@@ -36,6 +36,10 @@
         "updateUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
           "s3Key": "amplify-builds/updateUser-34664f4c356855536d71-build.zip"
+        },
+        "deleteUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/deleteUser-2b6f4452324e74544450-build.zip"
         }
       },
       "api": {

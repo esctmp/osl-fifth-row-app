@@ -13,6 +13,7 @@ exports.handler = async (event) => {
   const { user_id } = event.queryStringParameters;
   try {
     const user = await getUser(user_id);
+    console.log(user)
     return {
       statusCode: 200,
       headers: {

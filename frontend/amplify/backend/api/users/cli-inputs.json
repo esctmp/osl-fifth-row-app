@@ -28,6 +28,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/users/deleteUser": {
+      "name": "/users/deleteUser",
+      "lambdaFunction": "deleteUser",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
