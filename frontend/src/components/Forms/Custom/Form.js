@@ -122,6 +122,7 @@ export const FormTextField = ({ name, control, settings, multiline = false, requ
           InputLabelProps={{
             required: required
           }}
+          required={required}
           autoFocus={autoFocus}
           id={name}
           label={makeNameFancy(name)}
@@ -174,6 +175,7 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
           InputLabelProps={{
             required: required
           }}
+          required={required}
           id={name}
           label={makeNameFancy(name)}
           onChange={(e) => {
@@ -233,6 +235,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
           inputProps={{
             min: today
           }}
+          required={required}
           id={name}
           label={makeNameFancy(name)}
           onChange={(e) => {
@@ -330,6 +333,7 @@ export const FormRadioField = ({ name, label, control, options, settings, requir
             <RadioGroup
               name={name}
               value={field.value}
+              required={required}
               onChange={(e) => {
                 console.log(e.target.value);
                 field.onChange(parseInt(e.target.value));
