@@ -73,7 +73,7 @@ exports.handler = async (event) => {
 
     try {
       await client.query("BEGIN");
-      const exco_user_ids = await client.query(`SELECT user_id FROM users WHERE user_type=$1`, ["EXCO"]);
+      const exco_user_ids = await client.query(`SELECT user_id FROM users WHERE user_type=$1`, ["FRE"]);
       for (let i in exco_user_ids["rows"]) {
         let result = await client.query(
           `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND exco_user_id=$2 AND is_deleted = false`,
@@ -91,8 +91,9 @@ exports.handler = async (event) => {
         ["Approved"]
       );
   
+      // update osl and root outstanding EPFs
       await client.query(`UPDATE users SET outstanding_epf = $1 WHERE user_type != $2`, [
-        result["rows"][0]["count"], "EXCO"
+        result["rows"][0]["count"], "FRE"
       ]);
       await client.query("COMMIT");
     } catch (e) { // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
