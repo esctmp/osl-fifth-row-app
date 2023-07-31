@@ -6,7 +6,7 @@ import { Auth } from 'aws-amplify'
 import { useContext } from 'react'
 import {UserID} from "../../routes/UserID"
 import axios from "axios"
-import { responsiveFontSizes } from "@material-ui/core";
+import { circularProgressClasses, responsiveFontSizes } from "@material-ui/core";
 
 export default function Login() {
     
@@ -16,7 +16,9 @@ export default function Login() {
     const {userId,setUserId} = useContext(UserID);
     const onSubmit = handleSubmit(async (data) => {
         try {
+          console.log(data.email,data.password);
           const user =  await Auth.signIn(data.email,data.password);
+          console.log(user);
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
           axios.get("http://localhost:3000/users/getUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
