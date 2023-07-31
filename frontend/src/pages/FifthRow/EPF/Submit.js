@@ -46,7 +46,7 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
-  const { userId, setUserId } = useContext(UserID);
+  // const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];

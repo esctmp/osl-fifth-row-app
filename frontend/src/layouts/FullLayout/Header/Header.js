@@ -313,7 +313,7 @@ const Header = (props) => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <Link to="/">
+          <Link to="/login">
             <MenuItem onClick={()=>{
               Auth.signOut()
               .then(data => console.log(data))

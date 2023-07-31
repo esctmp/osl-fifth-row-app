@@ -5,18 +5,19 @@ import { Auth } from 'aws-amplify'
 import { useContext } from 'react'
 import {UserID} from "../../routes/UserID"
 import axios from "axios"
+import { circularProgressClasses, responsiveFontSizes } from "@material-ui/core";
 
 export default function Login() {
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
     const {userId,setUserId} = useContext(UserID);
-    console.log(userId);
     const onSubmit = handleSubmit(async (data) => {
 
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
+        //   console.log(groups);
           await axios.get("http://localhost:3000/users/getUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
                 if(response.data[i].email==data.email){
@@ -29,7 +30,9 @@ export default function Login() {
             navigate("/osl/homepage");
           } else if (groups.includes('FRE')) {
             navigate("/fifthrow/homepage");
-          } else {
+          } else if (groups.includes('ROOT')){
+            navigate("/root/homepage");
+          }else{
             navigate("/login");
           }
         } catch (error) {

@@ -26,7 +26,7 @@ import { Controller, useFieldArray, useWatch } from "react-hook-form";
 
 export const TableHeader = ({ text, sx = {} }) =>
   <>
-    <Typography sx={{ fontWeight: 'bold', mb: 0, ...SVGTextPositioningElement }}>
+    <Typography sx={{ fontWeight: 'bold', mb: 0, ...sx }}>
       {text}
     </Typography>
   </>
@@ -34,7 +34,7 @@ export const TableHeader = ({ text, sx = {} }) =>
 
 export const TableDescription = ({ text, sx = {} }) =>
   <>
-    <Typography sx={{ fontStyle: 'italic', mb: 0, ...SVGTextPositioningElement }}>
+    <Typography sx={{ fontStyle: 'italic', mb: 0, ...sx }}>
       {text}
     </Typography>
   </>
