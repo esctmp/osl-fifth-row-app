@@ -9,6 +9,7 @@ const RequireAuth = ({ children }) => {
     useLoginStatus();
     const nav = useNavigate();
     useEffect(() => {
+        console.log(userLoggedIn,"a");
         if (!userLoggedIn) {
             nav("/login");
         }
