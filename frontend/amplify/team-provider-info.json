@@ -1,4 +1,61 @@
 {
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontend-staging-172614-authRole",
+      "UnauthRoleArn": "arn:aws:iam::710995195828:role/amplify-frontend-staging-172614-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::710995195828:role/amplify-frontend-staging-172614-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-frontend-staging-172614-deployment",
+      "UnauthRoleName": "amplify-frontend-staging-172614-unauthRole",
+      "StackName": "amplify-frontend-staging-172614",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:710995195828:stack/amplify-frontend-staging-172614/a398cf00-2c5f-11ee-bfcf-026b9d98a442",
+      "AmplifyAppId": "dta2y13etkzgu"
+    },
+    "categories": {
+      "function": {
+        "CreateEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/CreateEPF-7a727451694a63367071-build.zip"
+        },
+        "createEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/createEPF-77506c43737655693644-build.zip"
+        },
+        "GetUsers": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUsers-2f65745361636c4f426e-build.zip"
+        },
+        "getEXCOEPFs": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/getEXCOEPFs-4637516b787438504147-build.zip"
+        },
+        "GetUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUser-524c3052346447464766-build.zip"
+        },
+        "updateUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/updateUser-34664f4c356855536d71-build.zip"
+        },
+        "deleteUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/deleteUser-2b6f4452324e74544450-build.zip"
+        }
+      },
+      "api": {
+        "EPF": {},
+        "users": {}
+      },
+      "auth": {
+        "frontend4bc2862d": {
+          "userPoolId": "ap-southeast-1_tmUYT7okV",
+          "userPoolName": "OSL",
+          "webClientId": "7eircm4uhqtgevci5610qnhopq",
+          "nativeClientId": "7eircm4uhqtgevci5610qnhopq"
+        }
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-frontend-dev-125209-authRole",

@@ -13,6 +13,7 @@ export default function Login() {
     const {userId,setUserId} = useContext(UserID);
     console.log(userId);
     const onSubmit = handleSubmit(async (data) => {
+
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const groups = user.signInUserSession.accessToken.payload["cognito:groups"];

@@ -58,6 +58,12 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
+  const handleCreateUser = () => {
+    window.location.href = '/#/osl/Createuser';
+  };
+  const handleSetting = () => {
+    window.location.href = '/#/Setting';
+  };
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
@@ -295,13 +301,13 @@ const Header = (props) => {
             </Box>
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleCreateUser}>
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Add another account
           </MenuItem>
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleSetting}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>

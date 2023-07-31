@@ -9,6 +9,9 @@ const FullLayout = lazy(() => import("../layouts/FullLayout/FullLayout.js"));
 /*****Pages******/
 const Dashboard1 = lazy(() => import("../views/dashboards/Dashboard1"));
 const Login = lazy(() => import("../pages/Shared/Login.js"));
+const Setting = lazy(() => import("../pages/Shared/Setting.js"));
+const Reset = lazy(() => import("../pages/Shared/ResetPassword.js"));
+const OSLCreateUser = lazy(() => import("../pages/OSL/CreateUser.js"));
 const ForgetPassword = lazy(() => import("../pages/Shared/ForgetPassword.js"));
 const FifthRowHomepage = lazy(() => import("../pages/FifthRow/Homepage"));
 const FifthRowEPF = lazy(() => import("../pages/FifthRow/EPF/EPF"));
@@ -46,16 +49,19 @@ const ThemeRoutes = [
   { path: "/", element: <Navigate to="/login" replace/> },
   { path: "/login",  element: <Login /> },
   { path: "/forgetpassword", element: <ForgetPassword />},
+  { path: "/reset-password", element: <Reset/>},
   {
     path: "/",
     element: <RequireAuth />,
     children: [
+      { path: "/Setting", element: <Setting />},
       { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
       { path: "/fifthrow/epf", exact: true, element:<FifthRowEPF />  },
       { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit />},
       { path: "/fifthrow/epf/view/:epf_id", exact: true, element: <FifthRowEPFSubmit /> },
       { path: "/fifthrow/epf/view", exact: true, element: <FifthRowEPFView /> },
       { path: "/osl/homepage", exact: true, element: <OSLHomepage /> },
+      { path: "/osl/CreateUser", exact: true, element: <OSLCreateUser /> },
       { path: "/osl/epf", exact: true, element: <OSLEPF /> },
       { path: "/osl/epf/submit", exact: true, element:<OSLEPFSubmit />  },
       { path: "/osl/epf/view/:epf_id", exact: true, element: <OSLEPFSubmit /> },
