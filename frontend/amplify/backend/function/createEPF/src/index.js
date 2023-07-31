@@ -111,6 +111,11 @@ exports.handler = async (event) => {
   }
 
   return {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*"
+    },
+    
     statusCode: 200,
     body: JSON.stringify('New EPF created!, EPF count updated!'),
   };
