@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "paths": {
+    "/users/GetUsers": {
+      "name": "/users/GetUsers",
+      "lambdaFunction": "GetUsers",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users/getEXCOEPFs": {
+      "name": "/users/getEXCOEPFs",
+      "lambdaFunction": "getEXCOEPFs",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users/GetUser": {
+      "name": "/users/GetUser",
+      "lambdaFunction": "GetUser",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users/updateUser": {
+      "name": "/users/updateUser",
+      "lambdaFunction": "updateUser",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users/deleteUser": {
+      "name": "/users/deleteUser",
+      "lambdaFunction": "deleteUser",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

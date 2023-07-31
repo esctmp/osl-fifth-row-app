@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/epfs/createEPF": {
+      "name": "/epfs/createEPF",
+      "lambdaFunction": "createEPF",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
