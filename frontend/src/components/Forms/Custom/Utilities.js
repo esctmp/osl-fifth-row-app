@@ -79,7 +79,7 @@ export const convertFieldsToJSON = (data) => {
 export async function createEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("SUBMITTED", data);
-    await axios.post("http://localhost:3000/epfs/createEPF",
+    await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/createEPF",
         data,
         {
             headers: {
