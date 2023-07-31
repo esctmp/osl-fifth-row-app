@@ -63,11 +63,11 @@ const Header = (props) => {
   const {userId,setUserId} = useContext(UserID);
   console.log(userId);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     console.log(response.data[0].name);
     setFRname(response.data[0].name);
     }).catch(error =>{
-        console.error("Error fetching EXCO: ",error);
+        console.error("Error fetching User: ",error);
     }))
 
   return (
