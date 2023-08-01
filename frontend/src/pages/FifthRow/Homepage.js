@@ -29,7 +29,7 @@ const Homepage = () => {
           <label htmlFor="fifthRow">{FRname}</label>
         </div>
         <div className="informationBox">
-          <p className="informationText">You have {EPFcount} outstanding forms to review.</p>
+          <p className="informationText" data-testid = "epfcount">You have {EPFcount} outstanding forms to review.</p>
         </div>
       </div>
     </div>

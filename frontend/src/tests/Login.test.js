@@ -1,11 +1,35 @@
 import Login from "../pages/Shared/Login";
 import '@testing-library/jest-dom';
-import {render, fireEvent,screen} from '@testing-library/react';
+import {render, fireEvent,screen, waitFor} from '@testing-library/react';
 import {UserID} from "../routes/UserID"
 import {Groups} from "../routes/Groups"
 import { useState } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
+import axios from "axios";
+import {Auth} from "aws-amplify"
+
+
+jest.mock('react-router-dom',()=>({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockNavigate,
+}));
+
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ success: true }),
+  })
+);
+const mockNavigate = jest.fn();
+axios.get = jest.fn(() => {
+    return Promise.resolve({data: { userId: 'ee0843b7-8517-432d-9612-58b9a42434e0' }});
+})
+
+// Mock Auth.signIn
+Auth.signIn = jest.fn(() => {
+    return Promise.resolve({ data: { groups: "FRE" }});
+})
+
 
 describe("Login Form Validation",() => {
     test("should reject the login due to empty username field", async()=>{
@@ -76,7 +100,7 @@ describe("Login Form Validation",() => {
     test("should reject the login due to empty password field", async()=>{    
         render(<Router>
             <UserID.Provider value={{userId: 'null', setUserId: () => {}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value = {{groups:"null",setGroups:()=>{}}}>
                 <Login/>
             </Groups.Provider>
             </UserID.Provider>
@@ -98,7 +122,7 @@ describe("Login Form Validation",() => {
         render(
         <Router>
             <UserID.Provider  value = {{userid:"null",setUserId:()=>{}}}>
-                <Groups.Provider value = {{userid:"null",setUserId:()=>{}}}>
+                <Groups.Provider value = {{groups:"null",setGroups:()=>{}}}>
                     <Login/>
                 </Groups.Provider>
             </UserID.Provider>
@@ -120,7 +144,7 @@ describe("Login Form Validation",() => {
         render(
         <Router>
             <UserID.Provider  value = {{userid:"null",setUserId:()=>{}}}>
-                <Groups.Provider value = {{userid:"null",setUserId:()=>{}}}>
+                <Groups.Provider value = {{groups:"null",setGroups:()=>{}}}>
                     <Login/>
                 </Groups.Provider>
             </UserID.Provider>
@@ -138,6 +162,29 @@ describe("Login Form Validation",() => {
         expect(errorMessage3).not.toBeInTheDocument();
         expect(errorMessage4).not.toBeInTheDocument();
     });
+
+    // test('redirects user to homepage after successful login', async () => {
+    //     const { getByPlaceholderText, getByTestId } = render(
+    //         <Router>
+    //         <UserID.Provider  value = {{userid:"ee0843b7-8517-432d-9612-58b9a42434e0",setUserId:()=>{}}}>
+    //             <Groups.Provider value = {{groups:"FRE",setGroups:()=>{}}}>
+    //                 <Login/>
+    //             </Groups.Provider>
+    //         </UserID.Provider>
+    //     </Router>);
+    //     const emailField = getByPlaceholderText('Enter your club email');
+    //     const passwordField = getByPlaceholderText('Enter your password');
+    //     const submitButton = getByTestId('Log in');
+      
+    //     fireEvent.change(emailField, { target: { value: 'testfre@club.sutd.edu.sg' } });
+    //     fireEvent.change(passwordField, { target: { value: 'P@ssword1!' } });
+    //     fireEvent.click(submitButton);
+      
+    //     await waitFor(() => {
+    //       // Check if navigate function was called with the expected argument
+    //       expect(mockNavigate).toBeCalledWith('/fifthrow/homepage');
+    //     });
+    //   });
 
     
 });
