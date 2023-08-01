@@ -25,6 +25,14 @@
           ],
           "category": "function",
           "resourceName": "getEPFs"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "updateEPF"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -118,6 +126,11 @@
       "service": "Lambda"
     },
     "getEXCOEPFs": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -286,6 +299,22 @@
         {
           "category": "function",
           "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
         }
       ]
     },

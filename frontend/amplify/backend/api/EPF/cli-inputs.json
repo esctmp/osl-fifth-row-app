@@ -21,6 +21,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/epfs/updateEPF": {
+      "name": "/epfs/updateEPF",
+      "lambdaFunction": "updateEPF",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
