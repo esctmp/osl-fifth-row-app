@@ -3,21 +3,23 @@ import "./LoginPage.css";
 import { useNavigate, Link } from "react-router-dom";
 import { Auth } from 'aws-amplify'
 import { useContext } from 'react'
-import {UserID} from "../../routes/UserID"
+import {UserID} from "../../routes/UserID"  
+import {Groups} from "../../routes/Groups"
 import axios from "axios"
-import { circularProgressClasses, responsiveFontSizes } from "@material-ui/core";
 
 export default function Login() {
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
     const {userId,setUserId} = useContext(UserID);
+    const {groups,setGroups} = useContext(Groups);
     const onSubmit = handleSubmit(async (data) => {
-
         try {
           const user =  await Auth.signIn(data.email,data.password);
-          const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
-        //   console.log(groups);
+          const groups = user.signInUserSession.accessToken.payload["cognito:groups"]
+          // console.log(group);
+          // await setGroups(group);
+          console.log(groups);
           await axios.get("http://localhost:3000/users/getUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
                 if(response.data[i].email==data.email){
@@ -55,7 +57,7 @@ export default function Login() {
                                 <label htmlFor="email">Club Email:</label>
                                 <input
                                     {...register("email", { required: "*This field is required!",pattern:{
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
                     message: "*Invalid email address"
                 } })}
                                     type="text"
