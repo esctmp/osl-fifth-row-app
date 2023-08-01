@@ -33,6 +33,14 @@
           ],
           "category": "function",
           "resourceName": "updateEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "deleteEPF"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -106,6 +114,11 @@
       "service": "Lambda"
     },
     "createEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "deleteEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -235,6 +248,22 @@
         {
           "category": "function",
           "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
         }
       ]
     },

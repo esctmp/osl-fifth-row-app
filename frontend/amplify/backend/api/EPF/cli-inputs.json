@@ -28,6 +28,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/epfs/deleteEPF": {
+      "name": "/epfs/deleteEPF",
+      "lambdaFunction": "deleteEPF",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

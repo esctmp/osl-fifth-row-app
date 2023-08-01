@@ -141,19 +141,23 @@ exports.handler = async (event) => {
         //Check for datatypes
         const datatypes = Object.values(epf_db_datatypes_update);
 
+        console.log("checking datatypes")
+        console.log(datatypes)
         for (let i = 0; i < values.length; i++) {
             if (typeof values[i] !== datatypes[i]) {
+                console.log("Error in " + values[i])
                 throw new Error("Unexpected data type");
                 }
             }
 
         //Check for valid epf_id
         const valid_epf_id = await pool.query(
-        `SELECT COUNT(*) FROM EPFS WHERE epf_id=$1 AND is_deleted = false `,
-        [epf_id]
+            `SELECT COUNT(*) FROM EPFS WHERE epf_id=$1 AND is_deleted = false `,
+            [epf_id]
         );
+        
         if (valid_epf_id.rows[0]["count"] == 0) {
-        throw new Error("Non-existent epf");
+            throw new Error("Non-existent epf");    
         }
 
         //Check for valid exco_user_id
