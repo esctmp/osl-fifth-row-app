@@ -23,6 +23,7 @@ export default function ResetPassword() {
   };
 
   return (
+    <div className ='bg'>
     <FormProvider {...methods}>
       <div className="MainContainer">
         <div className="Name">
@@ -71,5 +72,6 @@ export default function ResetPassword() {
         </div>
       </div>
     </FormProvider>
+    </div>
   );
 }
