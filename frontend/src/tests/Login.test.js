@@ -7,6 +7,6 @@ describe("Validation",() => {
         render(<Login/>);
         const field = screen.getByPlaceholderText("Enter your club email");
         fireEvent.change(field,{target:{value:""}});
-        expect(field).toBe("*This field is required!")
+        expect(field.value).toBe("*This field is required!");
     })
-})
+});
