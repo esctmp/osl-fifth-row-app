@@ -9,11 +9,25 @@ const pool = new Pool({
 });
 
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
+	
+	console.log(`EVENT: ${JSON.stringify(event)}`);
+	
+	const client = await pool.connect();
+	
+	// event in this case is a json object with the epf_id
+	// Example:
+	// {
+	// 	"epf_id": 1
+	// }
+
+	epf_id = event.epf_id;
+
     try {
+		console.log("connected to db")
 		await client.query("BEGIN");
 	
 		//Check for epf_id data type
+		console.log("checking epf_id")
 		if (typeof epf_id !== "number") {
 			throw new Error("Unexpected data type");
 		}
@@ -27,6 +41,7 @@ exports.handler = async (event) => {
 			throw new Error("Non-existent epf");
 		}
 	
+		console.log("valid epf id, getting epf data")
 		const result = await pool.query(
 		  	"SELECT * FROM EPFS WHERE epf_id = $1 AND is_deleted = false",
 			[epf_id]
