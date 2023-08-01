@@ -57,7 +57,7 @@ export default function Login() {
                                 <input
                                     {...register("email", { required: "*Email is required!",pattern:{
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
-                    message: "*Invalid email address"
+                    message: "*Invalid email address entered"
                 } })}
                                     type="text"
                                     id="email"
@@ -71,7 +71,10 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="password">Password:</label>
                                 <input
-                                    {...register("password", { required: "*Password is required!" })}
+                                    {...register("password", { required: "*Password is required!" ,pattern: {
+                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                        message:"*Invalid password entered"
+                                    }})}
                                     type="password"
                                     id="password"
                                     name="password"
