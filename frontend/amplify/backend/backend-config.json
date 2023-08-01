@@ -9,6 +9,14 @@
           ],
           "category": "function",
           "resourceName": "createEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEPF"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -87,6 +95,11 @@
       "service": "Lambda"
     },
     "deleteUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -212,6 +225,22 @@
         {
           "category": "function",
           "resourceName": "deleteUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
         }
       ]
     },
