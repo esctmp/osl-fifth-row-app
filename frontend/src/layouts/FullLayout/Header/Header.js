@@ -67,6 +67,7 @@ const Header = (props) => {
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
+  console.log(userId);
   useEffect(()=>
   axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     console.log(response.data[0].name);
