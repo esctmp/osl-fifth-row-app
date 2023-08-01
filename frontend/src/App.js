@@ -9,13 +9,13 @@ import {Groups} from "./routes/Groups"
 const App = () => {
   const [userId,setUserId] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(null);
-  const [group,setGroups] = useState(null);
+  const [groups,setGroups] = useState(null);
   const routing = useRoutes(Themeroutes);
   const theme = baseTheme;
   return (
     <UserID.Provider value ={{userId,setUserId}}>
     <UserLoggedIn.Provider value={{userLoggedIn, setUserLoggedIn}}>
-    <Groups.Provider value ={{group,setGroups}}>
+    <Groups.Provider value ={{groups,setGroups}}>
     <ThemeProvider theme={theme}>
       {routing}
     </ThemeProvider>
