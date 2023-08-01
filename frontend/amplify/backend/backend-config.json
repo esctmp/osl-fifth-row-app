@@ -17,6 +17,14 @@
           ],
           "category": "function",
           "resourceName": "getEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEPFs"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -100,6 +108,11 @@
       "service": "Lambda"
     },
     "getEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEPFs": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -241,6 +254,22 @@
         {
           "category": "function",
           "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
         }
       ]
     },
