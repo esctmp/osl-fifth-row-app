@@ -112,27 +112,91 @@ exports.handler = async (event) => {
             .join(",");
 
         const values = [
-            event.status, event.exco_user_id,
-            event.a_name, event.a_student_id, event.a_organisation, event.a_contact_number, event.a_email,
-            event.b_event_name, event.b_target_audience, event.b_event_schedule, event.b_expected_turnout, event.b_event_objective,
-            event.c1_date, event.c1_time, event.c1_activity_and_description, event.c1_venue,
-            event.c2_date, event.c2_time, event.c2_activity_and_description, event.c2_venue,
-            event.c3_date, event.c3_time, event.c3_activity_and_description, event.c3_venue,
-            event.c3_cleanup_date, event.c3_cleanup_time, event.c3_cleanup_activity_and_description, event.c3_cleanup_venue,
-            event.d1a_club_income_fund, event.d1a_osl_seed_fund, event.d1a_donation,
-            event.d1b_revenue, event.d1b_donation_or_scholarship, event.d1b_total_source_of_funds,
-            event.d11_items_goods_services, event.d11_price, event.d11_quantity, event.d11_amount, event.d11_total_revenue,
-            event.d2_items, event.d2_reason_for_purchase, event.d2_venue, event.d2_total_expenditure,
+            event.epf_id, 
+            event.status, 
+            event.exco_user_id,
+            event.a_name, 
+            event.a_student_id, 
+            event.a_organisation, 
+            event.a_contact_number, 
+            event.a_email,
+            event.a_comments_osl, 
+            event.a_comments_root,
+            event.b_event_name, 
+            event.b_target_audience, 
+            event.b_event_schedule, 
+            event.b_expected_turnout, 
+            event.b_event_objective,
+            event.b_comments_osl, 
+            event.b_comments_root,
+            event.c1_date, 
+            event.c1_time, 
+            event.c1_activity_and_description, 
+            event.c1_venue,
+            event.c2_date, 
+            event.c2_time, 
+            event.c2_activity_and_description, 
+            event.c2_venue,
+            event.c3_date, 
+            event.c3_time, 
+            event.c3_activity_and_description, 
+            event.c3_venue,
+            event.c3_cleanup_date, 
+            event.c3_cleanup_time, 
+            event.c3_cleanup_activity_and_description, 
+            event.c3_cleanup_venue,
+            event.c_comments_osl, 
+            event.c_comments_root,
+            event.d1a_club_income_fund, 
+            event.d1a_osl_seed_fund, 
+            event.d1a_donation,
+            event.d1b_revenue, 
+            event.d1b_donation_or_scholarship, 
+            event.d1b_total_source_of_funds,
+            event.d11_items_goods_services, 
+            event.d11_price, 
+            event.d11_quantity, 
+            event.d11_amount, 
+            event.d11_total_revenue,
+            event.d2_items, 
+            event.d2_reason_for_purchase, 
+            event.d2_venue, 
+            event.d2_total_expenditure,
+            event.d_comments_osl, 
+            event.d_comments_root,
             event.e_personal_data,
-            event.f_name, event.f_student_id, event.f_position,
-            event.g_1_1, event.g_1_2, event.g_1_3,
-            event.g_2_1, event.g_2_2, event.g_2_3,
-            event.g_3_1, event.g_3_2, event.g_3_3,
-            event.g_4_1, event.g_4_2, event.g_4_3,
-            event.g_5_1, event.g_5_2, event.g_5_3,
-            event.g_6_1, event.g_6_2, event.g_6_3,
-            event.g_7_1, event.g_7_2, event.g_7_3
+            event.e_comments_osl, 
+            event.e_comments_root,
+            event.f_name, 
+            event.f_student_id, 
+            event.f_position,
+            event.f_comments_osl, 
+            event.f_comments_root,
+            event.g_1_1, 
+            event.g_1_2, 
+            event.g_1_3,
+            event.g_2_1, 
+            event.g_2_2, 
+            event.g_2_3,
+            event.g_3_1, 
+            event.g_3_2, 
+            event.g_3_3,
+            event.g_4_1, 
+            event.g_4_2, 
+            event.g_4_3,
+            event.g_5_1, 
+            event.g_5_2, 
+            event.g_5_3,
+            event.g_6_1, 
+            event.g_6_2, 
+            event.g_6_3,
+            event.g_7_1, 
+            event.g_7_2, 
+            event.g_7_3,
+            event.g_comments_osl, 
+            event.g_comments_root
         ];
+
 
         const epf_id = event.epf_id;
         const exco_user_id = event.exco_user_id;
@@ -141,16 +205,18 @@ exports.handler = async (event) => {
         //Check for datatypes
         const datatypes = Object.values(epf_db_datatypes_update);
 
-        console.log("checking datatypes")
-        console.log(datatypes)
+        //console.log("checking datatypes")
         for (let i = 0; i < values.length; i++) {
             if (typeof values[i] !== datatypes[i]) {
-                console.log("Error in " + values[i])
+                console.log("Error in " + values[i] + " at index " + i)
+                console.log("Compared between " + values[i] + " and " + datatypes[i])
                 throw new Error("Unexpected data type");
                 }
             }
-
+        //console.log("datatypes verified")
         //Check for valid epf_id
+
+        //console.log("checking valid epf_id in epfs table")
         const valid_epf_id = await pool.query(
             `SELECT COUNT(*) FROM EPFS WHERE epf_id=$1 AND is_deleted = false `,
             [epf_id]
@@ -159,25 +225,34 @@ exports.handler = async (event) => {
         if (valid_epf_id.rows[0]["count"] == 0) {
             throw new Error("Non-existent epf");    
         }
+        
+        //console.log("valid epf_id in epfs table")
 
         //Check for valid exco_user_id
+        //console.log("checking valid exco_user_id in users table")
         const valid_exco_user_id = await pool.query(
             `SELECT COUNT(*) FROM users WHERE user_id=$1`,
             [exco_user_id]
         );
+
         if (valid_exco_user_id.rows[0]["count"] == 0) {
             throw new Error("Non-existent exco user id");
         }
 
+        //console.log("valid exco_user_id in users table")
         //Check for event name
-        if (B_event_name.trim().length == 0) {
+        //console.log("checking event 'B_event_name' name")
+        if (event.b_event_name.trim().length == 0) {
             throw new Error("Event name missing");
         }
+        //console.log("event name 'B_event_name' verified")
 
+        //console.log("Begin updating epfs")
         const query = `UPDATE EPFS SET (${columnNames}) = (${columnParams}) WHERE epf_id=$1 AND is_deleted = false RETURNING *`;
 
-        let result = await pool.query(query, values);
+        let result = await pool.query(query, values); // Return everything
         await client.query("COMMIT");
+        //console.log("Query Succeeded")
         return {
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -185,7 +260,7 @@ exports.handler = async (event) => {
             },
 
             statusCode: 200,
-            body: result.rows[0]
+            body: result.rows[0] // Returns updated EPF Data in body
         };
 
         } catch (e) {
