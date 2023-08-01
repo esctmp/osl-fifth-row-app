@@ -16,10 +16,8 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
-          const groups = user.signInUserSession.accessToken.payload["cognito:groups"]
-          // console.log(group);
-          // await setGroups(group);
-          console.log(groups);
+          const group = user.signInUserSession.accessToken.payload["cognito:groups"]
+          await setGroups(group);
           await axios.get("http://localhost:3000/users/getUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
                 if(response.data[i].email==data.email){
@@ -28,11 +26,11 @@ export default function Login() {
                 }
             }
           })
-          if (groups.includes('OSL')) {
+          if (group.includes('OSL')) {
             navigate("/osl/homepage");
-          } else if (groups.includes('FRE')) {
+          } else if (group.includes('FRE')) {
             navigate("/fifthrow/homepage");
-          } else if (groups.includes('ROOT')){
+          } else if (group.includes('ROOT')){
             navigate("/root/homepage");
           }else{
             navigate("/login");
@@ -56,7 +54,7 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="email">Club Email:</label>
                                 <input
-                                    {...register("email", { required: "*This field is required!",pattern:{
+                                    {...register("email", { required: "*Email is required!",pattern:{
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
                     message: "*Invalid email address"
                 } })}
@@ -72,7 +70,7 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="password">Password:</label>
                                 <input
-                                    {...register("password", { required: "*This field is required!" })}
+                                    {...register("password", { required: "*Password is required!" })}
                                     type="password"
                                     id="password"
                                     name="password"
@@ -89,7 +87,7 @@ export default function Login() {
                                 </label>
                             </div>
                             <div className="form-group">
-                            <button type="submit">Log in</button>
+                            <button type="submit" data-testid = "Log in">Log in</button>
                             </div>
                         </form>
                     </div>
