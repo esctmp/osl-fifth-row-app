@@ -9,4 +9,10 @@ describe("Validation",() => {
         fireEvent.change(field,{target:{value:""}});
         expect(field.value).toBe("*This field is required!");
     })
+    test("should reject the login due to empty password field", async()=>{
+        render(<Login/>);
+        field1 = screen.getByPlaceholderText("Enter your password");
+        fireEvent.change(field1,{target:{value:""}});
+        expect(field1.value).toBe("*This field is required");
+    })
 });
