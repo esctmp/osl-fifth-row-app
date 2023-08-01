@@ -6,15 +6,21 @@ import {
   ListItemText,
   useMediaQuery
 } from "@material-ui/core";
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
+import { UserID } from "../../../routes/UserID";
 import LogoIcon from "../Logo/LogoIcon";
-import Menuitems from "./data";
+// import Menuitems from "./data";
+import FREitems from "./FREitems";
+import OSLitems from "./OSLitems";
+import Rootitems from "./ROOTitems";
+
 
 const Sidebar = (props) => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -26,6 +32,31 @@ const Sidebar = (props) => {
       setOpen(index);
     }
   };
+
+
+  const {userId,setUserId} = useContext(UserID);
+  const [groupType,setGroupType] = useState("");
+  const [menuItems, setMenuItems] = useState([]);
+  useEffect(()=>
+  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
+    setGroupType(response.data[0].user_type);
+    }).catch(error =>{
+        console.error("Error fetching EXCO: ",error);
+    }))
+
+  useEffect(() => {
+      if (groupType === "FRE"){
+        setMenuItems(FREitems);  
+      } else if (groupType === "OSL"){
+        setMenuItems(OSLitems);  
+      } else if (groupType === "ROOT"){
+        setMenuItems(Rootitems);
+      }
+      
+      
+    }, [groupType]);
+
+    console.log(menuItems)
 
   const SidebarContent = (
     <Box sx={{ p: 3, height: "calc(100vh - 40px)" }}>
@@ -41,7 +72,7 @@ const Sidebar = (props) => {
             mt: 4,
           }}
         >
-          {Menuitems.map((item, index) => {
+          {menuItems.map((item, index) => {
             //{/********SubHeader**********/}
 
             return (
@@ -51,7 +82,7 @@ const Sidebar = (props) => {
                   button
                   component={NavLink}
                   to={item.href}
-                  selected={pathDirect === item.href}
+                  selected={pathDirect === item.href }
                   sx={{
                     mb: 1,
                     ...(pathDirect === item.href && {
@@ -61,6 +92,7 @@ const Sidebar = (props) => {
                     }),
                   }}
                 >
+                  {/* If sub-heading, more padding */}
                   {item?.type == "sub-heading" 
                     ? <ListItemText sx={{ml: 3}}>{item.title}</ListItemText>
                     : <ListItemText sx={{ml: 0}}>{item.title}</ListItemText>
@@ -73,6 +105,7 @@ const Sidebar = (props) => {
       </Box>
     </Box>
   );
+
   if (lgUp) {
     return (
       <Drawer
@@ -86,7 +119,7 @@ const Sidebar = (props) => {
         }}
       >
         {SidebarContent}
-      </Drawer>
+      </Drawer> 
     );
   }
   return (

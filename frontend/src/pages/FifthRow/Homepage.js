@@ -9,17 +9,14 @@ const Homepage = () => {
   const[FRname,setFRname] = useState("User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
-  //console.log(userId);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
-    // console.log(response.data[0].name);
-    // console.log(response.data[0].outstanding_epf);
+  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
         console.error("Error fetching EXCO: ",error);
     }))
- 
+  
 
   return (
     <div>

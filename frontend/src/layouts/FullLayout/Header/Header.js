@@ -9,6 +9,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserID } from "../../../routes/UserID";
+import { Auth } from 'aws-amplify';
+import { useNavigate } from "react-router-dom";
 
 import {
   AppBar,
@@ -23,8 +25,8 @@ import {
   Toolbar,
 } from "@material-ui/core";
 
-
 const Header = (props) => {
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -56,16 +58,21 @@ const Header = (props) => {
   const handleClose5 = () => {
     setAnchorEl5(null);
   };
+  const handleCreateUser = () => {
+    window.location.href = '/#/osl/Createuser';
+  };
+  const handleSetting = () => {
+    window.location.href = '/#/Setting';
+  };
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
-  console.log(userId);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getEXCO?user_id=${userId}`).then(function(response){
+  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     console.log(response.data[0].name);
     setFRname(response.data[0].name);
     }).catch(error =>{
-        console.error("Error fetching EXCO: ",error);
+        console.error("Error fetching User: ",error);
     }))
 
   return (
@@ -293,20 +300,24 @@ const Header = (props) => {
             </Box>
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleCreateUser}>
             <ListItemIcon>
               <PersonAdd fontSize="small" />
             </ListItemIcon>
             Add another account
           </MenuItem>
-          <MenuItem onClick={handleClose4}>
+          <MenuItem onClick={handleSetting}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
             Settings
           </MenuItem>
-          <Link to="/">
-            <MenuItem>
+          <Link to="/login">
+            <MenuItem onClick={()=>{
+              Auth.signOut()
+              .then(data => console.log(data))
+              .catch(err => console.log(err));
+            }}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
