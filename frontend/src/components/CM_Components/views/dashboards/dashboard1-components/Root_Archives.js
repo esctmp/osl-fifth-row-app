@@ -19,11 +19,13 @@ import {
 } from "@material-ui/core";
 
 const Root_Archives = () => {
+
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 3; // Number of rows to display per page
   const [searchTerm, setSearchTerm] = useState("");
   const [searchBy, setSearchBy] = useState("EPF ID");
   const [products, setProducts] = React.useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // Function to handle search input change
   const handleSearchChange = (event) => {
@@ -34,12 +36,22 @@ const Root_Archives = () => {
   // Function to handle search by dropdown change
   const handleSearchByChange = (event) => {
     setSearchBy(event.target.value);
-    setSearchTerm(""); // Reset the search term when changing the search by option
     setPage(0); // Reset page when the search by option changes
   };
 
+  const sortedProducts = products.slice().sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+  
+    if (sortOrder === "asc") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+
   // Filter products based on search term and selected search by option
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = sortedProducts.filter((product) => {
     if (searchTerm === "") return true;
 
     switch (searchBy) {
@@ -49,7 +61,6 @@ const Root_Archives = () => {
         return product.club.toLowerCase().includes(searchTerm.toLowerCase());
       case "Name":
         return product.epf_Name.toLowerCase().includes(searchTerm.toLowerCase());
-
       default:
         return true;
     }
@@ -107,9 +118,15 @@ const Root_Archives = () => {
     fetchData();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
+  const handleSort = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
-    <Box mb={3}>
+    <Box mb={3}
+    sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ marginLeft: 'auto' }}>
         <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
           <Select value={searchBy} onChange={handleSearchByChange}>
             <MenuItem value="EPF ID">EPF ID</MenuItem>
@@ -122,6 +139,7 @@ const Root_Archives = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
+        </Box>
       </Box>
     <Table
       aria-label="simple table"
@@ -140,6 +158,9 @@ const Root_Archives = () => {
           <TableCell>
             <Typography color="textSecondary" variant="h6">
               Date
+              <span onClick={handleSort} style={{ cursor: "pointer" }}>
+                {sortOrder === "asc" ? " ▲" : " ▼"}
+              </span>
             </Typography>
           </TableCell>
           <TableCell>
