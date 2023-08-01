@@ -18,6 +18,7 @@ export default function Login() {
           const user =  await Auth.signIn(data.email,data.password);
           const group = user.signInUserSession.accessToken.payload["cognito:groups"]
           await setGroups(group);
+          console.log(groups);
           await axios.get("http://localhost:3000/users/getUsers").then(function(response){
             for(let i =0; i<(response.data.length);i++){
                 if(response.data[i].email==data.email){
