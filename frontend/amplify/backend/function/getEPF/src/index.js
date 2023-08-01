@@ -13,14 +13,14 @@ exports.handler = async (event) => {
 	console.log(`EVENT: ${JSON.stringify(event)}`);
 	
 	const client = await pool.connect();
-	
+
 	// event in this case is a json object with the epf_id
 	// Example:
 	// {
 	// 	"epf_id": 1
 	// }
 
-	epf_id = event.epf_id;
+	const epf_id = event.epf_id;
 
     try {
 		console.log("connected to db")
@@ -47,8 +47,18 @@ exports.handler = async (event) => {
 			[epf_id]
 		);
 		await client.query("COMMIT");
-		//Returns EPF Data
-		return result["rows"];
+		
+		// Returns EPF Data and headers.
+		return {
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*"
+			},
+			
+			statusCode: 200,
+			body: result["rows"]
+		};
+
 	} catch (e) {
 		await client.query("ROLLBACK");
 		throw e;
