@@ -16,17 +16,10 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
+          const uid = user.username;
           const group = user.signInUserSession.accessToken.payload["cognito:groups"]
           await setGroups(group);
-          console.log(groups);
-          await axios.get("http://localhost:3000/users/getUsers").then(function(response){
-            for(let i =0; i<(response.data.length);i++){
-                if(response.data[i].email==data.email){
-                    const user_id = response.data[i].user_id;
-                    setUserId(user_id);
-                }
-            }
-          })
+          await setUserId(uid);
           if (group.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (group.includes('FRE')) {

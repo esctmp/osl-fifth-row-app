@@ -15,7 +15,7 @@ const RequireAuth = ({ children,allowedGroups }) => {
             nav("/login");
         }
     }, [userLoggedIn, nav]);
-    if (allowedGroups.includes(groups[0])){
+    if (allowedGroups && groups && allowedGroups.includes(groups[0])){
         return <FullLayout>{children}</FullLayout>;}
     else{
         nav("/login");
