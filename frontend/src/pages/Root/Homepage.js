@@ -11,7 +11,6 @@ const Homepage = () => {
   const[FRname,setFRname] = useState("ROOT User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
-  console.log(userId);
   useEffect(()=>
   axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     // console.log(response.data[0].name);
