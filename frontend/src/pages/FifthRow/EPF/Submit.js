@@ -370,6 +370,7 @@ const EPFSubmit = () => {
         <>List all Other Risks not listed in this table and not already identified in Annex A.<br></br><div style={{ fontWeight: 'normal' }}>This may include potential infringements of any University policies, core values and applicable regulations governing the organization and execution of an event. </div></>
       ],
     }
+
     return (
       <>
         <SectionHeader text="G. Risk Assessment" />
@@ -394,6 +395,25 @@ const EPFSubmit = () => {
       </>
     );
   };
+
+  const SectionFiles = () => {
+    <>
+      <SectionHeader text="Additional files" />
+
+      <Grid container spacing={6} >
+        <Grid item xs={9}>
+          <Button style={{ width: 120, height: 40 }} variant="contained" sx={draftButtonStyle}
+            onClick={() => { }} >
+            Choose files
+          </Button>
+          <Input type="file" name="file" multiple />
+        </Grid>
+
+        <Grid item xs={3} >
+        </Grid>
+      </Grid>
+    </>
+  }
 
 
   // RENDERING
@@ -424,6 +444,7 @@ const EPFSubmit = () => {
                       <SectionE />
                       <SectionF />
                       <SectionG />
+                      <SectionFiles />
                       <Stack spacing={2} direction="row" justifyContent="center">
                         <Button style={{ width: 120, height: 40 }} variant="contained"
                           onClick={handleSubmit(
