@@ -26,9 +26,8 @@ const userPool =
 describe('Homepage', () => {
     // 1
     test('Render - Landing Page', () => {
-        const [userId,setUserId] = [null, null];
         render(
-            <UserID.Provider value ={{userId,setUserId}}>
+            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider>
             )
@@ -42,7 +41,7 @@ describe('Homepage', () => {
     // 2
     test('Display outstanding EPF when user successfully logs in', () => {
         render(
-            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )
@@ -57,7 +56,7 @@ describe('Homepage', () => {
     // 3
     test('Display username when user successfully logs in', () => {
         render(
-            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )
@@ -72,7 +71,7 @@ describe('Homepage', () => {
     // 4 
     test('Display default username and epf values if unable to retrieve user info for homepage', () => {
         render(
-            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )

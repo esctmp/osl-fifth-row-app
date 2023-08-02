@@ -1,19 +1,19 @@
 const OSLitems = [  
     {
-      title: "OSL_Homepage",
+      title: "Homepage",
       href: "osl/homepage",
     },
     {
-      title: "OSL_EPF",
+      title: "EPF",
       href: "osl/epf",
     },
     {
-      title: "OSL_Review EPF",
+      title: "Review EPF",
       href: "osl/epf/submit",
       type: "sub-heading"
     },
     {
-      title: "OSL_View EPF List",
+      title: "View EPF List",
       href: "osl/epf/view",
       type: "sub-heading"
     },
