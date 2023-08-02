@@ -9,24 +9,18 @@ import { act } from 'react-dom/test-utils';
 import axios from "axios";
 import {Auth} from "aws-amplify"
 import mockCognito from '../__mocks__/Auth';
-import mockHttpClient from '../__mocks__/axios';
 
 const mockedNavigate = jest.fn();
 
-    jest.mock('react-router-dom', () => ({
-        ...jest.requireActual('react-router-dom'),
-        useNavigate: () => mockedNavigate
-      }));
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedNavigate
+    }));
 
 jest.mock('amazon-cognito-identity-js', () => ({
     CognitoUser: jest.fn(() => mockCognito),
   }));
   
-jest.mock('axios', () => ({
-    get: jest.fn(() => mockHttpClient.get()),
-  }));
-
-
 describe("Login Form Validation",() => {
     test("should reject the login due to empty username field", async()=>{
         render(<Router>
@@ -71,7 +65,7 @@ describe("Login Form Validation",() => {
             expect(errorMessage2).toBeInTheDocument();
         
     })
-    test("should not have an error in the login field if login field is filled in", async()=>{
+    test("should not have an error in the email field if email field is filled in", async()=>{
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
             <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
@@ -158,12 +152,35 @@ describe("Login Form Validation",() => {
         expect(errorMessage3).not.toBeInTheDocument();
         expect(errorMessage4).not.toBeInTheDocument();
     });
+    test("should reject login if both password and email fields are empty", async()=>{    
+        render(<Router>
+            <UserID.Provider value={{userId: 'null', setUserId: () => {}}}>
+            <Groups.Provider value = {{groups:"null",setGroups:()=>{}}}>
+                <Login/>
+            </Groups.Provider>
+            </UserID.Provider>
+            </Router>);
+        const emailField = screen.getByPlaceholderText("Enter your club email");
+        const passwordField = screen.getByPlaceholderText("Enter your password");
+        const submit = screen.getByTestId("Log in");
+        await act(async () => {
+            fireEvent.change(emailField,{target:{value:""}});
+            fireEvent.change(passwordField, { target: { value: "" } });
+            fireEvent.click(submit);
+          });
+        const errorMessage = await screen.queryByText("*Email is required!")
+        const errorMessage3 = await screen.queryByText("*Password is required!")
+        expect(errorMessage).toBeInTheDocument();
+        expect(errorMessage3).toBeInTheDocument();
+        
+    })
 
     test('redirects user to homepage after successful login', async () => {
+        const mockGroups = "FRE"
         const { getByPlaceholderText, getByTestId } = render(
             <Router>
             <UserID.Provider  value = {{userid:"ee0843b7-8517-432d-9612-58b9a42434e0",setUserId:()=>{}}}>
-                <Groups.Provider value = {{groups:"FRE",setGroups:()=>{}}}>
+                <Groups.Provider value = {{groups:mockGroups,setGroups:(groups)=>{mockGroups=groups}}}>
                     <Login/>
                 </Groups.Provider>
             </UserID.Provider>
@@ -171,10 +188,13 @@ describe("Login Form Validation",() => {
         const emailField = getByPlaceholderText('Enter your club email');
         const passwordField = getByPlaceholderText('Enter your password');
         const submitButton = getByTestId('Log in');
-      
-        fireEvent.change(emailField, { target: { value: 'testfre@club.sutd.edu.sg' } });
-        fireEvent.change(passwordField, { target: { value: 'P@ssword1!' } });
-        fireEvent.click(submitButton);
+        
+        await act(async()=>{
+            fireEvent.change(emailField, { target: { value: 'testfre@club.sutd.edu.sg' } });
+            fireEvent.change(passwordField, { target: { value: 'P@ssword1!' } });
+            fireEvent.click(submitButton);
+            fireEvent.click(submitButton);
+        })
       
         await waitFor(() => {
           // Check if navigate function was called with the expected argument

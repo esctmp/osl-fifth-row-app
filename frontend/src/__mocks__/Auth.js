@@ -1,10 +1,8 @@
 const mockResponse={
-    CognitoUser:{
-        signInUserSession:{
-            accessToken:{
-                payload:{
-                    "cognito:groups":['ROOT']
-                }
+    signInUserSession:{
+        accessToken:{
+            payload:{
+                "cognito:groups":'FRE'                
             }
         }
     }
