@@ -1,7 +1,4 @@
-
-
-
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -10,7 +7,6 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     port: 5432,
 });
-
 
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`);
@@ -26,12 +22,12 @@ exports.handler = async (event) => {
 
     try {
         await client.query("BEGIN");
-    
+
         //Check for epf_id data type
         if (typeof epf_id !== "number") {
             throw new Error("Unexpected data type");
         }
-    
+
         //Check for valid epf_id
         const valid_epf_id = await pool.query(
             `SELECT COUNT(*) FROM EPFS WHERE epf_id=$1 AND is_deleted = false`,
@@ -40,7 +36,7 @@ exports.handler = async (event) => {
         if (valid_epf_id.rows[0]["count"] == 0) {
             throw new Error("Non-existent epf");
         }
-    
+
         const query =
             "UPDATE EPFS SET is_deleted = true WHERE epf_id = $1 AND is_deleted = false RETURNING epf_id";
         const result = await pool.query(query, [epf_id]); //Returns {"epf_id": value}
@@ -54,19 +50,17 @@ exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-    
+
             headers: {
                 "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*"
+                "Access-Control-Allow-Headers": "*",
             },
-    
+
             epf_id: result.rows[0],
         };
-
     } catch (e) {
         await client.query("ROLLBACK");
         throw e;
-
     } finally {
         client.release();
     }
