@@ -1,19 +1,19 @@
 const FREitems = [
   {
-    title: "FifthRow_Homepage",
+    title: "Homepage",
     href: "fifthrow/homepage",
   },
   {
-    title: "FifthRow_EPF",
+    title: "EPF",
     href: "fifthrow/epf",
   },
   {
-    title: "FifthRow_Create New EPF",
+    title: "Create New EPF",
     href: "fifthrow/epf/new",
     type: "sub-heading"
   },
   {
-    title: "FifthRow_View EPF List",
+    title: "View EPF List",
     href: "fifthrow/epf/view",
     type: "sub-heading"
   },
