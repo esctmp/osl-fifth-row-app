@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -9,33 +9,31 @@ const pool = new Pool({
 });
 
 exports.handler = async (event) => {
-	
-	console.log(`EVENT: ${JSON.stringify(event)}`);
-	
-	const client = await pool.connect();
+    console.log(`EVENT: ${JSON.stringify(event)}`);
 
-	try {
+    const client = await pool.connect();
+
+    try {
         await client.query("BEGIN");
         const result = await pool.query(
-          `SELECT * FROM EPFS WHERE is_deleted = false`
+            `SELECT * FROM EPFS WHERE is_deleted = false`
         );
         await client.query("COMMIT");
 
         //Returns all EPF Data
         return {
             headers: {
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Headers": "*"
-			},
-			
-			statusCode: 200,
-            body: result["rows"]
-        };
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*",
+            },
 
+            statusCode: 200,
+            body: result["rows"],
+        };
     } catch (e) {
         await client.query("ROLLBACK");
         throw e;
     } finally {
         client.release();
     }
-}
+};
