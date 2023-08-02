@@ -55,22 +55,6 @@ const ThemeRoutes = [
     element: <RequireAuth />,
     children: [
       { path: "/Setting", element: <Setting />},
-      { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage /> },
-      { path: "/fifthrow/epf", exact: true, element:<FifthRowEPF />  },
-      { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit />},
-      { path: "/fifthrow/epf/view/:epf_id", exact: true, element: <FifthRowEPFSubmit /> },
-      { path: "/fifthrow/epf/view", exact: true, element: <FifthRowEPFView /> },
-      { path: "/osl/homepage", exact: true, element: <OSLHomepage /> },
-      { path: "/osl/CreateUser", exact: true, element: <OSLCreateUser /> },
-      { path: "/osl/epf", exact: true, element: <OSLEPF /> },
-      { path: "/osl/epf/submit", exact: true, element:<OSLEPFSubmit />  },
-      { path: "/osl/epf/view/:epf_id", exact: true, element: <OSLEPFSubmit /> },
-      { path: "/osl/epf/view", exact: true, element: <OSLEPFView /> },
-      { path: "/root/homepage", exact: true, element: <RootHomepage />},
-      { path: "/root/epf", exact: true, element: <RootEPF />},
-      { path: "/root/epf/submit", exact: true, element: <RootEPFSubmit   />},
-      { path: "/root/epf/view/:epf_id", exact: true, element: <RootEPFSubmit />},
-      { path: "/root/epf/view", exact: true, element: <RootEPFView />},
       { path: "dashboards/dashboard1", exact: true, element: <Dashboard1 /> },
       { path: "tables/basic-table", element: <BasicTable /> },
       { path: "/form-layouts/form-layouts", element: <FormLayouts /> },
@@ -82,7 +66,40 @@ const ThemeRoutes = [
       { path: "/form-elements/switch", element: <ExSwitch /> },
     ],
   },
-  
+  {
+    path:"/",
+  element:<RequireAuth allowedGroups={["FRE"]}/>,
+  children:[    
+    { path: "/fifthrow/homepage", exact: true, element: <FifthRowHomepage />},
+    { path: "/fifthrow/epf", exact: true, element:<FifthRowEPF /> },
+    { path: "/fifthrow/epf/new", exact: true, element: <FifthRowEPFSubmit />},
+    { path: "/fifthrow/epf/view/:epf_id", exact: true, element: <FifthRowEPFSubmit />},
+    { path: "/fifthrow/epf/view", exact: true, element: <FifthRowEPFView /> },
+    ],
+  },
+  {
+    path:"/",
+  element:<RequireAuth allowedGroups={["OSL"]}/>,
+  children:[ 
+    { path: "/osl/homepage", exact: true, element: <OSLHomepage /> },
+    { path: "/osl/CreateUser", exact: true, element: <OSLCreateUser /> },
+    { path: "/osl/epf", exact: true, element: <OSLEPF /> },
+    { path: "/osl/epf/submit", exact: true, element:<OSLEPFSubmit />  },
+    { path: "/osl/epf/view/:epf_id", exact: true, element: <OSLEPFSubmit /> },
+    { path: "/osl/epf/view", exact: true, element: <OSLEPFView /> },
+    ],
+  },
+  {
+    path:"/",
+  element:<RequireAuth allowedGroups={["ROOT"]}/>,
+  children:[ 
+    { path: "/root/homepage", exact: true, element: <RootHomepage />},
+    { path: "/root/epf", exact: true, element: <RootEPF />},
+    { path: "/root/epf/submit", exact: true, element: <RootEPFSubmit   />},
+    { path: "/root/epf/view/:epf_id", exact: true, element: <RootEPFSubmit />},
+    { path: "/root/epf/view", exact: true, element: <RootEPFView />},
+    ],
+  },
 ];
 
 export default ThemeRoutes;
