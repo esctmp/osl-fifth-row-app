@@ -318,6 +318,34 @@ exports.handler = async (event) => {
             );
             console.log("Updated outstanding EPF count for OSL and ROOT");
             await client.query("COMMIT");
+            try {
+                AWS.config.update({ region: "us-east-1" }); // Replace "us-east-1" with your preferred AWS region
+                const ses = new AWS.SES({ apiVersion: "2010-12-01" });
+        
+                const mailParams = {
+                    Destination: {
+                        ToAddresses: ["recipient_email@example.com"], // Replace with the recipient's email address
+                    },
+                    Message: {
+                        Body: {
+                            Text: {
+                                Data: "A new EPF has been created.", // Email body (plain text)
+                            },
+                        },
+                        Subject: {
+                            Data: "New EPF Created", // Email subject
+                        },
+                    },
+                    Source: "oslfifthrow@gmail.com", // Replace with your verified sender email address
+                };
+        
+                await ses.sendEmail(mailParams).promise();
+                console.log("Email notification sent successfully");
+            } catch (err) {
+                console.error("Error sending email:", err);
+            }
+        
+        
         } catch (e) {
             // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
             await client.query("ROLLBACK");
