@@ -396,7 +396,7 @@ const EPFSubmit = () => {
     );
   };
 
-  const SectionFiles = () => {
+  const SectionFiles = () => { // TODO
     <>
       <SectionHeader text="Additional files" />
 
@@ -444,7 +444,7 @@ const EPFSubmit = () => {
                       <SectionE />
                       <SectionF />
                       <SectionG />
-                      <SectionFiles />
+                      {/* <SectionFiles /> */}
                       <Stack spacing={2} direction="row" justifyContent="center">
                         <Button style={{ width: 120, height: 40 }} variant="contained"
                           onClick={handleSubmit(
