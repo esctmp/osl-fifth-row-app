@@ -24,50 +24,61 @@ const userPool =
 
 
 describe('Homepage', () => {
-    // test for homepage rendering
-    // test('Render - Landing Page', () => {
-    //     const [userId,setUserId] = [null, null];
-    //     render(
-    //         <UserID.Provider value ={{userId,setUserId}}>
-    //         <Homepage />
-    //         </UserID.Provider>
-    //         )
-    //     const field = screen.getByText("WELCOME");
-    //     const field2 = screen.getByText("You have _ outstanding forms to review.");
-    //     expect(field).toBeInTheDocument();
-    //     expect(field2).toBeInTheDocument();
-
-    // });
-
-    test('Display outstanding EPF', () => {
-        // const [userId,setUserId] = [null,null];
-        // const[EPFcount, setEPFcount] = [null, null];
+    // 1
+    test('Render - Landing Page', () => {
+        const [userId,setUserId] = [null, null];
         render(
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )
-        // setUserId("1");
-        // const user = userPool.find(user => user['user_id'] === userId);
-        // setEPFcount(user['outstanding EPF']);
-        // const field = screen.getByText("You have 3 outstanding forms to review.");
-        // expect(EPFcount).toBe(3);
-        // expect(field).toBeInTheDocument();
-        // render(<Homepage />);
-        // setUserId = "1";
+        const field = screen.getByText("WELCOME");
+        const field2 = screen.getByText("You have _ outstanding forms to review.");
+        expect(field).toBeInTheDocument();
+        expect(field2).toBeInTheDocument();
+
+    });
+
+    // 2
+    test('Display outstanding EPF when user successfully logs in', () => {
+        render(
+            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <Homepage />
+            </UserID.Provider> 
+            )
+        
         const user = userPool.find(user => user['user_id'] === "1");
         expect(user['outstanding EPF']).toBe(3);
-        // const field = screen.getByTestId("homepage - 1");
-        // expect(field).toBeInTheDocument();
-        // const placeholderPattern = new RegExp(`You have ${user['outstanding EPF']} outstanding forms to review.`);
-        // const field = screen.getByText(`You have ${user['outstanding EPF']} outstanding forms to review.`);
-        // expect(field).toBeInTheDocument();
-        // expect(field).toHaveTextContent(
-        //     `You have ${user['outstanding EPF']} outstanding forms to review.`);
+
+        const field = screen.getByTestId("epfcount");
+        expect(field).toBeInTheDocument();
+    });
+
+    // 3
+    test('Display username when user successfully logs in', () => {
+        render(
+            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <Homepage />
+            </UserID.Provider> 
+            )
         
-        const informationTextElement = screen.getByTestId("epfcount");
-        expect(informationTextElement).toBeInTheDocument();
-          
+        const user = userPool.find(user => user['user_id'] === "2");
+        expect(user['name']).toBe("EXCO User 2");
+
+        const field = screen.getByTestId("username");
+        expect(field).toBeInTheDocument();
+    });
+
+    // 4 
+    test('Display default username and epf values if unable to retrieve user info for homepage', () => {
+        render(
+            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <Homepage />
+            </UserID.Provider> 
+            )
+        
+        expect(screen.getByTestId("username")).toHaveTextContent("User");
+        expect(screen.getByTestId("epfcount")).toHaveTextContent("_");
     });
 
 });

@@ -10,7 +10,7 @@ const Homepage = () => {
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
   useEffect(()=>
-  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
+  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
@@ -26,7 +26,7 @@ const Homepage = () => {
           <label htmlFor="welcome">WELCOME</label>
         </div>
         <div className="fifthRow">
-          <label htmlFor="fifthRow">{FRname}</label>
+          <label htmlFor="fifthRow" data-testid = "username">{FRname}</label>
         </div>
         <div className="informationBox">
           <p className="informationText" data-testid = "epfcount">You have {EPFcount} outstanding forms to review.</p>
