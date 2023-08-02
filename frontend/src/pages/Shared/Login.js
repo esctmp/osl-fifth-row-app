@@ -1,25 +1,28 @@
 import { FormProvider, useForm } from "react-hook-form";
-import "./LoginPage.css";
+import "./Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { Auth } from 'aws-amplify'
 import { useContext } from 'react'
 import {UserID} from "../../routes/UserID"  
 import {Groups} from "../../routes/Groups"
-import axios from "axios"
+import {UserLoggedIn} from "../../routes/UserLoggedIn"
 
 export default function Login() {
     const navigate = useNavigate();
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
-    const {userId,setUserId} = useContext(UserID);
-    const {groups,setGroups} = useContext(Groups);
+    const {setUserId} = useContext(UserID);
+    const {setGroups} = useContext(Groups);
+    const {setUserLoggedIn} = useContext(UserLoggedIn);
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const uid = user.username;
           const group = user.signInUserSession.accessToken.payload["cognito:groups"]
-          await setGroups(group);
-          await setUserId(uid);
+          setGroups(group);
+          setUserId(uid);
+          setUserLoggedIn(true);
+          console.log(group,uid);
           if (group.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (group.includes('FRE')) {

@@ -8,10 +8,13 @@ import {Groups} from "./routes/Groups";
 const RequireAuth = ({ children,allowedGroups }) => {
     const {userLoggedIn} = useContext(UserLoggedIn);
     const {groups} = useContext(Groups);
-    useLoginStatus();
     const nav = useNavigate();
+    console.log("Before "+ userLoggedIn);
+    useLoginStatus();
+    console.log("After "+userLoggedIn);
     useEffect(() => {
         if (!userLoggedIn) {
+            console.log("fails at userloggedin");
             nav("/login");
         }
     }, [userLoggedIn, nav]);
