@@ -1,6 +1,6 @@
 {
   "auth": {
-    "oslfifthrowapp84336fda": {
+    "oslfifthrowapp50113030": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -9,35 +9,35 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_oslfifthrowapp84336fda_nativeClientId": {
+    "AMPLIFY_auth_oslfifthrowapp50113030_nativeClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "oslfifthrowapp84336fda"
+          "resourceName": "oslfifthrowapp50113030"
         }
       ]
     },
-    "AMPLIFY_auth_oslfifthrowapp84336fda_userPoolId": {
+    "AMPLIFY_auth_oslfifthrowapp50113030_userPoolId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "oslfifthrowapp84336fda"
+          "resourceName": "oslfifthrowapp50113030"
         }
       ]
     },
-    "AMPLIFY_auth_oslfifthrowapp84336fda_userPoolName": {
+    "AMPLIFY_auth_oslfifthrowapp50113030_userPoolName": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "oslfifthrowapp84336fda"
+          "resourceName": "oslfifthrowapp50113030"
         }
       ]
     },
-    "AMPLIFY_auth_oslfifthrowapp84336fda_webClientId": {
+    "AMPLIFY_auth_oslfifthrowapp50113030_webClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "oslfifthrowapp84336fda"
+          "resourceName": "oslfifthrowapp50113030"
         }
       ]
     }

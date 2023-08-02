@@ -22,6 +22,7 @@ export default function ForgetPassword() {
   };
 
   return (
+    <div className = "bg">
     <FormProvider {...methods}>
       <div className="MainContainer">
         <div className="Name">
@@ -65,5 +66,6 @@ export default function ForgetPassword() {
         </div>
       </div>
     </FormProvider>
+    </div>
   );
 }

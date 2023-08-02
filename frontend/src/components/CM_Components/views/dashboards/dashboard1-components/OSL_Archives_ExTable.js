@@ -25,6 +25,7 @@ const OSL_ExTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchBy, setSearchBy] = useState("EPF ID");
   const [products, setProducts] = React.useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // Function to handle search input change
   const handleSearchChange = (event) => {
@@ -38,8 +39,19 @@ const OSL_ExTable = () => {
     setPage(0); // Reset page when the search by option changes
   };
 
+  const sortedProducts = products.slice().sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+  
+    if (sortOrder === "asc") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+
   // Filter products based on search term and selected search by option
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = sortedProducts.filter((product) => {
     if (searchTerm === "") return true;
 
     switch (searchBy) {
@@ -94,7 +106,7 @@ const OSL_ExTable = () => {
             status: item.status,
             pbg: pbg,
             club:item.a_organisation,
-            action:"EXPORT"
+            // action:"EXPORT"
           };
         });
         setProducts(transformedData);
@@ -106,10 +118,15 @@ const OSL_ExTable = () => {
     fetchData();
   }, []); // Empty dependency array to ensure the effect runs only once on component mount
 
+  const handleSort = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
   
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
-    <Box mb={3}>
+    <Box mb={3}
+    sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ marginLeft: 'auto' }}>
         <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
           <Select value={searchBy} onChange={handleSearchByChange}>
             <MenuItem value="EPF ID">EPF ID</MenuItem>
@@ -122,6 +139,7 @@ const OSL_ExTable = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
+        </Box>
       </Box>
     <Table
       aria-label="simple table"
@@ -140,6 +158,9 @@ const OSL_ExTable = () => {
           <TableCell>
             <Typography color="textSecondary" variant="h6">
               Date
+              <span onClick={handleSort} style={{ cursor: "pointer" }}>
+                {sortOrder === "asc" ? " ▲" : " ▼"}
+              </span>
             </Typography>
           </TableCell>
           <TableCell>
@@ -157,11 +178,11 @@ const OSL_ExTable = () => {
               Club
             </Typography>
           </TableCell>
-          <TableCell>
+          {/* <TableCell>
             <Typography color="textSecondary" variant="h6">
               Actions
             </Typography>
-          </TableCell>
+          </TableCell> */}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -250,7 +271,7 @@ const OSL_ExTable = () => {
                 </Box>
               </Box>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <Box
                 sx={{
                   display: "flex",
@@ -268,7 +289,7 @@ const OSL_ExTable = () => {
                   </Typography>
                 </Box>
               </Box>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         ))}
       </TableBody>
