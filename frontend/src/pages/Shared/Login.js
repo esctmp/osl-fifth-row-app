@@ -16,17 +16,10 @@ export default function Login() {
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
+          const uid = user.username;
           const group = user.signInUserSession.accessToken.payload["cognito:groups"]
           await setGroups(group);
-          console.log(groups);
-          await axios.get("http://localhost:3000/users/getUsers").then(function(response){
-            for(let i =0; i<(response.data.length);i++){
-                if(response.data[i].email==data.email){
-                    const user_id = response.data[i].user_id;
-                    setUserId(user_id);
-                }
-            }
-          })
+          await setUserId(uid);
           if (group.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (group.includes('FRE')) {
@@ -57,7 +50,7 @@ export default function Login() {
                                 <input
                                     {...register("email", { required: "*Email is required!",pattern:{
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
-                    message: "*Invalid email address"
+                    message: "*Invalid email address entered"
                 } })}
                                     type="text"
                                     id="email"
@@ -71,7 +64,10 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="password">Password:</label>
                                 <input
-                                    {...register("password", { required: "*Password is required!" })}
+                                    {...register("password", { required: "*Password is required!" ,pattern: {
+                                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                        message:"*Invalid password entered"
+                                    }})}
                                     type="password"
                                     id="password"
                                     name="password"

@@ -28,9 +28,9 @@ describe('Homepage', () => {
     test('Render - Landing Page', () => {
         const [userId,setUserId] = [null, null];
         render(
-            <UserID.Provider value ={{userId,setUserId}}>
+            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
             <Homepage />
-            </UserID.Provider>
+            </UserID.Provider> 
             )
         const field = screen.getByText("WELCOME");
         const field2 = screen.getByText("You have _ outstanding forms to review.");
