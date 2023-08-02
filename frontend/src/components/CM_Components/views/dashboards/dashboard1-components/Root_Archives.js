@@ -106,7 +106,7 @@ const Root_Archives = () => {
             status: item.status,
             pbg: pbg,
             club:item.a_organisation,
-            action:"EXPORT"
+            // action:"EXPORT"
           };
         });
         setProducts(transformedData);
@@ -178,11 +178,11 @@ const Root_Archives = () => {
               Club
             </Typography>
           </TableCell>
-          <TableCell>
+          {/* <TableCell>
             <Typography color="textSecondary" variant="h6">
               Actions
             </Typography>
-          </TableCell>
+          </TableCell> */}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -280,7 +280,7 @@ const Root_Archives = () => {
                 </Box>
               </Box>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <Box
                 sx={{
                   display: "flex",
@@ -298,7 +298,7 @@ const Root_Archives = () => {
                   </Typography>
                 </Box>
               </Box>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         ))}
       </TableBody>

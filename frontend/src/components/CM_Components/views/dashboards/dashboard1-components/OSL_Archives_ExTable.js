@@ -106,7 +106,7 @@ const OSL_ExTable = () => {
             status: item.status,
             pbg: pbg,
             club:item.a_organisation,
-            action:"EXPORT"
+            // action:"EXPORT"
           };
         });
         setProducts(transformedData);
@@ -178,11 +178,11 @@ const OSL_ExTable = () => {
               Club
             </Typography>
           </TableCell>
-          <TableCell>
+          {/* <TableCell>
             <Typography color="textSecondary" variant="h6">
               Actions
             </Typography>
-          </TableCell>
+          </TableCell> */}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -271,7 +271,7 @@ const OSL_ExTable = () => {
                 </Box>
               </Box>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <Box
                 sx={{
                   display: "flex",
@@ -289,7 +289,7 @@ const OSL_ExTable = () => {
                   </Typography>
                 </Box>
               </Box>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         ))}
       </TableBody>
