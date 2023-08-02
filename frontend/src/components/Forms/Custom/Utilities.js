@@ -29,7 +29,7 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    let response = await axios.get("http://localhost:3000/epfs/getEPF",
+    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
         {
             params: { epf_id: epf_id }
         }
@@ -97,7 +97,7 @@ export async function createEPF(data) {
 export async function updateEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("UPDATED", data);
-    await axios.put("http://localhost:3000/epfs/updateEPF",
+    await axios.put("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/updateEPF",
         data,
         {
             headers: {
