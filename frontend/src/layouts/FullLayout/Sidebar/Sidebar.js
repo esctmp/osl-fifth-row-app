@@ -4,14 +4,14 @@ import {
   List,
   ListItem,
   ListItemText,
-  useMediaQuery
 } from "@material-ui/core";
-import axios from "axios";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import { SidebarWidth } from "../../../assets/global/Theme-variable";
-import { UserID } from "../../../routes/UserID";
+import { Groups } from "../../../routes/Groups";
 import LogoIcon from "../Logo/LogoIcon";
 // import Menuitems from "./data";
 import FREitems from "./FREitems";
@@ -23,7 +23,9 @@ const Sidebar = (props) => {
   const [open, setOpen] = useState(true);
   const { pathname } = useLocation();
   const pathDirect = pathname;
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const theme = useTheme();
+  const lgUp = useMediaQuery(theme.breakpoints.up("lg"));
+
 
   const handleClick = (index) => {
     if (open === index) {
@@ -33,38 +35,25 @@ const Sidebar = (props) => {
     }
   };
 
-
-  const {userId,setUserId} = useContext(UserID);
-  const [groupType,setGroupType] = useState("");
-  const [menuItems, setMenuItems] = useState([]);
-  useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
-    setGroupType(response.data[0].user_type);
-    }).catch(error =>{
-        console.error("Error fetching EXCO: ",error);
-    }))
+  const {groups, setGroups} = useContext(Groups);
+  const [menuItems, setMenuItems] = useState([]);  
 
   useEffect(() => {
-      if (groupType === "FRE"){
+      if (groups.includes("FRE")){
         setMenuItems(FREitems);  
-      } else if (groupType === "OSL"){
+      } else if (groups.includes("OSL")){
         setMenuItems(OSLitems);  
-      } else if (groupType === "ROOT"){
+      } else if (groups.includes("ROOT")){
         setMenuItems(Rootitems);
       }
       
-      
-    }, [groupType]);
-
-    console.log(menuItems)
+    }, [groups]);
 
   const SidebarContent = (
     <Box sx={{ p: 3, height: "calc(100vh - 40px)" }}>
-      {/* <Link to="/"> */}
         <Box sx={{ display: "flex", alignItems: "Center" }}>
-          <LogoIcon />
+          <LogoIcon data-testid = "logo"/>
         </Box>
-      {/* </Link> */}
 
       <Box>
         <List
@@ -77,7 +66,7 @@ const Sidebar = (props) => {
 
             return (
               <List component="li" disablePadding key={item.title}>
-                <ListItem
+                <ListItem data-testid={item.title}
                   onClick={() => handleClick(index)}
                   button
                   component={NavLink}
@@ -106,6 +95,7 @@ const Sidebar = (props) => {
     </Box>
   );
 
+  // permenant sidebar if screen size is bigger than breakpoint lg
   if (lgUp) {
     return (
       <Drawer
@@ -123,7 +113,7 @@ const Sidebar = (props) => {
     );
   }
   return (
-    <Drawer
+    <Drawer 
       anchor="left"
       open={props.isMobileSidebarOpen}
       onClose={props.onSidebarClose}
