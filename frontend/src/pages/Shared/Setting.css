@@ -1,0 +1,10 @@
+.mainContainer{
+    width:1000px;
+    border:1px solid black;
+    border-radius:20px;
+}
+input[type="text"]{
+    border:1px solid black;
+    align-items: center;
+    width:30px;
+}
