@@ -73,6 +73,7 @@ export const convertFieldsToJSON = (data) => {
     }
     let res = { ...listObjs, ...scalarObjs };
     res = Object.fromEntries(Object.entries(res).map(([k, v]) => [k.replace('c3cleanup', 'c3_cleanup'), v])); // fix for EPF only
+    res['b_event_schedule'] = res['b_event_schedule'].replace('T', ' ')
     return res;
 }
 

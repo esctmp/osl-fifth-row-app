@@ -48,6 +48,7 @@ const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
   // const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
+  const { userId, _ } = useContext(UserID);
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
   const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
@@ -65,6 +66,8 @@ const EPFSubmit = () => {
         if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
         if (values?.status == STATUS.Approved.description) { formControl.settings = FORM_MODES["ARCHIVED"]; }
       })
+    } else {
+      setValue("exco_user_id", userId);
     }
   }, []);
 
