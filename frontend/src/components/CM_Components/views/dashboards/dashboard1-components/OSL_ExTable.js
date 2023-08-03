@@ -314,6 +314,7 @@ const OSL_ExTable = () => {
         ))}
       </TableBody>
       <TablePagination
+        data-testid="page-number"
         rowsPerPageOptions={[]} // Disable rows per page selection
         component="div"
         count={filteredProducts.length}
