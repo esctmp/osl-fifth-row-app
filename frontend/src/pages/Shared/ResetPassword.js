@@ -34,7 +34,7 @@ export default function ResetPassword() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="container">
             <div>
               <p>
-                Enter the verification code and new password to reset your password.
+                A code to reset the account's password will only be sent if the user exists. Enter the verification code and new password to reset your password.
               </p>
             </div>
             <div className="form-group">

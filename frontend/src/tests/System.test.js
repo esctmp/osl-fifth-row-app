@@ -1,4 +1,4 @@
-import { Builder, By, Key, Until } from 'selenium-webdriver';
+const { Builder, By, Key, Until } = require('selenium-webdriver');
 
 const url = "http://localhost:3001";
 const excoUser = {
@@ -43,4 +43,4 @@ test("System - Fifth Row Submit And OSL Approve", async () => {
     // 10. Fifth Row user navigates to View Form Archive
 
 
-});
+},100000);
