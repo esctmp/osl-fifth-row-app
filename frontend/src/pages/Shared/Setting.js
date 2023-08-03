@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Auth } from "aws-amplify";
 import { UserID } from "../../routes/UserID";
+import "./Setting.css"
 
 const Settings = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -52,7 +53,7 @@ const Settings = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="mainContainer">
       <h2 style={styles.heading}>Settings</h2>
       <div style={styles.tabContainer}>
         <div
@@ -77,7 +78,7 @@ const Settings = () => {
           <div style={styles.formField}>
             <label>Current Password:</label>
             <input
-              type="password"
+              type="text"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               style={styles.input}
@@ -86,7 +87,7 @@ const Settings = () => {
           <div style={styles.formField}>
             <label>New Password:</label>
             <input
-              type="password"
+              type="text"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               style={styles.input}
@@ -95,7 +96,7 @@ const Settings = () => {
           <div style={styles.formField}>
             <label>Confirm Password:</label>
             <input
-              type="password"
+              type="text"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               style={styles.input}

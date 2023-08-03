@@ -2,7 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import "./Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { Auth } from 'aws-amplify'
-import { useContext } from 'react'
+import { useContext ,useState} from 'react'
 import {UserID} from "../../routes/UserID"  
 import {Groups} from "../../routes/Groups"
 import {UserLoggedIn} from "../../routes/UserLoggedIn"
@@ -14,6 +14,7 @@ export default function Login() {
     const {setUserId} = useContext(UserID);
     const {setGroups} = useContext(Groups);
     const {setUserLoggedIn} = useContext(UserLoggedIn);
+    const [loginError,setLoginError] = useState("");
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
@@ -22,7 +23,6 @@ export default function Login() {
           setGroups(group);
           setUserId(uid);
           setUserLoggedIn(true);
-          console.log(group,uid);
           if (group.includes('OSL')) {
             navigate("/osl/homepage");
           } else if (group.includes('FRE')) {
@@ -34,6 +34,7 @@ export default function Login() {
           }
         } catch (error) {
           console.log('Error signing in:', error);
+          setLoginError('Error signing in: ' + error);
         }
       });
     return (
@@ -83,10 +84,11 @@ export default function Login() {
 
                             <div className="forgetpassword">
                                 <label htmlFor="forgetpassword">
-                                    <nav><Link to='/forgetpassword'>Forget Password</Link></nav>
+                                    <nav><Link to='/forget-password'>Forget Password</Link></nav>
                                 </label>
                             </div>
                             <div className="form-group">
+                            {loginError && <p className="errorMessage">{loginError}</p>}
                             <button type="submit" data-testid = "Log in">Log in</button>
                             </div>
                         </form>

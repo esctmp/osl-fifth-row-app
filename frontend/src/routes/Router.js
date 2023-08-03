@@ -52,7 +52,7 @@
     { path: "/reset-password", element: <Reset/>},
     {
       path: "/",
-      element: <RequireAuth />,
+      element: <RequireAuth allowedGroups={["FRE","OSL","ROOT"]}/>,
       children: [
         { path: "/Setting", element: <Setting />},
         { path: "dashboards/dashboard1", exact: true, element: <Dashboard1 /> },
