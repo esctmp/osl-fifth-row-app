@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+const AWS = require('aws-sdk');
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -148,6 +149,62 @@ const columnParams = new Array(82)
     .join(",");
 
 // END FORMATTING //
+async function sendEmailToOSF() {
+    try {
+        AWS.config.update({ region: "ap-southeast-1" }); // Replace "us-east-1" with your preferred AWS region
+        const ses = new AWS.SES({ apiVersion: "2010-12-01" });
+        const mailParams = {
+            Destination: {
+                ToAddresses: ["oslfifthrow@gmail.com"], // Replace with the OSF's email address
+            },
+            Message: {
+                Body: {
+                    Text: {
+                        Data: "A new EPF has been created.", // Email body (plain text)
+                    },
+                },
+                Subject: {
+                    Data: "New EPF Created", // Email subject
+                },
+            },
+            Source: "oslfifthrow@gmail.com", // Replace with your verified sender email address
+        };
+
+        await ses.sendEmail(mailParams).promise();
+        console.log("Email notification sent to OSF successfully");
+    } catch (err) {
+        console.error("Error sending email to OSF:", err);
+    }
+}
+
+// Function to send an email to the user
+async function sendEmailToUser(userEmail) {
+    try {
+        AWS.config.update({ region: "ap-southeast-1" }); // Replace "us-east-1" with your preferred AWS region
+        const ses = new AWS.SES({ apiVersion: "2010-12-01" });
+        const mailParams = {
+            Destination: {
+                ToAddresses: [userEmail], // Replace with the user's email address
+            },
+            Message: {
+                Body: {
+                    Text: {
+                        Data: "Your EPF has been submitted.", // Email body (plain text)
+                    },
+                },
+                Subject: {
+                    Data: "EPF Submission Confirmation", // Email subject
+                },
+            },
+            Source: "oslfifthrow@gmail.com", // Replace with your verified sender email address
+        };
+
+        await ses.sendEmail(mailParams).promise();
+        console.log("Email notification sent to user successfully");
+    } catch (err) {
+        console.error("Error sending email to user:", err);
+    }
+}
 
 exports.handler = async (event) => {
     const client = await pool.connect();
@@ -318,33 +375,14 @@ exports.handler = async (event) => {
             );
             console.log("Updated outstanding EPF count for OSL and ROOT");
             await client.query("COMMIT");
-            try {
-                AWS.config.update({ region: "us-east-1" }); // Replace "us-east-1" with your preferred AWS region
-                const ses = new AWS.SES({ apiVersion: "2010-12-01" });
-        
-                const mailParams = {
-                    Destination: {
-                        ToAddresses: ["recipient_email@example.com"], // Replace with the recipient's email address
-                    },
-                    Message: {
-                        Body: {
-                            Text: {
-                                Data: "A new EPF has been created.", // Email body (plain text)
-                            },
-                        },
-                        Subject: {
-                            Data: "New EPF Created", // Email subject
-                        },
-                    },
-                    Source: "oslfifthrow@gmail.com", // Replace with your verified sender email address
-                };
-        
-                await ses.sendEmail(mailParams).promise();
-                console.log("Email notification sent successfully");
-            } catch (err) {
-                console.error("Error sending email:", err);
-            }
-        
+            sendEmailToOSF();
+            console.log("sendEmailtoOSF")
+
+            // Send email to the user
+            const userEmail = event.a_email;
+            sendEmailToUser(userEmail);
+            console.log("sendEmailToUser")
+
         
         } catch (e) {
             // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
