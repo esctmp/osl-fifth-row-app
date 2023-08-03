@@ -12,11 +12,14 @@ const RequireAuth = ({ children, allowedGroups }) => {
     const {groups, setGroups} = useContext(Groups);
     const {setUserId} = useContext(UserID);
     const navigate = useNavigate();
+    let group;
   
     useEffect(() => {
       Auth.currentAuthenticatedUser()
         .then(user => {
-          const group = user.signInUserSession.accessToken.payload["cognito:groups"];
+          group = user.attributes["custom:user_type"];
+          if (!group){
+            group = user.signInUserSession.accessToken.payload["cognito:groups"];}
           const uid = user.username;
           setGroups(group);
           setUserId(uid);
@@ -31,7 +34,7 @@ const RequireAuth = ({ children, allowedGroups }) => {
     useEffect(() => {
       if (authStatus === 'logged-out') {
         navigate('/login');
-      } else if (authStatus === 'logged-in' && !(allowedGroups && groups && allowedGroups.includes(groups[0]))) {
+      } else if (authStatus === 'logged-in' && !(allowedGroups && groups && (allowedGroups.includes(groups[0])||allowedGroups[0]==groups))) {
         navigate('/login');
       }
     }, [authStatus, allowedGroups, groups, navigate]);
@@ -42,7 +45,7 @@ const RequireAuth = ({ children, allowedGroups }) => {
     }
   
     // The rest of your component...
-    if (authStatus === 'logged-in' && allowedGroups && groups && allowedGroups.includes(groups[0])){
+    if (authStatus === 'logged-in' && allowedGroups && groups && (allowedGroups.includes(groups[0])||allowedGroups[0]==groups)){
       return <FullLayout>{children}</FullLayout>;
     } else {
       return null;

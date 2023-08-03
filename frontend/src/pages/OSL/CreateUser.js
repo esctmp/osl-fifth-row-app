@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { API, Auth } from "aws-amplify";
+import "./CreateUser.css";
 
 const CreateUser = () => {
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [successCreate, setSuccessCreate] = useState(null);
     const [user, setUser] = useState({
       email: "",
       role: "FRE",
@@ -29,10 +32,11 @@ const CreateUser = () => {
             'custom:user_type': user.role,
           },
         });
-  
+        setSuccessCreate("User successfully signed up and assigned to group!");
         console.log("User successfully signed up and assigned to group!");
       } catch (error) {
         console.error("Error signing up user:", error.message);
+        setErrorMessage("Your username or password is in the wrong format!")
       }
     };
   
@@ -42,8 +46,9 @@ const CreateUser = () => {
       <h2 style={styles.heading}>Create User</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.formField}>
-          <label>Name:</label>
+          <label >Name:</label>
           <input
+            className="Name"
             type="text"
             name="name"
             value={user.name}
@@ -59,6 +64,8 @@ const CreateUser = () => {
             value={user.email}
             onChange={handleChange}
             style={styles.input}
+            placeholder="Required: in the form of ...@...sutd.edu.sg"
+            className="userfield"
           />
         </div>
         <div style={styles.formField}>
@@ -69,6 +76,8 @@ const CreateUser = () => {
             value={user.password}
             onChange={handleChange}
             style={styles.input}
+            placeholder="Required: 8 characters, 1 number, 1 special character, 1 uppercase letter, 1 lowercase letter"
+            className="pwfield"
           />
         </div>
         <div style={styles.formField}>
@@ -94,6 +103,8 @@ const CreateUser = () => {
             <option value="FRE">FifthRow Exco</option>
           </select>
         </div>
+        {successCreate && <p className=  'successCreate'>{successCreate}</p>}
+        {errorMessage && <p className = 'errorMessage'>{errorMessage}</p>}
         <button type="submit" style={styles.button}>
           Create
         </button>
