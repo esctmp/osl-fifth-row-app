@@ -179,11 +179,14 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
           id={name}
           label={makeNameFancy(name)}
           onChange={(e) => {
-            field.onChange(e.target.value);
-            ((required && !e.target.value) || (pattern && !pattern.test(e.target.value))) ? setError(true) : setError(false);
+            let s = e.target.value;
+            field.onChange(parseInt(e.target.value));
+            (required && !e.target.value) ? setError(true) : setError(false);
+            (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
+            console.log(name, parseInt(e.target.value));
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
-          value={field.value || ''}
+          value={field.value}
           multiline={multiline}
           disabled={!settings.enableInputs}
           fullWidth
