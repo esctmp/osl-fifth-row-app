@@ -8,7 +8,7 @@ import Settings from "@material-ui/icons/Settings";
 import { Auth } from 'aws-amplify';
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Groups } from "../../../routes/Groups";
 import { UserID } from "../../../routes/UserID";
 
@@ -26,6 +26,8 @@ import {
 } from "@material-ui/core";
 
 const Header = (props) => {
+
+  const navigate = useNavigate();
   
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -59,10 +61,10 @@ const Header = (props) => {
     setAnchorEl5(null);
   };
   const handleCreateUser = () => {
-    window.location.href = '/#/osl/Createuser';
+    navigate('/osl/Createuser');
   };
   const handleSetting = () => {
-    window.location.href = '/#/Setting';
+    navigate('/Setting');
   };
 
   const[FRname,setFRname] = useState(null);
