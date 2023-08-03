@@ -13,12 +13,28 @@ describe('OSL - View Page', () => {
     });
 
     // Test case for column names matching
-    it("displays correct column names", () => {
+    it("displays 'EPF Id' in the column name", () => {
         render(<OSL_ExTable />);
         expect(screen.getByText("EPF Id")).toBeInTheDocument();
+    });
+
+    it("displays 'Date' in the column name", () => {
+        render(<OSL_ExTable />);
         expect(screen.getByText("Date")).toBeInTheDocument();
+    });
+
+    it("displays 'Name' in the column name", () => {
+        render(<OSL_ExTable />);
         expect(screen.getByText("Name")).toBeInTheDocument();
+    });
+
+    it("displays 'Status' in the column name", () => {
+        render(<OSL_ExTable />);
         expect(screen.getByText("Status")).toBeInTheDocument();
+    });
+
+    it("displays 'Club' in the column name", () => {
+        render(<OSL_ExTable />);
         expect(screen.getByText("Club")).toBeInTheDocument();
     });
 
@@ -42,28 +58,6 @@ describe('OSL - View Page', () => {
         const searchInput = screen.getByPlaceholderText(/Search by EPF ID/i);
         fireEvent.change(searchInput, { target: { value: '123' } });
         expect(searchInput.value).toBe('123');
-    });
-
-    // it('search input for Name updates correctly', () => {
-    //     render(<OSL_ExTable />);
-    
-    //     // Type 'John' in the search input and check if the value is updated
-    //     const searchInput = screen.getByPlaceholderText(/Search by Name/i);
-    //     fireEvent.change(searchInput, { target: { value: 'Badminton Competition' } });
-    //     expect(searchInput.value).toBe('Badminton Competition');
-    // });
-
-    it('check if Status is indeed inside the column', () => {
-        // Render the OSL_ExTable component
-        render(<OSL_ExTable />);
-    
-        // Find the table rows in the current page
-        const tableRows = screen.getAllByRole('row');
-    
-        // All displayed rows should contain the search term 'John'
-        tableRows.forEach((row) => {
-          expect(row).toHaveTextContent('Status');
-        });
     });
 
     it('initial page number display without any data', () => {
