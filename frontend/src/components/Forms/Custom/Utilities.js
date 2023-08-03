@@ -93,7 +93,8 @@ export const convertFieldsToJSON = (data) => {
         "d11_quantity",
         "d11_amount",
         "d11_total_revenue",
-        "d2_total_expenditure"
+        "d2_total_expenditure",
+        "f_student_id"
     ]
     for (let field of fields) {
         if (Object.keys(res).includes(field)) {
@@ -126,6 +127,7 @@ export async function createEPF(data) {
 
 
 export async function updateEPF(data) {
+    delete data?.date_created;
     data = convertFieldsToJSON(data);
     console.log("UPDATED", data);
     await axios.put("http://localhost:3000/epfs/updateEPF",

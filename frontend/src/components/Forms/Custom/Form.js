@@ -175,7 +175,6 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
           InputLabelProps={{
             required: required
           }}
-          InputProps={{ inputProps: { min: 0 } }}
           required={required}
           id={name}
           label={makeNameFancy(name)}
@@ -183,7 +182,7 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
             let s = e.target.value;
             field.onChange(parseInt(e.target.value));
             (required && !e.target.value) ? setError(true) : setError(false);
-            (e.target.value && (!/[^0-9]/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
+            (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
             console.log(name, parseInt(e.target.value));
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}

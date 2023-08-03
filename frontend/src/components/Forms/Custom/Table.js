@@ -209,7 +209,7 @@ const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = 
             onChange={(e) => {
               field.onChange(parseInt(e.target.value));
               (required && !e.target.value) ? setError(true) : setError(false);
-              (e.target.value && !/[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
+              (e.target.value && !/^[0-9]*$/.test(e.target.value)) ? setError(true) : setError(false);
             }}
             onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
             error={error}
