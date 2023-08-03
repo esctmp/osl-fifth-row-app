@@ -113,6 +113,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "S3Trigger260841bd": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "createEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -232,6 +237,22 @@
         {
           "category": "function",
           "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_S3Trigger260841bd_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3Trigger260841bd"
+        }
+      ]
+    },
+    "AMPLIFY_function_S3Trigger260841bd_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3Trigger260841bd"
         }
       ]
     },
