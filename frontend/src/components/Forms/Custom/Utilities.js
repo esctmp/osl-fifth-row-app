@@ -73,7 +73,37 @@ export const convertFieldsToJSON = (data) => {
     }
     let res = { ...listObjs, ...scalarObjs };
     res = Object.fromEntries(Object.entries(res).map(([k, v]) => [k.replace('c3cleanup', 'c3_cleanup'), v])); // fix for EPF only
-    res['b_event_schedule'] = res['b_event_schedule'].replace('T', ' ')
+
+    // Reformat datetime
+    if (Object.keys(res).includes('b_event_schedule')) {
+        res['b_event_schedule'] = res['b_event_schedule'].replace('T', ' ')
+    }
+
+    // Parse numbers and floats
+    const fields = [
+        'a_student_id',
+        'a_contact_number',
+        'd1a_club_income_fund',
+        "d1a_osl_seed_fund",
+        "d1a_donation",
+        "d1b_revenue",
+        "d1b_donation_or_scholarship",
+        "d1b_total_source_of_funds",
+        "d11_price",
+        "d11_quantity",
+        "d11_amount",
+        "d11_total_revenue",
+        "d2_total_expenditure"
+    ]
+    for (let field of fields) {
+        if (Object.keys(res).includes(field)) {
+            if (Array.isArray(res[field])) {
+                res[field] = res[field].map((str) => parseFloat(str) || null);
+            } else {
+                res[field] = parseFloat(res[field]);
+            }
+        }
+    }
     return res;
 }
 
