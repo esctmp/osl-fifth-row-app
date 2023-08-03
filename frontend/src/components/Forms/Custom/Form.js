@@ -247,7 +247,7 @@ export const FormDateTimeField = ({ name, control, settings, multiline = false, 
             ((required && !field.value)) ? setError(true) : setError(false);
           }
           }
-          value={(field.value || '').replace('Z', '')}
+          value={(field.value || '')}
           helperText={(warn ? "Warning: The event date is < 5 weeks away." : "")}
           type="datetime-local"
           multiline={multiline}
