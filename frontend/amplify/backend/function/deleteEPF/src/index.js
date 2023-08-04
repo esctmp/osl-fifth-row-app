@@ -10,9 +10,9 @@ const pool = new Pool({
 
 exports.handler = async (event) => {
     const epf_id = event.epf_id;
-    let result = null;
     const MAX_RETRIES = 5;
-    const client = await pool.connect();
+    let result = null;
+    let client;
 
     // event in this case is a json object with the epf_id
     // Example:
@@ -22,6 +22,7 @@ exports.handler = async (event) => {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
         try {
+            client = await pool.connect();
             await client.query("BEGIN");
             await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 
