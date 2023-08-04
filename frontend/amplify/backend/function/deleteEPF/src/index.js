@@ -41,10 +41,10 @@ exports.handler = async (event) => {
             "UPDATE EPFS SET is_deleted = true WHERE epf_id = $1 AND is_deleted = false RETURNING epf_id";
         const result = await pool.query(query, [epf_id]); //Returns {"epf_id": value}
 
-        await pool.query(
-            `UPDATE FILES SET is_deleted = true WHERE epf_id = $1 AND is_deleted = false`,
-            [epf_id]
-        );
+        // await pool.query(
+        //     `UPDATE FILES SET is_deleted = true WHERE epf_id = $1 AND is_deleted = false`,
+        //     [epf_id]
+        // );
 
         await client.query("COMMIT");
 

@@ -13,11 +13,6 @@ exports.handler = async (event) => {
 
     const client = await pool.connect();
 
-    // event in this case is a json object with the epf_id
-    // Example:
-    // {
-    // 	"epf_id": 1
-    // }
 
     const epf_id = event.epf_id;
 
