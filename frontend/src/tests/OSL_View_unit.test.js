@@ -6,11 +6,18 @@ const oslUser = {
     password: "P@ssword1!"
 };
 
+var driver = null;
+beforeEach(async () => {
+    driver = await new Builder().forBrowser('chrome').build();
+})
+afterAll(async () => {
+    await driver.quit();
+})
+
 // Use cases:
 // 4) View Form Archive (FRE)
 test("System - Fifth Row Submit And OSL Approve", async () => {
     // 1. FRE logins
-    let driver = await new Builder().forBrowser('chrome').build();
     await driver.manage().window().maximize();
     await driver.executeScript('alert("Focus window")')
         .then(() => driver.switchTo().alert().accept());
