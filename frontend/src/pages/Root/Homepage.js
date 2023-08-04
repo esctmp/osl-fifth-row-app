@@ -12,7 +12,7 @@ const Homepage = () => {
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
+  axios.get(`hhttps://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getUser?user_id=${userId}`).then(function(response){
     // console.log(response.data[0].name);
     // console.log(response.data[0].outstanding_epf);
     setEPFcount(response.data[0].outstanding_epf);
