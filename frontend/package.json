@@ -20,6 +20,7 @@
     "@testing-library/user-event": "^12.8.3",
     "apexcharts": "^3.23.1",
     "aws-amplify": "^5.3.5",
+    "aws-sdk": "^2.1429.0",
     "axios": "^1.4.0",
     "axois": "^0.0.1-security",
     "date-fns": "^2.30.0",
@@ -37,7 +38,8 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.18.1"
+    "axios-mock-adapter": "^1.18.1",
+    "jest-haste-map": "^29.6.2"
   },
   "scripts": {
     "start": "react-scripts start",

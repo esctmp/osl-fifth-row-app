@@ -113,11 +113,6 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "S3Trigger260841bd": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "createEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -208,6 +203,38 @@
         }
       ]
     },
+    "AMPLIFY_function_GetUser_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
     "AMPLIFY_function_GetUser_deploymentBucketName": {
       "usedBy": [
         {
@@ -221,6 +248,38 @@
         {
           "category": "function",
           "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
         }
       ]
     },
@@ -240,19 +299,35 @@
         }
       ]
     },
-    "AMPLIFY_function_S3Trigger260841bd_deploymentBucketName": {
+    "AMPLIFY_function_createEPF_dbHost": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "S3Trigger260841bd"
+          "resourceName": "createEPF"
         }
       ]
     },
-    "AMPLIFY_function_S3Trigger260841bd_s3Key": {
+    "AMPLIFY_function_createEPF_dbName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "S3Trigger260841bd"
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
         }
       ]
     },
