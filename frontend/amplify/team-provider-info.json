@@ -19,11 +19,19 @@
         },
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-616657636e306c733477-build.zip"
+          "s3Key": "amplify-builds/createEPF-616657636e306c733477-build.zip",
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres"
         },
         "GetUsers": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUsers-4e786e6e38314d47554e-build.zip"
+          "s3Key": "amplify-builds/GetUsers-4e786e6e38314d47554e-build.zip",
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres"
         },
         "getEXCOEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
@@ -31,7 +39,11 @@
         },
         "GetUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUser-52415a31343144613935-build.zip"
+          "s3Key": "amplify-builds/GetUser-52415a31343144613935-build.zip",
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres"
         },
         "updateUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",

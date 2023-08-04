@@ -203,6 +203,38 @@
         }
       ]
     },
+    "AMPLIFY_function_GetUser_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
     "AMPLIFY_function_GetUser_deploymentBucketName": {
       "usedBy": [
         {
@@ -219,6 +251,38 @@
         }
       ]
     },
+    "AMPLIFY_function_GetUsers_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
     "AMPLIFY_function_GetUsers_deploymentBucketName": {
       "usedBy": [
         {
@@ -232,6 +296,38 @@
         {
           "category": "function",
           "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
         }
       ]
     },
