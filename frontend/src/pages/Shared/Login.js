@@ -12,22 +12,29 @@ export default function Login() {
     const methods = useForm();
     const { register, handleSubmit, formState: { errors } } = methods;
     const {setUserId} = useContext(UserID);
-    const {setGroups} = useContext(Groups);
+    const {groups,setGroups} = useContext(Groups);
     const {setUserLoggedIn} = useContext(UserLoggedIn);
     const [loginError,setLoginError] = useState("");
     const onSubmit = handleSubmit(async (data) => {
         try {
           const user =  await Auth.signIn(data.email,data.password);
           const uid = user.username;
-          const group = user.signInUserSession.accessToken.payload["cognito:groups"]
+          console.log(user);
+          var group =null;
+          group = user.attributes["custom:user_type"];
+          if (!group){
+            group = user.signInUserSession.accessToken.payload["cognito:groups"];}
+          console.log(group);
+          console.log(group == "FRE");
+          console.log(group ==="FRE");
           setGroups(group);
           setUserId(uid);
           setUserLoggedIn(true);
-          if (group.includes('OSL')) {
+          if (group.includes('OSL')|| group == "OSL") {
             navigate("/osl/homepage");
-          } else if (group.includes('FRE')) {
+          } else if (group.includes('FRE') || group=="FRE") {
             navigate("/fifthrow/homepage");
-          } else if (group.includes('ROOT')){
+          } else if (group.includes('ROOT') || group =="ROOT"){
             navigate("/root/homepage");
           }else{
             navigate("/login");

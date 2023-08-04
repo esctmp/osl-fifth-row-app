@@ -1,0 +1,367 @@
+{
+  "api": {
+    "EPF": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "createEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEPFs"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "updateEPF"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "users": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GetUsers"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GetUser"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "updateUser"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "deleteUser"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "frontend4bc2862d": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "function": {
+    "GetUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "GetUsers": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "createEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "deleteEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "deleteUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEPFs": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getEXCOEPFs": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateEPF": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "updateUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_frontend4bc2862d_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend4bc2862d_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend4bc2862d"
+        }
+      ]
+    },
+    "AMPLIFY_function_CreateEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_CreateEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
+        }
+      ]
+    }
+  }
+}

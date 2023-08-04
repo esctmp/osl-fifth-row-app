@@ -39,8 +39,8 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLE
-  const { userId, setUserId } = useContext(UserID);
   const { epf_id } = useParams();
+  const { userId, _ } = useContext(UserID);
   const mode = (epf_id != undefined) ? "OSL_COMMENT" : "NEW";
   const settings = FORM_MODES[mode];
   const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
@@ -57,6 +57,8 @@ const EPFSubmit = () => {
         if (values?.status == STATUS.Approved.description || values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["ARCHIVED"]; } // TODO fix
         Object.entries(values).map(([k, v]) => setValue(k, v));
       })
+    } else {
+      setValue("exco_user_id", userId);
     }
   }, []);
 
@@ -79,9 +81,9 @@ const EPFSubmit = () => {
             <SectionBody text="The project director will be the main point of contact for SG Events and Office of Student Life." />
             <Grid container spacing={2} sx={{ mb: 5 }}>
               <Grid item xs={6}><FormTextField {...formControl} name="a_name" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="a_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
+              <Grid item xs={6}><FormNumberField {...formControl} name="a_student_id" required={true} pattern={/^\d{7}$/} /></Grid>
               <Grid item xs={6}><FormTextField {...formControl} name="a_organisation" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/} /></Grid>
+              <Grid item xs={6}><FormNumberField {...formControl} name="a_contact_number" required={true} pattern={/^\d{8}$/} /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="a_email" required={true} pattern={/\@mymail.sutd.edu.sg$/} /></Grid>
             </Grid>
           </Grid>
@@ -420,14 +422,14 @@ const EPFSubmit = () => {
                         <Button style={{ width: 120, height: 40 }} color="success" variant="contained" 
                           onClick={handleSubmit(
                             async (data) => {
-                              data.status = STATUS.Approved.description;; submit(data);
+                              data.status = STATUS.Approved.description; submit(data);
                             })}>
                           Approve
                         </Button>
                         <Button style={{ width: 120, height: 40 }} color="error" variant="contained"
                           onClick={handleSubmit(
                             async (data) => {
-                              data.status = STATUS.Declined.description;; submit(data);
+                              data.status = STATUS.Declined.description; submit(data);
                             })}>
                           Decline
                         </Button>
