@@ -209,7 +209,7 @@ const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = 
             onChange={(e) => {
               field.onChange(parseInt(e.target.value));
               (required && !e.target.value) ? setError(true) : setError(false);
-              (e.target.value && /[^0-9]/.test(e.target.value)) ? setError(true) : setError(false);
+              (e.target.value && !/^[0-9]*$/.test(e.target.value)) ? setError(true) : setError(false);
             }}
             onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
             error={error}
@@ -287,10 +287,10 @@ const TableRowDateInput = ({ name, settings, control, minRows = 3, required = fa
             }}
             onChange={(e) => {
               field.onChange(e.target.value);
-              ((e.target.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value)) || isNaN(Date.parse(e.target.value, "MM/DD/YYYY")) || (required && !e.target.value)) ? setError(true) : setError(false);
+              ((e.target.value && !/^\d\d\d\d\-\d\d-\d\d$/.test(e.target.value)) || isNaN(Date.parse(e.target.value, "YYYY-MM-DD")) || (required && !e.target.value)) ? setError(true) : setError(false);
             }}
             onFocus={() => {
-              ((field.value && !/^\d\d\/\d\d\/\d\d\d\d$/.test(field.value)) || isNaN(Date.parse(field.value, "MM/DD/YYYY")) || (required && !field.value)) ? setError(true) : setError(false);
+              ((field.value && !/^\d\d\d\d\-\d\d-\d\d$/.test(field.value)) || isNaN(Date.parse(field.value, "YYYY-MM-DD")) || (required && !field.value)) ? setError(true) : setError(false);
             }}
             error={error}
             id={name}
@@ -299,7 +299,7 @@ const TableRowDateInput = ({ name, settings, control, minRows = 3, required = fa
             multiline
             minRows={minRows}
             value={field.value}
-            placeholder="MM/DD/YYYY"
+            placeholder="YYYY-MM-DD"
             disabled={!settings.enableInputs}
             sx={{ height: '100%' }} // TODO make error border a bit thicker
             display='flex'

@@ -5,12 +5,12 @@ import MenuOutlinedIcon from "@material-ui/icons/MenuOutlined";
 import Logout from "@material-ui/icons/Logout";
 import PersonAdd from "@material-ui/icons/PersonAdd";
 import Settings from "@material-ui/icons/Settings";
+import { Auth } from 'aws-amplify';
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Groups } from "../../../routes/Groups";
 import { UserID } from "../../../routes/UserID";
-import { Auth } from 'aws-amplify';
-import { useNavigate } from "react-router-dom";
 
 import {
   AppBar,
@@ -26,6 +26,8 @@ import {
 } from "@material-ui/core";
 
 const Header = (props) => {
+
+  const navigate = useNavigate();
   
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -59,14 +61,15 @@ const Header = (props) => {
     setAnchorEl5(null);
   };
   const handleCreateUser = () => {
-    window.location.href = '/#/osl/Createuser';
+    navigate('/osl/Createuser');
   };
   const handleSetting = () => {
-    window.location.href = '/#/Setting';
+    navigate('/Setting');
   };
 
   const[FRname,setFRname] = useState(null);
   const {userId,setUserId} = useContext(UserID);
+  const {groups, setGroups} = useContext(Groups);
   console.log(userId);
   useEffect(()=>
   axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
@@ -75,6 +78,23 @@ const Header = (props) => {
     }).catch(error =>{
         console.error("Error fetching User: ",error);
     }))
+
+  const CreateUser = () => {
+    const {groups, setGroups} = useContext(Groups);
+    if (groups.includes("OSL")){
+      return(
+        <MenuItem onClick={handleCreateUser}>
+            <ListItemIcon>
+              <PersonAdd fontSize="small" />
+            </ListItemIcon>
+            Add another account
+        </MenuItem>
+      );
+    } else {
+      return null;
+      } 
+    };
+  
 
   return (
     <AppBar sx={props.sx} elevation={0} className={props.customClass}>
@@ -301,12 +321,7 @@ const Header = (props) => {
             </Box>
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleCreateUser}>
-            <ListItemIcon>
-              <PersonAdd fontSize="small" />
-            </ListItemIcon>
-            Add another account
-          </MenuItem>
+          <CreateUser />
           <MenuItem onClick={handleSetting}>
             <ListItemIcon>
               <Settings fontSize="small" />
