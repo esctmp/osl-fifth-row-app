@@ -7,6 +7,7 @@ const excoUser = {
     password: "P@ssword1!"
 };
 const verificationCode = "246810"
+const newPassword = "NewP@ssword1!"
 
 test("System - Reset Password", async () => {
     // 1. User navigates to Reset Password
@@ -23,19 +24,44 @@ test("System - Reset Password", async () => {
     }
 
     // 2. Fifth Row user fills in form and submits
-    console.log("BUG")
     await driver.wait(until.elementLocated(By.id('email')), 5000);
-    console.log("BUGGGGG")
     let data = { // compulsory form fields
         "email": "testfre@club.sutd.edu.sg",
     }
-    // for (let key of Object.keys(data)) {
-    //     await driver.findElement(By.id('email')).sendKeys(data[key]);
-    // }
     await driver.findElement(By.id('email')).sendKeys(data.email, Key.RETURN);
-    await driver.findElement(By.xpath('//button[contains(text(),"Send")]')).click();
+    await driver.findElement(By.xpath('//button[contains(text(),"Send")]'))
+        .click();
 
     // 3. User receives verification code
+    try {
+        const alert = await driver.wait(until.alertIsPresent(), 90 * 100);
+        if (alert) {
+          const alertText = await alert.getText();
+          console.log(`Alert text is ${alertText}`);
+          expect(alertText).toBe(`${verificationCode} has been sent`);
+          await alert.accept();
+        } else {
+          throw new Error("Verification code alert not found");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    
+    // 4. User keys in verification code and new password
+    await driver.wait(until.elementLocated(By.id('code')), 5000);
+    let otp = { // compulsory form fields
+        "code": `${verificationCode}`,
+    }
+    await driver.findElement(By.id('code')).sendKeys(otp.code, Key.RETURN);
 
-    // 4. User keys in new passcode and clicks reset password
+    await driver.wait(until.elementLocated(By.id('password')), 5000);
+    let password = { // compulsory form fields
+        "new_password": `${newPassword}`,
+    }
+    await driver.findElement(By.id('password')).sendKeys(password.new_password, Key.RETURN);
+
+
+    // 5. User clicks reset password
+    await driver.findElement(By.xpath('//button[contains(text(),"Reset Password")]'))
+        .click();
 }, 5 * 60 * 1000);  
