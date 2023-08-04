@@ -4,8 +4,11 @@ import { render, screen } from '@testing-library/react';
 // import mediaQuery from 'css-mediaquery';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import FREitems from '../layouts/FullLayout/Sidebar/FREitems';
 import Sidebar from '../layouts/FullLayout/Sidebar/Sidebar';
 import { Groups } from "../routes/Groups";
+
+// const url = "http://localhost:3001/#/fifthrow/homepage";
 
 
 // function createMatchMedia(width) {
@@ -73,6 +76,7 @@ describe ('Sidebar', () => {
         title: "Homepage",
         href: "fifthrow/homepage",
     };
+    const items = FREitems.forEach;
     const pathDirect = 'fifthrow/homepage'; // Set a path for comparison
 
     // Render the component with necessary context and props
@@ -80,7 +84,7 @@ describe ('Sidebar', () => {
         <Router>
         <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
         <Sidebar
-          item={item}
+          item={items}
           pathDirect={pathDirect}
           handleClick={() => {}}
           user={userPool.find(user => user['type'] === "FRE")}
@@ -91,12 +95,13 @@ describe ('Sidebar', () => {
 
     // // Get the rendered list item element
     const list = screen.getByRole('generic');
+    // expect(list.length).toBe(4);
     // const listItem = list.querySelectorAll('li');
 
     // // Assertions
     // expect (listItem.length).toBe(4); 
-    // expect(listItem).toBeInTheDocument();
-//     expect(listItem).toHaveTextContent('Homepage'); // Make sure the text is rendered
+    expect(list).toBeInTheDocument();
+    // expect(list).toHaveTextContent('Homepage'); // Make sure the text is rendered
 //     expect(listItem).toHaveAttribute('href', 'fifthrow/homepage'); // Ensure NavLink has the correct 'to' prop
   });
 
@@ -132,6 +137,7 @@ describe ('Sidebar', () => {
     // });
 
     // each button will route to where it is supposed to
+
 
 
 
