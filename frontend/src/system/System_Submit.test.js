@@ -1,5 +1,4 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
-import dummyEPF from '../assets/dummyEPF.json';
 
 const url = "http://localhost:3001";
 const excoUser = {
@@ -24,7 +23,7 @@ afterAll(async () => {
 // 9) Submit Forms (Fifth Row EXCOs)
 // 7) Comment on Forms (OSL)
 // 8) Approve Forms (OSL)
-test("System - Fifth Row Submit And OSL Approve", async () => {
+test("System - Fifth Row Submit, OSL Comment And OSL Approve", async () => {
     // 1. Fifth Row user logins
     await driver.manage().window().maximize();
     await driver.executeScript('alert("Focus window")')
