@@ -1,0 +1,24 @@
+.errorMessage{
+    font: size 12px;
+    font-family: "DM Sans", sans-serif;
+    color: rgb(162, 29, 29);
+}
+.successCreate{
+    font: size 12px;
+    font-family: "DM Sans", sans-serif;
+    color: rgb(162, 29, 29);
+}
+.userfield::placeholder{
+    font-size:9px;
+}
+.pwfield::placeholder{
+    font-size:9px;
+}
+
+.userfield {
+  width: 300px; /* Adjust to your preferred width */
+}
+
+.pwfield {
+  width: 200px; /* Adjust to your preferred width */
+}
