@@ -72,7 +72,7 @@ const Header = (props) => {
   const {groups, setGroups} = useContext(Groups);
   console.log(userId);
   useEffect(()=>
-  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getUser?user_id=${userId}`).then(function(response){
+  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
     console.log(response.data[0].name);
     setFRname(response.data[0].name);
     }).catch(error =>{
