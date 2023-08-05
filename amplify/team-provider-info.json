@@ -1,0 +1,79 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontend-staging-172614-authRole",
+      "UnauthRoleArn": "arn:aws:iam::710995195828:role/amplify-frontend-staging-172614-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::710995195828:role/amplify-frontend-staging-172614-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-frontend-staging-172614-deployment",
+      "UnauthRoleName": "amplify-frontend-staging-172614-unauthRole",
+      "StackName": "amplify-frontend-staging-172614",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:710995195828:stack/amplify-frontend-staging-172614/a398cf00-2c5f-11ee-bfcf-026b9d98a442",
+      "AmplifyAppId": "dta2y13etkzgu"
+    },
+    "categories": {
+      "auth": {
+        "frontend05785438": {
+          "nativeClientId": "7eircm4uhqtgevci5610qnhopq",
+          "userPoolId": "ap-southeast-1_tmUYT7okV",
+          "userPoolName": "OSL",
+          "webClientId": "7eircm4uhqtgevci5610qnhopq"
+        }
+      },
+      "function": {
+        "GetUser": {
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres",
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUser-586553714c2f31636231-build.zip"
+        },
+        "GetUsers": {
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres",
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/GetUsers-5942646b6f4f704b4e2b-build.zip"
+        },
+        "createEPF": {
+          "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
+          "dbName": "esc_db",
+          "dbPassword": "12345678",
+          "dbUser": "postgres",
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/createEPF-5839626536347478354d-build.zip"
+        },
+        "deleteEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/deleteEPF-4672477155564e307865-build.zip"
+        },
+        "deleteUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/deleteUser-4356783847486d485a43-build.zip"
+        },
+        "getEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/getEPF-6950435571466a353150-build.zip"
+        },
+        "getEPFs": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/getEPFs-614f794c366853686235-build.zip"
+        },
+        "getEXCOEPFs": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/getEXCOEPFs-3173574671563650654d-build.zip"
+        },
+        "updateEPF": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/updateEPF-56764f53317067686266-build.zip"
+        },
+        "updateUser": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/updateUser-454e45417a354771776a-build.zip"
+        }
+      }
+    }
+  }
+}
