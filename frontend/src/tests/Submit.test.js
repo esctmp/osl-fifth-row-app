@@ -3,13 +3,18 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { waitFor } from "@testing-library/react";
+import { UserID } from "../routes/UserID.js";
 
 describe('Fifth Row - EPF Form', () => {
 
     describe('Validation', () => {
         // 11 - 13
         test('Validation - Required', () => {
-            render(<EPFSubmit />)
+            render(
+                <UserID.Provider value={{ userId: 'null', setUserId: () => { } }}>
+                    <EPFSubmit />
+                </UserID.Provider>
+            )
             // 11
             const field = screen.getByLabelText(/^Name/);
             fireEvent.change(field, { target: { value: '' } });
@@ -26,7 +31,11 @@ describe('Fifth Row - EPF Form', () => {
 
         // 15 - 18
         test('Validation - Correct Format', async () => {
-            render(<EPFSubmit />)
+            render(
+                <UserID.Provider value={{ userId: 'null', setUserId: () => { } }}>
+                    <EPFSubmit />
+                </UserID.Provider>
+            )
             // 15
             const field = screen.getByLabelText(/^Event Schedule/);
             fireEvent.change(field, { target: { value: '2023-01-01T14:00' } });
