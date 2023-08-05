@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "paths": {
+    "/epfs/createEPF": {
+      "name": "/epfs/createEPF",
+      "lambdaFunction": "createEPF",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/epfs/getEPF": {
+      "name": "/epfs/getEPF",
+      "lambdaFunction": "getEPF",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/epfs/getEPFs": {
+      "name": "/epfs/getEPFs",
+      "lambdaFunction": "getEPFs",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/epfs/updateEPF": {
+      "name": "/epfs/updateEPF",
+      "lambdaFunction": "updateEPF",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/epfs/deleteEPF": {
+      "name": "/epfs/deleteEPF",
+      "lambdaFunction": "deleteEPF",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
