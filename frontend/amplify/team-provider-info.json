@@ -19,7 +19,7 @@
         },
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-6675754a41684e656441-build.zip",
+          "s3Key": "amplify-builds/createEPF-354c452f6e6d4a786a65-build.zip",
           "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
           "dbName": "esc_db",
           "dbPassword": "12345678",
@@ -27,7 +27,7 @@
         },
         "GetUsers": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUsers-5942646b6f4f704b4e2b-build.zip",
+          "s3Key": "amplify-builds/GetUsers-35494b4c41436f4e6530-build.zip",
           "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
           "dbName": "esc_db",
           "dbPassword": "12345678",
@@ -35,11 +35,11 @@
         },
         "getEXCOEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEXCOEPFs-566c596848794f436233-build.zip"
+          "s3Key": "amplify-builds/getEXCOEPFs-724e6a544474626c7956-build.zip"
         },
         "GetUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/GetUser-586553714c2f31636231-build.zip",
+          "s3Key": "amplify-builds/GetUser-5a636d427173524e5a50-build.zip",
           "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
           "dbName": "esc_db",
           "dbPassword": "12345678",
@@ -47,27 +47,27 @@
         },
         "updateUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/updateUser-454e45417a354771776a-build.zip"
+          "s3Key": "amplify-builds/updateUser-376e3471465a6c366e48-build.zip"
         },
         "deleteUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/deleteUser-6e767a4a655558766c2f-build.zip"
+          "s3Key": "amplify-builds/deleteUser-57334c53687943616958-build.zip"
         },
         "getEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEPF-79594e726b5761304f48-build.zip"
+          "s3Key": "amplify-builds/getEPF-73786861306f52597168-build.zip"
         },
         "getEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEPFs-614f794c366853686235-build.zip"
+          "s3Key": "amplify-builds/getEPFs-426c416b774a6653476c-build.zip"
         },
         "updateEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/updateEPF-56764f53317067686266-build.zip"
+          "s3Key": "amplify-builds/updateEPF-37487163743453713635-build.zip"
         },
         "deleteEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/deleteEPF-4672477155564e307865-build.zip"
+          "s3Key": "amplify-builds/deleteEPF-4d3854507671567a5564-build.zip"
         }
       },
       "api": {
