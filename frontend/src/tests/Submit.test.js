@@ -47,7 +47,8 @@ const createSampleDraftForm = async () => {
     });
     return {
         epf_id: (response.data.find((obj) => obj?.b_event_name == eventName) || {})?.epf_id,
-        userId: userId
+        userId: userId,
+        b_event_name: eventName
     }
 };
 
@@ -153,7 +154,7 @@ describe('Fifth Row - EPF Form', () => {
         // }, 25000)
 
         test("Invalid Form Behavior", async () => {
-            const { userId, epf_id } = await createSampleDraftForm();
+            const { userId, epf_id, b_event_name } = await createSampleDraftForm();
             // expect(epf_id).not.toBeUndefined();
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
@@ -165,12 +166,12 @@ describe('Fifth Row - EPF Form', () => {
 
             // 2
             await waitFor(() => {
-                expect(screen.getByLabelText(/^Event Name/)).not.not.toHaveValue(); // TODO
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
             }, { timeout: 5000 });
             fireEvent.change(screen.getByLabelText(/^Contact Number/), { target: { value: '1234578' } });
             fireEvent.click(screen.getByRole('button', { name: /Save draft/ }));
             await waitFor(() =>
-                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+                expect(alertMock).toHaveBeenLastCalledWith("Form is invalid. Please fix and submit it again.")
             , { timeout: 2000 });
 
             // 8
