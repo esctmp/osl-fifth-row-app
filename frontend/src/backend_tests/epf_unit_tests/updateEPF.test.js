@@ -6,6 +6,19 @@ const path = require("path");
 const fs = require("fs");
 
 describe("updateEPF", () => {
+
+    beforeAll(async() => {
+        //TruncateUsers Table
+        //TruncateEPF Table
+
+        //Create Test User
+    })
+
+    beforeEach(async() => {
+        //TruncateEPF Table
+        //CreateEPF to update
+    })
+
     test("Test ID: 1 - Valid input: Update existing EPF with valid fields", async () => {
         const jsonFilePath = path.join(
             __dirname,
@@ -552,4 +565,11 @@ describe("updateEPF", () => {
 
         expect(result).toBe("Invalid value for amount");
     });
+
+
+
+    afterAll(async() => {
+        //Truncate Users Table
+        //Truncate EPFs Table
+    })
 });

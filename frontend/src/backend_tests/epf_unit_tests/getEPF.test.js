@@ -6,6 +6,16 @@ const path = require("path");
 const fs = require("fs");
 
 describe("getEPF", () => {
+    beforeAll(async()=> {
+        //Truncate Users Table
+        //Create User
+    })
+
+    beforeEach(async()=> {
+        //Truncate EPFs table
+        //Create EPF
+    })
+
     test("Test ID: 1 - Valid EPF ID", async () => {
         const jsonFilePath = path.join(
             __dirname,
@@ -74,4 +84,9 @@ describe("getEPF", () => {
 
         expect(result).toBe("Non-existent epf_id");
     });
+
+    afterAll(async()=> {
+        //Truncate Users Table
+        //Truncate EPFs table
+    })
 });

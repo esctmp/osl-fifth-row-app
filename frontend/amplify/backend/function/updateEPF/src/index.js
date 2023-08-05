@@ -1,13 +1,6 @@
 const { Pool } = require("pg");
 
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: 5432,
-});
-
+let pool;
 let client;
 let result = null;
 const MAX_RETRIES = 5;
@@ -98,109 +91,141 @@ const epf_db_datatypes_create = {
     g_comments_root: "string",
 };
 
-const columnNames =
-    "status,exco_user_id,a_name,a_student_id,a_organisation,a_contact_number,a_email,a_comments_osl,a_comments_root,b_event_name,b_target_audience,b_event_schedule,b_expected_turnout,b_event_objective,b_comments_osl,b_comments_root,c1_date,c1_time,c1_activity_and_description,c1_venue,c2_date,c2_time,c2_activity_and_description,c2_venue,c3_date,c3_time,c3_activity_and_description,c3_venue,c3_cleanup_date,c3_cleanup_time,c3_cleanup_activity_and_description,c3_cleanup_venue,c_comments_osl,c_comments_root,d1a_club_income_fund,d1a_osl_seed_fund,d1a_donation,d1b_revenue,d1b_donation_or_scholarship,d1b_total_source_of_funds,d11_items_goods_services,d11_price,d11_quantity,d11_amount,d11_total_revenue,d2_items,d2_reason_for_purchase,d2_venue,d2_total_expenditure,d_comments_osl,d_comments_root,e_personal_data,e_comments_osl,e_comments_root,f_name,f_student_id,f_position,f_comments_osl,f_comments_root,g_1_1,g_1_2,g_1_3,g_2_1,g_2_2,g_2_3,g_3_1,g_3_2,g_3_3,g_4_1,g_4_2,g_4_3,g_5_1,g_5_2,g_5_3,g_6_1,g_6_2,g_6_3,g_7_1,g_7_2,g_7_3,g_comments_osl,g_comments_root";
-
 var epf_db_datatypes_update = { epf_id: "number", ...epf_db_datatypes_create };
 
-const columnParams = columnNames
-    .split(",")
-    .map((_, i) => `$${i + 2}`)
-    .join(",");
-
 exports.handler = async (event) => {
-    client = await pool.connect();
-    console.log("connected to db");
+    if (event.test == 1) {
+        // pool for test db
+        pool = new Pool({
+            user: process.env.TEST_DB_USER,
+            host: process.env.TEST_DB_HOST,
+            database: process.env.TEST_DB_NAME,
+            password: process.env.TEST_DB_PASSWORD,
+            port: 5432,
+        });
+    } else {
+        // pool for prod db
+        pool = new Pool({
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            database: process.env.DB_NAME,
+            password: process.env.DB_PASSWORD,
+            port: 5432,
+        });
+    }
 
-    await client.query("BEGIN");
-
-    // Extract values from event object //
-    const values = [
-        event.epf_id,
-        event.status,
-        event.exco_user_id,
-        event.a_name,
-        event.a_student_id,
-        event.a_organisation,
-        event.a_contact_number,
-        event.a_email,
-        event.a_comments_osl,
-        event.a_comments_root,
-        event.b_event_name,
-        event.b_target_audience,
-        event.b_event_schedule,
-        event.b_expected_turnout,
-        event.b_event_objective,
-        event.b_comments_osl,
-        event.b_comments_root,
-        event.c1_date,
-        event.c1_time,
-        event.c1_activity_and_description,
-        event.c1_venue,
-        event.c2_date,
-        event.c2_time,
-        event.c2_activity_and_description,
-        event.c2_venue,
-        event.c3_date,
-        event.c3_time,
-        event.c3_activity_and_description,
-        event.c3_venue,
-        event.c3_cleanup_date,
-        event.c3_cleanup_time,
-        event.c3_cleanup_activity_and_description,
-        event.c3_cleanup_venue,
-        event.c_comments_osl,
-        event.c_comments_root,
-        event.d1a_club_income_fund,
-        event.d1a_osl_seed_fund,
-        event.d1a_donation,
-        event.d1b_revenue,
-        event.d1b_donation_or_scholarship,
-        event.d1b_total_source_of_funds,
-        event.d11_items_goods_services,
-        event.d11_price,
-        event.d11_quantity,
-        event.d11_amount,
-        event.d11_total_revenue,
-        event.d2_items,
-        event.d2_reason_for_purchase,
-        event.d2_venue,
-        event.d2_total_expenditure,
-        event.d_comments_osl,
-        event.d_comments_root,
-        event.e_personal_data,
-        event.e_comments_osl,
-        event.e_comments_root,
-        event.f_name,
-        event.f_student_id,
-        event.f_position,
-        event.f_comments_osl,
-        event.f_comments_root,
-        event.g_1_1,
-        event.g_1_2,
-        event.g_1_3,
-        event.g_2_1,
-        event.g_2_2,
-        event.g_2_3,
-        event.g_3_1,
-        event.g_3_2,
-        event.g_3_3,
-        event.g_4_1,
-        event.g_4_2,
-        event.g_4_3,
-        event.g_5_1,
-        event.g_5_2,
-        event.g_5_3,
-        event.g_6_1,
-        event.g_6_2,
-        event.g_6_3,
-        event.g_7_1,
-        event.g_7_2,
-        event.g_7_3,
-        event.g_comments_osl,
-        event.g_comments_root,
+    // BEGIN FORMATTING //
+    const columns = [
+        { name: "status", value: event.status },
+        { name: "exco_user_id", value: event.exco_user_id },
+        { name: "a_name", value: event.a_name },
+        { name: "a_student_id", value: event.a_student_id },
+        { name: "a_organisation", value: event.a_organisation },
+        { name: "a_contact_number", value: event.a_contact_number },
+        { name: "a_email", value: event.a_email },
+        { name: "a_comments_osl", value: event.a_comments_osl },
+        { name: "a_comments_root", value: event.a_comments_root },
+        { name: "b_event_name", value: event.b_event_name },
+        { name: "b_target_audience", value: event.b_target_audience },
+        { name: "b_event_schedule", value: event.b_event_schedule },
+        { name: "b_expected_turnout", value: event.b_expected_turnout },
+        { name: "b_event_objective", value: event.b_event_objective },
+        { name: "b_comments_osl", value: event.b_comments_osl },
+        { name: "b_comments_root", value: event.b_comments_root },
+        { name: "c1_date", value: event.c1_date },
+        { name: "c1_time", value: event.c1_time },
+        {
+            name: "c1_activity_and_description",
+            value: event.c1_activity_and_description,
+        },
+        { name: "c1_venue", value: event.c1_venue },
+        { name: "c2_date", value: event.c2_date },
+        { name: "c2_time", value: event.c2_time },
+        {
+            name: "c2_activity_and_description",
+            value: event.c2_activity_and_description,
+        },
+        { name: "c2_venue", value: event.c2_venue },
+        { name: "c3_date", value: event.c3_date },
+        { name: "c3_time", value: event.c3_time },
+        {
+            name: "c3_activity_and_description",
+            value: event.c3_activity_and_description,
+        },
+        { name: "c3_venue", value: event.c3_venue },
+        { name: "c3_cleanup_date", value: event.c3_cleanup_date },
+        { name: "c3_cleanup_time", value: event.c3_cleanup_time },
+        {
+            name: "c3_cleanup_activity_and_description",
+            value: event.c3_cleanup_activity_and_description,
+        },
+        { name: "c3_cleanup_venue", value: event.c3_cleanup_venue },
+        { name: "c_comments_osl", value: event.c_comments_osl },
+        { name: "c_comments_root", value: event.c_comments_root },
+        { name: "d1a_club_income_fund", value: event.d1a_club_income_fund },
+        { name: "d1a_osl_seed_fund", value: event.d1a_osl_seed_fund },
+        { name: "d1a_donation", value: event.d1a_donation },
+        { name: "d1b_revenue", value: event.d1b_revenue },
+        {
+            name: "d1b_donation_or_scholarship",
+            value: event.d1b_donation_or_scholarship,
+        },
+        {
+            name: "d1b_total_source_of_funds",
+            value: event.d1b_total_source_of_funds,
+        },
+        {
+            name: "d11_items_goods_services",
+            value: event.d11_items_goods_services,
+        },
+        { name: "d11_price", value: event.d11_price },
+        { name: "d11_quantity", value: event.d11_quantity },
+        { name: "d11_amount", value: event.d11_amount },
+        { name: "d11_total_revenue", value: event.d11_total_revenue },
+        { name: "d2_items", value: event.d2_items },
+        { name: "d2_reason_for_purchase", value: event.d2_reason_for_purchase },
+        { name: "d2_venue", value: event.d2_venue },
+        { name: "d2_total_expenditure", value: event.d2_total_expenditure },
+        { name: "d_comments_osl", value: event.d_comments_osl },
+        { name: "d_comments_root", value: event.d_comments_root },
+        { name: "e_personal_data", value: event.e_personal_data },
+        { name: "e_comments_osl", value: event.e_comments_osl },
+        { name: "e_comments_root", value: event.e_comments_root },
+        { name: "f_name", value: event.f_name },
+        { name: "f_student_id", value: event.f_student_id },
+        { name: "f_position", value: event.f_position },
+        { name: "f_comments_osl", value: event.f_comments_osl },
+        { name: "f_comments_root", value: event.f_comments_root },
+        { name: "g_1_1", value: event.g_1_1 },
+        { name: "g_1_2", value: event.g_1_2 },
+        { name: "g_1_3", value: event.g_1_3 },
+        { name: "g_2_1", value: event.g_2_1 },
+        { name: "g_2_2", value: event.g_2_2 },
+        { name: "g_2_3", value: event.g_2_3 },
+        { name: "g_3_1", value: event.g_3_1 },
+        { name: "g_3_2", value: event.g_3_2 },
+        { name: "g_3_3", value: event.g_3_3 },
+        { name: "g_4_1", value: event.g_4_1 },
+        { name: "g_4_2", value: event.g_4_2 },
+        { name: "g_4_3", value: event.g_4_3 },
+        { name: "g_5_1", value: event.g_5_1 },
+        { name: "g_5_2", value: event.g_5_2 },
+        { name: "g_5_3", value: event.g_5_3 },
+        { name: "g_6_1", value: event.g_6_1 },
+        { name: "g_6_2", value: event.g_6_2 },
+        { name: "g_6_3", value: event.g_6_3 },
+        { name: "g_7_1", value: event.g_7_1 },
+        { name: "g_7_2", value: event.g_7_2 },
+        { name: "g_7_3", value: event.g_7_3 },
+        { name: "g_comments_osl", value: event.g_comments_osl },
+        { name: "g_comments_root", value: event.g_comments_root },
     ];
-
+    const definedColumns = columns.filter(
+        (column) => column.value !== undefined
+    );
+    const columnNames = definedColumns.map((column) => column.name).join(",");
+    const columnParams = definedColumns.map((_, i) => `$${i + 2}`).join(",");
+    const defined_values = definedColumns.map((column) => column.value);
     const epf_id = event.epf_id;
     const exco_user_id = event.exco_user_id;
 
@@ -208,17 +233,14 @@ exports.handler = async (event) => {
     // Check for datatypes
     //console.log("Checking datatypes");
     const datatypes = Object.values(epf_db_datatypes_update);
+    if (typeof epf_id !== datatypes[0]) {
+        throw new Error("Unexpected data type");
+    }
 
-    for (let i = 0; i < values.length; i++) {
-        if (typeof values[i] !== datatypes[i]) {
-            console.log(
-                "Error at index " +
-                    i +
-                    " for value, datatype: " +
-                    values[i] +
-                    " " +
-                    datatypes[i]
-            );
+    for (let i = 0; i < columns.length; i++) {
+        const { name, value } = columns[i];
+        const expectedType = datatypes[i + 1];
+        if (value !== undefined && typeof value !== expectedType) {
             throw new Error("Unexpected data type");
         }
     }
@@ -396,6 +418,7 @@ exports.handler = async (event) => {
     });
     // END VERIFICATION OF EVENT//
 
+    // BEGIN UPDATING //
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
         try {
             client = await pool.connect();
@@ -419,9 +442,7 @@ exports.handler = async (event) => {
             }
 
             const query = `UPDATE EPFS SET (${columnNames}) = (${columnParams}) WHERE epf_id=$1 AND is_deleted = false RETURNING *`;
-            result = await client.query(query, values);
-
-            await client.query("COMMIT");
+            result = await client.query(query, [epf_id, ...defined_values]);
 
             // UPDATE OUTSTANDING EPF COUNT //
             try {

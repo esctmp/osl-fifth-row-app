@@ -1,6 +1,14 @@
 const { Pool } = require("pg");
 const AWS = require("aws-sdk");
 
+let pool;
+let client;
+let result = null;
+const status_types = ["Draft", "Pending Approval", "Approved", "Rejected"];
+let epf_count = null;
+let retryCount = 5;
+const RETRY_DELAY_MS = 200;
+
 // START FORMATTING //
 const epf_db_datatypes_create = {
     status: "string",
@@ -145,7 +153,6 @@ const epf_db_datatypes_create = {
 // }
 
 exports.handler = async (event) => {
-    let pool;
     if (event.test == 1) {
         // pool for test db
         pool = new Pool({
@@ -166,6 +173,7 @@ exports.handler = async (event) => {
         });
     }
 
+    // START FORMATTING //
     const columns = [
         { name: "status", value: event.status },
         { name: "exco_user_id", value: event.exco_user_id },
@@ -272,7 +280,6 @@ exports.handler = async (event) => {
         { name: "g_comments_root", value: event.g_comments_root },
     ];
 
-    const status_types = ["Draft", "Pending Approval", "Approved", "Rejected"];
     const definedColumns = columns.filter(
         (column) => column.value !== undefined
     );
@@ -282,6 +289,7 @@ exports.handler = async (event) => {
     const datatypes = Object.values(epf_db_datatypes_create);
 
     const exco_user_id = event.exco_user_id;
+    // END FORMATTING //
 
     // BEGIN VERIFICATION //
     // Check for datatypes
@@ -298,17 +306,6 @@ exports.handler = async (event) => {
     //console.log("Checking status");
     if (!status_types.includes(event.status)) {
         throw new Error("Invalid Status Type");
-    }
-
-    // Check for valid exco_user_id
-    //console.log("Checking exco user id");
-    const valid_exco_user_id = await pool.query(
-        `SELECT COUNT(*) FROM users WHERE user_id=$1`,
-        [event.exco_user_id]
-    );
-    console.log(valid_exco_user_id.rows[0]);
-    if (valid_exco_user_id.rows[0]["count"] == 0) {
-        throw new Error("Non-existent exco user id");
     }
 
     // Check for event name
@@ -477,125 +474,113 @@ exports.handler = async (event) => {
 
     // END VERIFICATION OF EVENT//
 
-    let client;
-    let result = null;
-    let epf_count = null;
-    let retryCount = 5;
-    const RETRY_DELAY_MS = 200;
+    while (retryCount > 0) {
+        try {
+            client = await pool.connect();
+            //console.log("connected to db");
+            await client.query("BEGIN");
+            await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 
-    try {
-        client = await pool.connect();
-        //console.log("connected to db");
-        await client.query("BEGIN");
-        while (retryCount > 0) {
-            try {
-                await client.query(
-                    "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE"
-                );
-
-                // Check for valid exco_user_id
-                const valid_exco_user_id = await client.query(
-                    `SELECT COUNT(*) FROM users WHERE user_id=$1`,
-                    [exco_user_id]
-                );
-                if (valid_exco_user_id.rows[0]["count"] == 0) {
-                    throw new Error("Non-existent exco user id");
-                }
-
-                const query = `INSERT INTO EPFS(${columnNames}) VALUES (${columnParams}) RETURNING *`;
-                result = await client.query(query, defined_values);
-
-                // UPDATE OUTSTANDING EPF COUNT //
-                try {
-                    //console.log("Updating outstanding EPF count");
-                    const exco_user_ids = await client.query(
-                        `SELECT user_id FROM users WHERE user_type=$1`,
-                        ["FRE"]
-                    );
-                    for (let i in exco_user_ids["rows"]) {
-                        let result = await client.query(
-                            `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND exco_user_id=$2 AND is_deleted = false`,
-                            ["Approved", exco_user_ids["rows"][i]["user_id"]]
-                        );
-
-                        await client.query(
-                            `UPDATE users SET outstanding_epf=$1 WHERE user_id=$2`,
-                            [
-                                result["rows"][0]["count"],
-                                exco_user_ids["rows"][i]["user_id"],
-                            ]
-                        );
-                    }
-                    //console.log("Updated outstanding EPF count for FREs");
-
-                    const result = await client.query(
-                        `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND is_deleted = false`,
-                        ["Approved"]
-                    );
-
-                    // update osl and root outstanding EPFs
-                    await client.query(
-                        `UPDATE users SET outstanding_epf = $1 WHERE user_type != $2`,
-                        [result["rows"][0]["count"], "FRE"]
-                    );
-                    //console.log("Updated outstanding EPF count for OSL and ROOT");
-                    // sendEmailToOSF();
-                    // console.log("sendEmailtoOSF")
-
-                    // // Send email to the user
-                    // const userEmail = event.a_email;
-                    // sendEmailToUser(userEmail);
-                    // console.log("sendEmailToUser")
-                } catch (e) {
-                    // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
-                    await client.query("ROLLBACK");
-                    throw e;
-                }
-                // END UPDATE OUTSTANDING EPF COUNT //
-
-                await client.query("COMMIT");
-                return {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Headers": "*",
-                    },
-                    statusCode: 200,
-                    result: result["rows"][0],
-                    epf_count: epf_count,
-                };
-            } catch (err) {
-                if (err.message === "Non-existent exco user id") {
-                    await client.query("COMMIT");
-                    throw err;
-                } else {
-                    if (client) {
-                        await client.query("ROLLBACK");
-                        if (
-                            err.code === "40001" ||
-                            err.message.includes("deadlock detected")
-                        ) {
-                            // 40001 is the error code for serialization failure
-                            retryCount -= 1;
-                            await new Promise((resolve) =>
-                                setTimeout(resolve, RETRY_DELAY_MS)
-                            );
-                        } else {
-                            throw err;
-                        }
-                    } else new Error("couldnt acquire client");
-                }
-            } finally {
-                if (client) {
-                    client.release();
-                }
+            // Check for valid exco_user_id
+            const valid_exco_user_id = await client.query(
+                `SELECT COUNT(*) FROM users WHERE user_id=$1`,
+                [exco_user_id]
+            );
+            if (valid_exco_user_id.rows[0]["count"] == 0) {
+                throw new Error("Non-existent exco user id");
             }
-            if (retryCount <= 0) {
-                throw new Error(
-                    "Transaction failed due to serialization error or deadlock after 5 retries"
+
+            const query = `INSERT INTO EPFS(${columnNames}) VALUES (${columnParams}) RETURNING *`;
+            result = await client.query(query, defined_values);
+
+            // START GET OUSTANDING EPF COUNT //
+            try {
+                let result = await client.query(
+                    `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND exco_user_id=$2 AND is_deleted = false`,
+                    ["Approved", exco_user_id]
                 );
+                epf_count = result.rows[0]["count"];
+            } catch (err) {
+                throw err;
+            }
+            // END GET OUSTANDING EPF COUNT //
+
+            // UPDATE OUTSTANDING EPF COUNT //
+            try {
+                const exco_user_ids = await client.query(
+                    `SELECT user_id FROM users WHERE user_type=$1 FOR UPDATE`,
+                    ["FRE"]
+                );
+
+                // update exco outstanding epf count
+                for (let i in exco_user_ids["rows"]) {
+                    const userId = exco_user_ids["rows"][i]["user_id"];
+                    let results = await client.query(
+                        `SELECT COUNT(*) FROM EPFS WHERE status!=$1 AND exco_user_id=$2 AND is_deleted = false`,
+                        ["Approved", userId]
+                    );
+
+                    await client.query(
+                        `UPDATE users SET outstanding_epf=$1 WHERE user_id=$2`,
+                        [results["rows"][0]["count"], userId]
+                    );
+                }
+
+                const total_count = await client.query(
+                    `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND is_deleted = false`,
+                    ["Approved"]
+                );
+
+                // update osl and root outstanding epf count
+                await client.query(
+                    `UPDATE users SET outstanding_epf=$1 WHERE user_type!=$2`,
+                    [total_count["rows"][0]["count"], "FRE"]
+                );
+            } catch (err) {
+                throw err;
+            }
+            // END UPDATE OUTSTANDING EPF COUNT //
+
+            await client.query("COMMIT");
+            return {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*",
+                },
+                statusCode: 200,
+                result: result["rows"][0],
+                epf_count: epf_count,
+            };
+        } catch (err) {
+            if (err.message === "Non-existent exco user id") {
+                await client.query("COMMIT");
+                throw err;
+            } else {
+                if (client) {
+                    await client.query("ROLLBACK");
+                    if (
+                        err.code === "40001" ||
+                        err.message.includes("deadlock detected")
+                    ) {
+                        // 40001 is the error code for serialization failure
+                        retryCount -= 1;
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, RETRY_DELAY_MS)
+                        );
+                    } else {
+                        throw err;
+                    }
+                } else new Error("couldnt acquire client");
+            }
+        } finally {
+            if (client) {
+                client.release();
             }
         }
-    } catch (error) {
-        throw error;
+        if (retryCount <= 0) {
+            throw new Error(
+                "Transaction failed due to serialization error or deadlock after 5 retries"
+            );
+        }
     }
 };

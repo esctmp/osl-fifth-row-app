@@ -6,6 +6,22 @@ const path = require("path");
 const fs = require("fs");
 
 describe("createEPF", () => {
+    beforeEach(async() => {
+        //TruncateUsers Table
+
+        //TruncateEPF Table
+        /*
+        const response = await lambda
+        .invoke({
+            FunctionName: "clearEPFTests-staging", 
+        })
+        .promise();
+        */
+
+        //Create Test User
+    })
+
+
     test("Test ID: 1 - Create new EPF with valid fields", async () => {
         const jsonFilePath = path.join(
             __dirname,
@@ -27,6 +43,10 @@ describe("createEPF", () => {
 
         let matches = true;
         for (let key in data) {
+            if(key=="test") {
+                continue
+            }
+
             if (String(data[key]) !== String(result[key])) {
                 matches = false;
                 break;
@@ -167,7 +187,7 @@ describe("createEPF", () => {
         expect(result).toBe("Unexpected data type");
     });
 
-    test.only("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
+    test("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
         const jsonFilePath_1 = path.join(
             __dirname,
             "createEPF_testjson",
@@ -210,6 +230,10 @@ describe("createEPF", () => {
         if (result_EPF1["a_name"] == "user 1") {
             let matches_1 = true;
             for (let key in data_1) {
+                if(key=="test") {
+                    continue
+                }
+
                 if (String(data_1[key]) !== String(result_EPF1[key])) {
                     matches_1 = false;
                     break;
@@ -220,6 +244,10 @@ describe("createEPF", () => {
 
             let matches_2 = true;
             for (let key in data_2) {
+                if(key=="test") {
+                    continue
+                }
+
                 if (String(data_2[key]) !== String(result_EPF2[key])) {
                     matches_2 = false;
                     break;
@@ -229,6 +257,10 @@ describe("createEPF", () => {
         } else {
             let matches_1 = true;
             for (let key in data_1) {
+                if(key=="test") {
+                    continue
+                }
+
                 if (String(data_1[key]) !== String(result_EPF2[key])) {
                     matches_1 = false;
                     break;
@@ -238,6 +270,10 @@ describe("createEPF", () => {
 
             let matches_2 = true;
             for (let key in data_2) {
+                if(key=="test") {
+                    continue
+                }
+
                 if (String(data_2[key]) !== String(result_EPF1[key])) {
                     matches_2 = false;
                     break;
@@ -488,4 +524,14 @@ describe("createEPF", () => {
 
         expect(result).toBe("Invalid Status Type");
     });
+
+    afterAll(async()=> {
+        //Truncate Users table
+        //Truncate EPFs table
+        const response = await lambda
+        .invoke({
+            FunctionName: "clearEPFTests-staging", 
+        })
+        .promise();
+    })
 });
