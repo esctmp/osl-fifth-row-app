@@ -166,6 +166,7 @@ exports.handler = async (event) => {
         });
     }
 
+    // START FORMATTING //
     const columns = [
         { name: "status", value: event.status },
         { name: "exco_user_id", value: event.exco_user_id },
@@ -302,11 +303,11 @@ exports.handler = async (event) => {
 
     // Check for valid exco_user_id
     //console.log("Checking exco user id");
+    console.log(event.exco_user_id);
     const valid_exco_user_id = await pool.query(
         `SELECT COUNT(*) FROM users WHERE user_id=$1`,
         [event.exco_user_id]
     );
-    console.log(valid_exco_user_id.rows[0]);
     if (valid_exco_user_id.rows[0]["count"] == 0) {
         throw new Error("Non-existent exco user id");
     }
