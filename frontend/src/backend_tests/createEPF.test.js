@@ -266,4 +266,224 @@ describe("createEPF", () => {
 
         expect(result).toBe("Invalid Student ID");
     });
+
+    test("Test ID: 10 - Invalid Contact Number", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test10.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Contact Number");
+    });
+
+    test("Test ID: 11 - Invalid Email Format", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test11.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid email format");
+    });
+
+    test("Test ID: 12 - Invalid Student ID in List", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test12.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Student ID");
+    });
+
+    test("Test ID: 13 - Invalid Value for Money", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test13.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid value for money");
+    });
+
+    test("Test ID: 14 - Invalid Value for Money in List", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test14.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid value for money");
+    });
+
+    test("Test ID: 15 - Invalid Value for Quantity in List", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test15.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid quantity value");
+    });
+
+    test("Test ID: 16 - Invalid Datetime format for Event Schedule", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test16.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Datetime Format");
+    });
+
+    test("Test ID: 17 - Invalid Date format in List", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test17.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Date Format");
+    });
+
+    test("Test ID: 18 - Invalid Time format in List", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test18.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Time Format");
+    });
+
+    test("Test ID: 19 - Invalid Status Type", async () => {
+        const jsonFilePath = path.join(
+            __dirname,
+            "createEPF_testjson",
+            "createEPF_test19.json"
+        );
+        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
+        const data = JSON.parse(jsonData);
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "createEPF-staging",
+                Payload: JSON.stringify(data),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid Status Type");
+    });
 });
