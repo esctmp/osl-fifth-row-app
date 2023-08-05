@@ -24,12 +24,10 @@ export default function Login() {
           group = user.attributes["custom:user_type"];
           if (!group){
             group = user.signInUserSession.accessToken.payload["cognito:groups"];}
-          console.log(group);
-          console.log(group == "FRE");
-          console.log(group ==="FRE");
           setGroups(group);
           setUserId(uid);
           setUserLoggedIn(true);
+          console.log(user);
           if (group.includes('OSL')|| group == "OSL") {
             navigate("/osl/homepage");
           } else if (group.includes('FRE') || group=="FRE") {
