@@ -29,7 +29,7 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    let response = await axios.get("https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
+    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
         {
             params: { epf_id: epf_id }
         }
