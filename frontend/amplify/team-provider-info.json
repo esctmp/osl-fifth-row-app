@@ -51,11 +51,11 @@
         },
         "deleteUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/deleteUser-6e767a4a655558766c2f-build.zip"
+          "s3Key": "amplify-builds/deleteUser-373331584f6e786c532f-build.zip"
         },
         "getEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEPF-79594e726b5761304f48-build.zip"
+          "s3Key": "amplify-builds/getEPF-6950435571466a353150-build.zip"
         },
         "getEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",

@@ -59,10 +59,7 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="email">Club Email:</label>
                                 <input
-                                    {...register("email", { required: "*Email is required!",pattern:{
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
-                    message: "*Invalid email address entered"
-                } })}
+                                    {...register("email")}
                                     type="text"
                                     id="email"
                                     name="email"
