@@ -37,7 +37,6 @@ export async function getEPF(epf_id) {
         console.log(error);
         return { data: [{}] };
     });
-    console.log
     console.log(response[0])
     let data = convertJSONToFields(response.data[0]);
     //let data = convertJSONToFields(dummyEPF);
