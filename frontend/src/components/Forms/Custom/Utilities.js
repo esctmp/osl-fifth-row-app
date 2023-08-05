@@ -29,19 +29,16 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
-        {
-            params: { epf_id: epf_id }
-        }
-    ).then((res) => res, (error) => {
-        console.log(error);
-        return { data: [{}] };
-    });
-    console.log(response[0])
-    let data = convertJSONToFields(response.data[0]);
-    //let data = convertJSONToFields(dummyEPF);
-    console.log("LOADED", data);
-    return data;
+    console.log("asdas"+epf_id)
+    const reqdata={"epf_id": parseInt(epf_id)}
+
+    const response = await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",reqdata);
+
+    console.log(response.data);
+
+    let data = convertJSONToFields(response.data);
+    console.log("LOADED", data[0]);
+    return data[0]
 }
 
 
