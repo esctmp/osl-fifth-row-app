@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -143,6 +143,7 @@ const column_names = metadata.concat(
     sectionG7
 );
 
+const status_types = ["Draft", "Pending Approval", "Approved", "Rejected"];
 const columnParams = new Array(82)
     .fill()
     .map((_, i) => `$${i + 1}`)
@@ -210,7 +211,7 @@ exports.handler = async (event) => {
     const client = await pool.connect();
 
     try {
-        console.log("connected to db");
+        //console.log("connected to db");
         await client.query("BEGIN");
 
         // Extract values from event object //
@@ -299,8 +300,9 @@ exports.handler = async (event) => {
             event.g_comments_root,
         ];
 
-        // BEGIN VERIFICATION OF EVENT//
+        // BEGIN VERIFICATION //
         // Check for datatypes
+        //console.log("Checking datatypes");
         const datatypes = Object.values(epf_db_datatypes_create);
 
         for (let i = 0; i < values.length; i++) {
@@ -317,7 +319,14 @@ exports.handler = async (event) => {
             }
         }
 
+        // Check for valid status
+        //console.log("Checking status");
+        if (!status_types.includes(event.status)) {
+            throw new Error("Invalid Status Type");
+        }
+
         // Check for valid exco_user_id
+        //console.log("Checking exco user id");
         const valid_exco_user_id = await pool.query(
             `SELECT COUNT(*) FROM users WHERE user_id=$1`,
             [event.exco_user_id]
@@ -327,21 +336,183 @@ exports.handler = async (event) => {
         }
 
         // Check for event name
+        //console.log("Checking event name");
         if (event.b_event_name.trim().length == 0) {
             throw new Error("Event name missing");
         }
+
+        // Check for valid student id
+        //console.log("Checking student id");
+        const student_id_regex = /^1\d{6}$/;
+        if (
+            !student_id_regex.test(event.a_student_id) &&
+            event.a_student_id !== undefined
+        ) {
+            throw new Error("Invalid Student ID");
+        }
+
+        event.f_student_id.forEach((student_id) => {
+            if (
+                !student_id_regex.test(parseInt(student_id)) &&
+                student_id !== ""
+            ) {
+                throw new Error("Invalid Student ID");
+            }
+        });
+
+        // Check for valid contact number
+        //console.log("Checking contact number");
+        const contact_number_regex = /^[689]\d{7}$/;
+        if (
+            !contact_number_regex.test(event.a_contact_number) &&
+            event.a_contact_number !== undefined
+        ) {
+            throw new Error("Invalid Contact Number");
+        }
+
+        // Check for valid email format
+        //console.log("Checking email format");
+        if (event.a_email !== undefined) {
+            const [username, domain] = event.a_email.split("@");
+            const isValidUsername = /^[^\s@]+$/;
+            const isValidDomain = /^[^\s@]+\.[^\s@]+$/;
+            if (
+                !event.a_email.includes("@") ||
+                !isValidUsername.test(username) ||
+                !isValidDomain.test(domain)
+            ) {
+                throw new Error("Invalid email format");
+            }
+        }
+
+        // Check for money or funding sections
+        //console.log("Checking money or funding sections");
+        if (
+            (event.d1a_club_income_fund < 0 &&
+                event.d1a_club_income_fund !== undefined) ||
+            (event.d1a_osl_seed_fund < 0 &&
+                event.d1a_osl_seed_fund !== undefined) ||
+            (event.d1a_donation < 0 && event.d1a_donation !== undefined) ||
+            (event.d1b_revenue < 0 && event.d1b_revenue !== undefined) ||
+            (event.d1b_donation_or_scholarship < 0 &&
+                event.d1b_donation_or_scholarship !== undefined) ||
+            (event.d1b_total_source_of_funds < 0 &&
+                event.d1b_total_source_of_funds !== undefined) ||
+            (event.d11_total_revenue < 0 &&
+                event.d11_total_revenue !== undefined) ||
+            (event.d2_total_expenditure < 0 &&
+                event.d2_total_expenditure !== undefined)
+        ) {
+            throw new Error("Invalid value for money");
+        }
+        event.d11_price.forEach((price) => {
+            if (price !== "") {
+                if (price < 0) {
+                    throw new Error("Invalid value for money");
+                }
+            }
+        });
+        event.d11_amount.forEach((price) => {
+            if (price !== "") {
+                if (price < 0) {
+                    throw new Error("Invalid value for money");
+                }
+            }
+        });
+        //Validation for Quantity
+        //console.log("Checking quantity");
+        event.d11_quantity.forEach((price) => {
+            if (price !== "") {
+                if (price < 0) {
+                    throw new Error("Invalid quantity value");
+                }
+            }
+        });
+
+        // Check for valid datetime format
+        //console.log("Checking datetime format");
+        const datetime_regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
+        if (event.b_event_schedule !== undefined) {
+            if (!datetime_regex.test(event.b_event_schedule)) {
+                throw new Error("Invalid Datetime Format");
+            }
+        }
+
+        // Check for date format
+        //console.log("Checking date format");
+        const date_regex = /^\d{4}-\d{2}-\d{2}$/;
+        event.c1_date.forEach((date) => {
+            if (date !== "") {
+                if (!date_regex.test(date)) {
+                    throw new Error("Invalid Date Format");
+                }
+            }
+        });
+        event.c2_date.forEach((date) => {
+            if (date !== "") {
+                if (!date_regex.test(date)) {
+                    throw new Error("Invalid Date Format");
+                }
+            }
+        });
+        event.c3_date.forEach((date) => {
+            if (date !== "") {
+                if (!date_regex.test(date)) {
+                    throw new Error("Invalid Date Format");
+                }
+            }
+        });
+        event.c3_cleanup_date.forEach((date) => {
+            if (date !== "") {
+                if (!date_regex.test(date)) {
+                    throw new Error("Invalid Date Format");
+                }
+            }
+        });
+        // Check for valid time format
+        const time_regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+        event.c1_time.forEach((time) => {
+            if (time !== "") {
+                if (!time_regex.test(time)) {
+                    throw new Error("Invalid Time Format");
+                }
+            }
+        });
+
+        event.c2_time.forEach((time) => {
+            if (time !== "") {
+                if (!time_regex.test(time)) {
+                    throw new Error("Invalid Time Format");
+                }
+            }
+        });
+        event.c3_time.forEach((time) => {
+            if (time !== "") {
+                if (!time_regex.test(time)) {
+                    throw new Error("Invalid Time Format");
+                }
+            }
+        });
+
+        event.c3_cleanup_time.forEach((time) => {
+            if (time !== "") {
+                if (!time_regex.test(time)) {
+                    throw new Error("Invalid Time Format");
+                }
+            }
+        });
         // END VERIFICATION OF EVENT//
 
         // BEGIN CREATE EPF QUERY //
         const query = `INSERT INTO EPFS(${column_names}) VALUES (${columnParams}) RETURNING *`;
         const results = await pool.query(query, values);
         await client.query("COMMIT");
-        console.log("Committed to db, new EPF created");
+        //console.log("Committed to db, new EPF created");
         // END CREATE EPF QUERY //
 
         // UPDATE OUTSTANDING EPF COUNT //
         try {
-            console.log("Updating outstanding EPF count");
+            //console.log("Updating outstanding EPF count");
             await client.query("BEGIN");
             const exco_user_ids = await client.query(
                 `SELECT user_id FROM users WHERE user_type=$1`,
@@ -361,7 +532,7 @@ exports.handler = async (event) => {
                     ]
                 );
             }
-            console.log("Updated outstanding EPF count for FREs");
+            //console.log("Updated outstanding EPF count for FREs");
 
             const result = await client.query(
                 `SELECT COUNT(*) FROM EPFS WHERE status != $1 AND is_deleted = false`,
@@ -373,7 +544,7 @@ exports.handler = async (event) => {
                 `UPDATE users SET outstanding_epf = $1 WHERE user_type != $2`,
                 [result["rows"][0]["count"], "FRE"]
             );
-            console.log("Updated outstanding EPF count for OSL and ROOT");
+            //console.log("Updated outstanding EPF count for OSL and ROOT");
             await client.query("COMMIT");
             // sendEmailToOSF();
             // console.log("sendEmailtoOSF")
@@ -382,8 +553,6 @@ exports.handler = async (event) => {
             // const userEmail = event.a_email;
             // sendEmailToUser(userEmail);
             // console.log("sendEmailToUser")
-
-        
         } catch (e) {
             // ERROR HANDLING FOR UPDATE OUTSTANDING EPF COUNT
             await client.query("ROLLBACK");
