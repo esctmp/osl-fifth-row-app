@@ -87,7 +87,7 @@ const ExTable = () => {
         console.log("ARGGHHHHH")
         console.log(userId)
         console.log("UID")
-        const response = await axios.get(`https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
+        const response = await axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
         console.log("hi");
         const transformedData = response.data.map((item) => {
           let pbg;

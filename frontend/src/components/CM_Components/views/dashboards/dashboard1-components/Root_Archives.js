@@ -79,7 +79,7 @@ const Root_Archives = () => {
     const fetchData = async () => {
       try {
         console.log("ARGGHHHHH")
-        const response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs"); // Replace with your actual API endpoint
+        const response = await axios.get("https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
 
         const approvedData = response.data.filter(item => item.status === "Approved");
