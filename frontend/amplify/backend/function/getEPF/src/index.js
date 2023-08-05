@@ -9,53 +9,59 @@ const pool = new Pool({
 });
 
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
-
-    const client = await pool.connect();
-
-
     const epf_id = event.epf_id;
+    const MAX_RETRIES = 5;
+    let result = null;
+    let client;
 
-    try {
-        console.log("connected to db");
-        await client.query("BEGIN");
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+        try {
+            client = await pool.connect();
+            await client.query("BEGIN");
+            await client.query(
+                "SET TRANSACTION ISOLATION LEVEL READ COMMITTED"
+            );
 
-        //Check for epf_id data type
-        console.log("checking epf_id");
-        if (typeof epf_id !== "number") {
-            throw new Error("Unexpected data type");
+            // Check for valid epf_id
+            const valid_epf_id = await client.query(
+                `SELECT COUNT(*) FROM EPFS WHERE epf_id = $1 AND is_deleted = false`,
+                [epf_id]
+            );
+
+            if (valid_epf_id.rows[0]["count"] == 0) {
+                throw new Error("Non-existent epf");
+            }
+
+            result = await client.query(
+                "SELECT * FROM EPFS WHERE epf_id = $1 AND is_deleted = false",
+                [epf_id]
+            );
+
+            await client.query("COMMIT");
+            break; // Break the retry loop upon successful transaction
+        } catch (err) {
+            if (client) {
+                await client.query("ROLLBACK");
+            }
+            if (
+                !err.message.includes("could not serialize access") &&
+                !err.message.includes("deadlock detected")
+            ) {
+                throw err;
+            }
+            if (attempt === MAX_RETRIES - 1) {
+                throw new Error("Max retrieval attempts exceeded");
+            }
+            await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+        } finally {
+            if (client) {
+                client.release();
+            }
         }
-
-        //Check for valid epf_id
-        const valid_epf_id = await pool.query(
-            `SELECT COUNT(*) FROM EPFS WHERE epf_id = $1 AND is_deleted = false`,
-            [epf_id]
-        );
-        if (valid_epf_id.rows[0]["count"] == 0) {
-            throw new Error("Non-existent epf");
-        }
-
-        console.log("valid epf id, getting epf data");
-        const result = await pool.query(
-            "SELECT * FROM EPFS WHERE epf_id = $1 AND is_deleted = false",
-            [epf_id]
-        );
-        await client.query("COMMIT");
-
-        // Returns EPF Data and headers.
-        return {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*",
-            },
-
-            statusCode: 200,
-            body: result["rows"],
-        };
-    } catch (e) {
-        await client.query("ROLLBACK");
-        throw e;
-    } finally {
-        client.release();
     }
+
+    if (result["rows"].length === 0) {
+        return null;
+    }
+    return result["rows"];
 };

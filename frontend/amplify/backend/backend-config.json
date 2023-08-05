@@ -94,7 +94,7 @@
     }
   },
   "auth": {
-    "frontend4bc2862d": {
+    "frontend05785438": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -155,6 +155,38 @@
     }
   },
   "parameters": {
+    "AMPLIFY_auth_frontend05785438_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
     "AMPLIFY_auth_frontend4bc2862d_nativeClientId": {
       "usedBy": [
         {
