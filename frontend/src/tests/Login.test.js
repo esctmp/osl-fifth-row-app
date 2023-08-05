@@ -8,25 +8,49 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import axios from "axios";
 import {Auth} from "aws-amplify"
-import mockCognito from '../__mocks__/Auth';
 import { UserLoggedIn } from "../routes/UserLoggedIn";
 
 const mockedNavigate = jest.fn();
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockedNavigate
-    }));
+// jest.mock('react-router-dom', () => ({
+//     ...jest.requireActual('react-router-dom'),
+//     useNavigate: () => mockedNavigate
+//     }));
 
-jest.mock('amazon-cognito-identity-js', () => ({
-    CognitoUser: jest.fn(() => mockCognito),
-  }));
+// const mockSetGroups = jest.fn();
+// jest.mock('../routes/Groups', () => ({
+//   Groups: {
+//     Consumer: ({ children }) => children({
+//       groups: 'FRE',
+//       setGroups: mockSetGroups,
+//     }),
+//     Provider: ({ children }) => <div>{children}</div>,
+//   },
+// }));
+
+// jest.mock("aws-amplify",()=>({
+//     Auth:{
+//         currentAuthenticatedUser:jest.fn().mockResolvedValue({
+//             username:'testfre',
+//             attributes:{
+//                 'custom:user_type':'FRE',
+//             },
+//         signInUserSession:{
+//             accessToken:{
+//                 payload:{
+//                     'cognito:groups':"FRE"
+//                 }
+//             }
+//         }
+//         })
+//     }
+// }));
   
 describe("Login Form Validation",() => {
     test("should reject the login due to empty email field", async()=>{
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -49,7 +73,7 @@ describe("Login Form Validation",() => {
     test("should reject the log in due to invalid email, not in the form of ...@...sutd.edu.sg",async()=>{
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -73,7 +97,7 @@ describe("Login Form Validation",() => {
     test("should not have an error in the email field if email field is filled in", async()=>{
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -97,7 +121,7 @@ describe("Login Form Validation",() => {
     test("should reject the login due to empty password field", async()=>{    
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -121,7 +145,7 @@ describe("Login Form Validation",() => {
         render(
             <Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -145,7 +169,7 @@ describe("Login Form Validation",() => {
         render(
             <Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -168,7 +192,7 @@ describe("Login Form Validation",() => {
     test("should reject login if both password and email fields are empty", async()=>{    
         render(<Router>
             <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-            <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+            <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
             <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
                 <Login/>
             </UserLoggedIn.Provider>
@@ -195,7 +219,7 @@ describe("Login Form Validation",() => {
     //     const { getByPlaceholderText, getByTestId } = render(
     //         <Router>
     //         <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
-    //         <Groups.Provider value ={{groups:'null',setGroups:()=>{}}}>
+    //         <Groups.Provider value ={{groups:'null',setGroups: ()=>{}}}>
     //         <UserLoggedIn.Provider value ={{userLoggedIn:'null', setUserLoggedIn:()=>{}}}>
     //             <Login/>
     //         </UserLoggedIn.Provider>

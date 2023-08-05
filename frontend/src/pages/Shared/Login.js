@@ -27,7 +27,6 @@ export default function Login() {
           setGroups(group);
           setUserId(uid);
           setUserLoggedIn(true);
-          console.log(user);
           if (group.includes('OSL')|| group == "OSL") {
             navigate("/osl/homepage");
           } else if (group.includes('FRE') || group=="FRE") {
