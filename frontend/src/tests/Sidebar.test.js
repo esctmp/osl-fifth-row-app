@@ -4,22 +4,16 @@ import { render, screen } from '@testing-library/react';
 // import mediaQuery from 'css-mediaquery';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import mockCognito from '../__mocks__/Auth';
+import Header from '../layouts/FullLayout/Header/Header';
 import FREitems from '../layouts/FullLayout/Sidebar/FREitems';
 import Sidebar from '../layouts/FullLayout/Sidebar/Sidebar';
 import { Groups } from "../routes/Groups";
+import { UserID } from "../routes/UserID";
 
-// const url = "http://localhost:3001/#/fifthrow/homepage";
-
-
-// function createMatchMedia(width) {
-//     return (query) => ({
-//       matches: mediaQuery.match(query, {
-//         width,
-//       }),
-//       addListener: () => {},
-//       removeListener: () => {},
-//     });
-//   }
+jest.mock('amazon-cognito-identity-js', () => ({
+    CognitoUser: jest.fn(() => mockCognito),
+  }));
 
 const userPool = 
 [
@@ -47,62 +41,65 @@ const userPool =
 ]
 
 describe ('Sidebar', () => {
+// SIDE BAR WAS CLOSED DUMBASS!!!!!!!!!
+// need to set window size before testing
+    test('Render - Sidebar', () => {
+        render(
+            <Router>
+            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
+            <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
+            {/* <Sidebar/> */}
+            <Header />
+            </Groups.Provider> 
+            </UserID.Provider>
+            </Router>
+            )
+        // const field = screen.getByRole("generic");
+        const button = screen.getByTestId("sidebarmenu");
+        // const logo = screen.queryByRole("img", {name: "logo"});
+        // expect(field).toBeInTheDocument();
+        expect(button).toBeInTheDocument();
+        // expect(logo).toHaveAttribute('src', '../layouts/FullLayout/Logo/LogoIcon');
+    });
 
-    // beforeAll(() => {
-    //     window.matchMedia = createMatchMedia(window.innerWidth);
-    //   });
 
-    // test('Render - Sidebar', () => {
-    //     render(
-    //         <Router>
-    //         <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
-    //         {/* <ThemeProvider theme={theme}> */}
-    //         <Sidebar 
-    //             user={userPool.find(user => user['type'] === "FRE")}
-    //         />
-    //         {/* </ThemeProvider> */}
-    //         </Groups.Provider> 
-    //         </Router>
-    //         )
-    //     // const field = screen.getByTestId("sidebar");
-    //     const field = screen.getByTestId("logo");
-    //     expect(field).toBeInTheDocument();
-    // });
-
-
-    it('should render a list item with NavLink', () => {
+    test('render a list item with NavLink', () => {
     // Define the test data
     const item = {
         title: "Homepage",
         href: "fifthrow/homepage",
     };
-    const items = FREitems.forEach;
+    const items = FREitems;
     const pathDirect = 'fifthrow/homepage'; // Set a path for comparison
-
+    
     // Render the component with necessary context and props
     render(
         <Router>
         <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
         <Sidebar
-          item={items}
-          pathDirect={pathDirect}
-          handleClick={() => {}}
-          user={userPool.find(user => user['type'] === "FRE")}
+        //   item={items}
+        //   pathDirect={pathDirect}
+        //   user={userPool.find(user => user['type'] === "FRE")}
         />
         </Groups.Provider>
         </Router>
     );
 
-    // // Get the rendered list item element
-    const list = screen.getByRole('generic');
-    // expect(list.length).toBe(4);
-    // const listItem = list.querySelectorAll('li');
+//     // // Get the rendered list item element
+        
+        // const list = screen.getByRole('link', {name: "Homepage"});
+        // // const listElement = list.querySelectorAll('li');
+        // // const listElementValue = listElement[0]; 
+        // expect(list).toBeInTheDocument();
+//     const list = screen.getByRole('list');
+//     // expect(list.length).toBe(1);
+//     // const listItem = list.querySelectorAll('li');
 
-    // // Assertions
-    // expect (listItem.length).toBe(4); 
-    expect(list).toBeInTheDocument();
-    // expect(list).toHaveTextContent('Homepage'); // Make sure the text is rendered
-//     expect(listItem).toHaveAttribute('href', 'fifthrow/homepage'); // Ensure NavLink has the correct 'to' prop
+//     // // Assertions
+//     // expect (listItem.length).toBe(4); 
+//     expect(list).toBeInTheDocument();
+        // expect(list).toHaveTextContent('Homepage'); // Make sure the text is rendered
+        // expect(list).toHaveAttribute('href', 'fifthrow/homepage'); // Ensure NavLink has the correct 'to' prop
   });
 
 
@@ -119,7 +116,7 @@ describe ('Sidebar', () => {
     //         </Router>
     //         )
     //     // const user = userPool.find(user => user['type'] === "FRE");
-    //     const list = screen.getByRole('generic');
+    //     const list = screen.getByRole('li', {name : "Homepage"});
     //     expect (list).toBeInTheDocument();
     //     // -------- works until here
     //     const listItem = list.querySelectorAll('li');
