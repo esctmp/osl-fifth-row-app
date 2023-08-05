@@ -35,7 +35,7 @@
         },
         "getEXCOEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEXCOEPFs-566c596848794f436233-build.zip"
+          "s3Key": "amplify-builds/getEXCOEPFs-3173574671563650654d-build.zip"
         },
         "GetUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
