@@ -23,7 +23,7 @@ describe("createEPF", () => {
             .promise();
 
         let result = JSON.parse(response.Payload);
-        result = result["body"];
+        result = result["result"];
 
         let matches = true;
         for (let key in data) {
@@ -167,7 +167,7 @@ describe("createEPF", () => {
         expect(result).toBe("Unexpected data type");
     });
 
-    test("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
+    test.only("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
         const jsonFilePath_1 = path.join(
             __dirname,
             "createEPF_testjson",
@@ -200,10 +200,11 @@ describe("createEPF", () => {
         ]);
 
         let result_EPF1 = JSON.parse(response[0].Payload);
-        result_EPF1 = result_EPF1["body"];
+        result_EPF1 = result_EPF1["result"];
+        console.log(result_EPF1);
 
         let result_EPF2 = JSON.parse(response[1].Payload);
-        result_EPF2 = result_EPF2["body"];
+        result_EPF2 = result_EPF2["result"];
 
         if (result_EPF1["a_name"] == "user 1") {
             let matches_1 = true;

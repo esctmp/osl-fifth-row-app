@@ -61,7 +61,21 @@ exports.handler = async (event) => {
     }
 
     if (result["rows"].length === 0) {
-        return null;
+        return {
+            headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "*",
+            },
+            statusCode: 200,
+            body:result["rows"],
+        }
     }
-    return result["rows"];
+    return {
+        headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*",
+        },
+        statusCode: 200,
+        body:result["rows"],
+    }
 };
