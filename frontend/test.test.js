@@ -6,7 +6,7 @@ describe("Test Suite", () => {
     // Correct input cases
     test("Test ID: 1 Test", async () => {
         const message = "Hi";
-        expect(message).toMatch("Hi");
+        expect(message).toMatch("FAIL");
     });
 
     afterAll(async () => {});
