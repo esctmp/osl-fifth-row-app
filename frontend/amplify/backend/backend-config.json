@@ -113,6 +113,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "clearEPFTests": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "createEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -328,6 +333,22 @@
         {
           "category": "function",
           "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearEPFTests_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearEPFTests_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearEPFTests"
         }
       ]
     },
