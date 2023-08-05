@@ -347,6 +347,22 @@
         }
       ]
     },
+    "AMPLIFY_function_deleteAllEPFTests_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAllEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAllEPFTests_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAllEPFTests"
+        }
+      ]
+    },
     "AMPLIFY_function_deleteEPF_deploymentBucketName": {
       "usedBy": [
         {

@@ -68,6 +68,10 @@
         "deleteEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
           "s3Key": "amplify-builds/deleteEPF-4672477155564e307865-build.zip"
+        },
+        "deleteAllEPFTests": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/deleteAllEPFTests-4d50366c773447496173-build.zip"
         }
       },
       "api": {
