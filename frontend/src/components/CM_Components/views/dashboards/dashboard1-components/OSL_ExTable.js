@@ -130,7 +130,6 @@ const OSL_ExTable = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
