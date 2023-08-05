@@ -19,7 +19,7 @@
         },
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-6159315539616c544f50-build.zip",
+          "s3Key": "amplify-builds/createEPF-4236357748794d417478-build.zip",
           "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
           "dbName": "esc_db",
           "dbPassword": "12345678",
@@ -71,7 +71,11 @@
         },
         "clearEPFTests": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/clearEPFTests-514d66304a3330716f7a-build.zip"
+          "s3Key": "amplify-builds/clearEPFTests-58317458567048704241-build.zip"
+        },
+        "clearUSERSTest": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/clearUSERSTest-756543347473312b476f-build.zip"
         }
       },
       "api": {

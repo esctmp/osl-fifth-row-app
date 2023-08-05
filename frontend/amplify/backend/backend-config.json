@@ -118,6 +118,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "clearUSERSTest": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "createEPF": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -349,6 +354,22 @@
         {
           "category": "function",
           "resourceName": "clearEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearUSERSTest_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearUSERSTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearUSERSTest_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearUSERSTest"
         }
       ]
     },
