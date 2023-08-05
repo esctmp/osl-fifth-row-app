@@ -39,7 +39,7 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLE
-  const { epf_id } = useParams();
+  const { epf_id } = useParams() || {};
   const { userId, _ } = useContext(UserID);
   const mode = (epf_id != undefined) ? "OSL_COMMENT" : "NEW";
   const settings = FORM_MODES[mode];

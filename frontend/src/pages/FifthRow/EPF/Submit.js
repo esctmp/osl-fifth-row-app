@@ -47,7 +47,7 @@ import { UserID } from '../../../routes/UserID';
 const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
   // const { userId, setUserId } = useContext(UserID);
-  const { epf_id } = useParams();
+  const { epf_id } = useParams() || {};
   const { userId, _ } = useContext(UserID);
   const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
   const settings = FORM_MODES[mode];
@@ -206,7 +206,7 @@ const EPFSubmit = () => {
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "float"]
+      colTypes: [, "money"]
     };
 
     const tableSettingsD1B = {
@@ -215,19 +215,19 @@ const EPFSubmit = () => {
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "float"]
+      colTypes: [, "money"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [, "float", "number", "float"]
+      colTypes: [, "money", "number", "money"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [, 'float'],
+      colTypes: [, 'money'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -239,7 +239,7 @@ const EPFSubmit = () => {
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [, 'float'],
+      colTypes: [, 'money'],
       rowRequired: [true]
     }
     return (
@@ -321,7 +321,8 @@ const EPFSubmit = () => {
       names: ['f_name', 'f_student_id', 'f_position'],
       colNames: ['Name', 'Student ID', 'Position'],
       colConfig: [4, 4, 4],
-      minRowsRequired: 1
+      minRowsRequired: 1,
+      patterns: [,/^\d{7}$/,]
     }
     return (
       <>
@@ -469,7 +470,8 @@ const EPFSubmit = () => {
                             async (err) => { // onInvalid
                               let data = getValues();
                               if (data?.b_event_name) {
-                                data.status = STATUS.Draft.description; submit(data);
+                                console.log(err);
+                                alert("Form is invalid. Please fix and submit it again.");
                               } else {
                                 alert("You must fill in the Event Name before saving this form as draft.");
                               };
