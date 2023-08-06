@@ -35,8 +35,9 @@ export const FORM_MODES = {
   // Fifth Row
   "NEW": { enableInputs: true, loadForm: false, showComments: false, enableOSLComments: false, enableROOTComments: false },
   "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
-  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
-  "SUBMITTED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "PENDING APPROVAL": { enableInputs: false, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
+  "APPROVED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "DECLINED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 
   // OSL
   "OSL_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: true, enableROOTComments: false },
@@ -346,6 +347,7 @@ export const FormRadioField = ({ name, label, control, options, settings, requir
             >
               {options.map((option, idx) =>
                 <FormControlLabel
+                  disabled={!settings.enableInputs}
                   value={idx}
                   control={<Radio />}
                   sx={{ mb: -1 }}

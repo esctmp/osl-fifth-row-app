@@ -122,11 +122,11 @@ export const TableRowsStatic = ({ names, rowNames, rowRequired = [], patterns = 
   )
 };
 
-const TableDeleteRow = ({ onClickFunction, settings }) =>
+const TableDeleteRow = ({ onClickFunction, settings, tableName }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
-        id='delete-row'
+        id={tableName + '-delete-row'}
         variant='outlined'
         color='error'
         display='flex'
@@ -139,11 +139,11 @@ const TableDeleteRow = ({ onClickFunction, settings }) =>
     </Grid>
   </>
 
-const TableAddRow = ({ onClickFunction, settings }) =>
+const TableAddRow = ({ onClickFunction, settings, tableName }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
-        id='add-row'
+        id={tableName + '-add-row'}
         variant='outlined'
         display='flex'
         sx={{ fontSize: 28, height: '30px', width: '100%' }}
@@ -471,8 +471,8 @@ export const TableRowsDynamic = (props) => {
           : <TableRowDynamic keys={field.id} idx={idx} pattern={(props?.patterns || [])[idx]} {...props} />
       }
       )}
-      <TableDeleteRow onClickFunction={(e) => { if (fields.length > (props?.minRowsRequired || 0)) { remove(fields.length - 1) } }} {...props} />
-      <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} {...props} />
+      <TableDeleteRow onClickFunction={(e) => { if (fields.length > (props?.minRowsRequired || 0)) { remove(fields.length - 1) } }} tableName={props.names[0].split('_')[0]}{...props} />
+      <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} tableName={props.names[0].split('_')[0]} {...props} />
     </>
   )
 }
