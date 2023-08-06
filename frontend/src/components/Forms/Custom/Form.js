@@ -37,7 +37,7 @@ export const FORM_MODES = {
   "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
   "PENDING APPROVAL": { enableInputs: false, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
   "APPROVED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
-  "DECLINED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "REJECTED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 
   // OSL
   "OSL_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: true, enableROOTComments: false },
@@ -53,7 +53,7 @@ export const STATUS = {
   Draft: Symbol("Draft"), // access for fifthrow only
   Submitted: Symbol("Pending Approval"), // disable input access for fifth row, enable access for OSL & ROOT
   Approved: Symbol("Approved"), // disable input access for all
-  Declined: Symbol("Declined"), // disable input access for all
+  Rejected: Symbol("Rejected"), // disable input access for all
 };
 
 

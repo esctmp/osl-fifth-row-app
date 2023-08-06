@@ -42,7 +42,6 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => { // wrapper component to process api calls
   const { epf_id } = useParams() || {};
-  console.log("EPF_ID ?", epf_id);
   const { userId, _ } = useContext(UserID);
 
   const [loaded, setLoaded] = useState(false); // whether api call is done
@@ -54,7 +53,7 @@ const EPFSubmit = () => { // wrapper component to process api calls
     if (settings.loadForm) {
       getEPF(epf_id).then(values => {
         setInitialValues(values);
-        if (values?.status == STATUS.Declined.description) { setSettings(FORM_MODES["DECLINED"]); }
+        if (values?.status == STATUS.Rejected.description) { setSettings(FORM_MODES["REJECTED"]); }
         if (values?.status == STATUS.Submitted.description) { setSettings(FORM_MODES["PENDING APPROVAL"]); }
         if (values?.status == STATUS.Approved.description) { setSettings(FORM_MODES["APPROVED"]); }
         setLoaded(true);
@@ -378,8 +377,8 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="g" owner="OSL" />
+            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
@@ -433,8 +432,8 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="g_comments_osl" owner="OSL" />
+            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
