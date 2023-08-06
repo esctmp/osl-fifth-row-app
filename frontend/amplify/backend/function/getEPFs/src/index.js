@@ -9,7 +9,6 @@ const pool = new Pool({
 });
 
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
 
     const client = await pool.connect();
 
@@ -28,7 +27,7 @@ exports.handler = async (event) => {
             },
 
             statusCode: 200,
-            body: result["rows"],
+            body: JSON.stringify(result["rows"]),
         };
     } catch (e) {
         await client.query("ROLLBACK");
