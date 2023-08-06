@@ -1,0 +1,6 @@
+{
+    "test":1,
+  "queryStringParameters": {
+      "exco_user_id": "user2"
+    }
+}

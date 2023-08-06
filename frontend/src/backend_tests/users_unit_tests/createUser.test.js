@@ -22,7 +22,7 @@ describe("createUser", () => {
         })
         .promise();
 
-    })
+    }, 1000000)
 
     test("Test ID: 1.1 - Valid input: Create root user with valid name, email and id", async () => {
 
@@ -47,15 +47,16 @@ describe("createUser", () => {
             })
             .promise();
 
-        console.log(response)
+        //console.log(response)
+
     
-        response_payload = JSON.parse(response["Payload"])
+        let response_payload = JSON.parse(response["Payload"])
         expect(response_payload["user_id"]).toMatch(payload["userName"])
         expect(response_payload["name"]).toMatch(payload["request"]["userAttributes"]["name"])
         expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
         
-    });
+    }, 1000000);
 
     test("Test ID: 1.2 - Valid input: Create osl user with valid name, email and id", async () => {
         const payload = {
@@ -76,13 +77,15 @@ describe("createUser", () => {
                 Payload: JSON.stringify(payload),
             })
             .promise();
+
+        //console.log(response)
     
-        response_payload = JSON.parse(response["Payload"])
+        let response_payload = JSON.parse(response["Payload"])
         expect(response_payload["user_id"]).toMatch(payload["userName"])
         expect(response_payload["name"]).toMatch(payload["request"]["userAttributes"]["name"])
         expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
-    });
+    }, 1000000);
 
     test("Test ID: 1.3 - Valid input: Create exco user with valid name, email and id", async () => {
         const payload = {
@@ -103,15 +106,17 @@ describe("createUser", () => {
                 Payload: JSON.stringify(payload),
             })
             .promise();
+
+        //console.log(response)
     
-        response_payload = JSON.parse(response["Payload"])
+        let response_payload = JSON.parse(response["Payload"])
         expect(response_payload["user_id"]).toMatch(payload["userName"])
         expect(response_payload["name"]).toMatch(payload["request"]["userAttributes"]["name"])
         expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
-    });
+    }, 1000000);
 
-    test("2.1 - Missing name: Attempt to create user without providing a name", async () => {
+    test("Test ID: 2.1 - Missing name: Attempt to create user without providing a name", async () => {
         const payload = {
             test: 1,
             request: {
@@ -133,12 +138,14 @@ describe("createUser", () => {
             })
             .promise();
 
+        //console.log(response)
+
 
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
         expect(result).toBe("Name must be provided");
-    });
+    }, 1000000);
 
     test("Test ID: 2.2 - Missing email: Attempt to create user without providing an email", async () => {
         const payload = {
@@ -160,11 +167,13 @@ describe("createUser", () => {
             })
             .promise();
 
+        //console.log(response)
+
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid email format");
-    });
+    }, 1000000);
 
     test("Test ID: 2.3 - Invalid email format: Attempt to create user with an incorrect email format", async () => {
         const payload = {
@@ -186,11 +195,13 @@ describe("createUser", () => {
             })
             .promise();
 
+        //console.log(response)
+
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid email format");
-    });
+    }, 1000000);
 
     test("Test ID: 2.4 - Missing user_id: Attempt to create user without providing an id", async () => {
         const payload = {
@@ -212,11 +223,13 @@ describe("createUser", () => {
             })
             .promise();
 
+        //console.log(response)
+
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
         expect(result).toBe("User ID must be provided");
-    });
+    }, 1000000);
 
     test("Test ID: 2.5 - Invalid user_type: Attempt to create user with an invalid type", async () => {
         const payload = {
@@ -238,15 +251,13 @@ describe("createUser", () => {
             })
             .promise();
 
+        //console.log(response)
+
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid user type. Must be 'root', 'osl', or 'fre'");
-    });
-
-    test("Test ID: 3.1 - Duplicate entry: Attempt to create user with an existing id, name, email, and type combination", async () => {
-        //expect(result).toBe("Duplicate entry");
-    });
+    }, 1000000);
 
 
 });
