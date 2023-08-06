@@ -5,15 +5,59 @@ const lambda = new AWS.Lambda({ region: "ap-southeast-1" });
 const path = require("path");
 const fs = require("fs");
 
+async function restart() {
+    //TruncateUsers Table
+    const response_users = await lambda
+    .invoke({
+        FunctionName: "clearUSERSTest-staging", 
+    })
+    .promise();
+
+
+    //TruncateEPF Table
+    const response_epfs = await lambda
+    .invoke({
+        FunctionName: "clearEPFTests-staging", 
+    })
+    .promise();
+    
+
+    //Create Test User
+    const payload = {
+        request: {
+            userAttributes: {
+                "custom:user_type": "EXCO",
+                name: "test user",
+                email: "test_user@example.com",
+            },
+        },
+        userName: "1239e242-3538-41f2-95dd-abc62e451310",
+    };
+
+    const response = await lambda
+        .invoke({
+            FunctionName: "addUserGroups",
+            Payload: JSON.stringify(payload),
+        })
+        .promise();
+}
+
 describe("createEPF", () => {
+    beforeEach(async() => {
+            
+    })
+
+
     test("Test ID: 1 - Create new EPF with valid fields", async () => {
+        await restart()
+
         const jsonFilePath = path.join(
             __dirname,
             "createEPF_testjson",
             "createEPF_test1.json"
         );
         const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
-        const data = JSON.parse(jsonData);
+        let data = JSON.parse(jsonData);
 
         const response = await lambda
             .invoke({
@@ -23,10 +67,16 @@ describe("createEPF", () => {
             .promise();
 
         let result = JSON.parse(response.Payload);
-        result = result["result"];
-
+        result = JSON.parse(result["body"])
+        result = JSON.parse(JSON.stringify(result["result"], null, 2))
+        data = data["body"]
+        
         let matches = true;
         for (let key in data) {
+            if(key=="test") {
+                continue
+            }
+
             if (String(data[key]) !== String(result[key])) {
                 matches = false;
                 break;
@@ -167,14 +217,18 @@ describe("createEPF", () => {
         expect(result).toBe("Unexpected data type");
     });
 
-    test.only("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
+
+
+    test("Test ID: 8 - Create multiple EPFs with valid fields concurrently", async () => {
+
+        await restart()
         const jsonFilePath_1 = path.join(
             __dirname,
             "createEPF_testjson",
             "createEPF_test8_1.json"
         );
         const jsonData_1 = fs.readFileSync(jsonFilePath_1, "utf-8");
-        const data_1 = JSON.parse(jsonData_1);
+        let data_1 = JSON.parse(jsonData_1);
 
         const jsonFilePath_2 = path.join(
             __dirname,
@@ -182,7 +236,7 @@ describe("createEPF", () => {
             "createEPF_test8_2.json"
         );
         const jsonData_2 = fs.readFileSync(jsonFilePath_2, "utf-8");
-        const data_2 = JSON.parse(jsonData_2);
+        let data_2 = JSON.parse(jsonData_2);
 
         const response = await Promise.all([
             lambda
@@ -199,18 +253,28 @@ describe("createEPF", () => {
                 .promise(),
         ]);
 
-        console.log(response)
-
         let result_EPF1 = JSON.parse(response[0].Payload);
-        result_EPF1 = result_EPF1["result"];
+        result_EPF1 = JSON.parse(result_EPF1["body"])
+        result_EPF1 = JSON.parse(JSON.stringify(result_EPF1["result"], null, 2))
 
-        let result_EPF2 = JSON.parse(response[1].Payload);
-        result_EPF2 = result_EPF2["result"];
+        let result_EPF2 = JSON.parse(response[0].Payload);
+        result_EPF2 = JSON.parse(result_EPF2["body"])
+        result_EPF2 = JSON.parse(JSON.stringify(result_EPF2["result"], null, 2))
+
+        data_1 = data_1["body"]
+        data_2 = data_2["body"]
 
         if (result_EPF1["a_name"] == "user 1") {
             let matches_1 = true;
             for (let key in data_1) {
-                if (String(data_1[key]) !== String(result_EPF1[key])) {
+
+                if(key=="test") {
+                    continue
+                }
+
+                if (String(data_1[key]) != String(result_EPF1[key])) {
+                    console.log(data_1[key])
+                    console.log(result_EPF1[key])
                     matches_1 = false;
                     break;
                 }
@@ -220,7 +284,12 @@ describe("createEPF", () => {
 
             let matches_2 = true;
             for (let key in data_2) {
-                if (String(data_2[key]) !== String(result_EPF2[key])) {
+
+                if(key=="test") {
+                    continue
+                }
+
+                if (String(data_2[key]) != String(result_EPF2[key])) {
                     matches_2 = false;
                     break;
                 }
@@ -229,7 +298,14 @@ describe("createEPF", () => {
         } else {
             let matches_1 = true;
             for (let key in data_1) {
-                if (String(data_1[key]) !== String(result_EPF2[key])) {
+
+                if(key=="test") {
+                    continue
+                }
+
+                if (String(data_1[key]) != String(result_EPF2[key])) {
+                    console.log(data_1[key])
+                    console.log(result_EPF1[key])
                     matches_1 = false;
                     break;
                 }
@@ -238,7 +314,14 @@ describe("createEPF", () => {
 
             let matches_2 = true;
             for (let key in data_2) {
-                if (String(data_2[key]) !== String(result_EPF1[key])) {
+
+                if(key=="test") {
+                    continue
+                }
+
+                if (String(data_2[key]) != String(result_EPF1[key])) {
+                    console.log(data_1[key])
+                    console.log(result_EPF1[key])
                     matches_2 = false;
                     break;
                 }
@@ -246,6 +329,9 @@ describe("createEPF", () => {
             expect(matches_2).toBeTruthy();
         }
     });
+
+
+    
 
     test("Test ID: 9 - Invalid Student ID", async () => {
         const jsonFilePath = path.join(
@@ -488,4 +574,8 @@ describe("createEPF", () => {
 
         expect(result).toBe("Invalid Status Type");
     });
+
+    afterAll(async()=> {
+        
+    })
 });

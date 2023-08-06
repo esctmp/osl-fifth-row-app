@@ -1,4 +1,4 @@
-{
+{"body": {
     "status": 1,
     "exco_user_id": "1239e242-3538-41f2-95dd-abc62e451310",
     "a_name": "user 1",
@@ -10,7 +10,7 @@
     "a_comments_root": "A Comment ROOT",
     "b_event_name": "event 1",
     "b_target_audience": "target Audience 1",
-    "b_event_schedule": "2023-06-21 16:49",
+    "b_event_schedule": "2023-06-21T16:49",
     "b_expected_turnout": 1,
     "b_event_objective": "event Objective 1",
     "b_comments_osl": "B Comment OSL",
@@ -92,6 +92,8 @@
     "g_7_2": "blank",
     "g_7_3": "blank",
     "g_comments_osl": "G Comment OSL",
-    "g_comments_root": "G Comment ROOT"
+    "g_comments_root": "G Comment ROOT",
+    "test":1
+  }
   }
   

@@ -6,16 +6,26 @@ const path = require("path");
 const fs = require("fs");
 
 describe("createUser", () => {
+    beforeEach(async() => {
+        //TruncateUsers Table
+        const response_users = await lambda
+        .invoke({
+            FunctionName: "clearUSERSTest-staging", 
+        })
+        .promise();
+
+    })
     test("Test ID: 1.1 - Valid input: Create root user with valid name, email and id", async () => {
         const payload = {
+            test: 1,
             request: {
                 userAttributes: {
                     "custom:user_type": "ROOT",
-                    name: "hello world3",
-                    email: "helloword3_testing@example.com",
+                    name: "user 1",
+                    email: "user_1_testing@example.com",
                 },
             },
-            userName: "helloworld3",
+            userName: "user1",
         };
 
         const response = await lambda
@@ -34,14 +44,15 @@ describe("createUser", () => {
 
     test("Test ID: 1.2 - Valid input: Create osl user with valid name, email and id", async () => {
         const payload = {
+            test: 1,
             request: {
                 userAttributes: {
                     "custom:user_type": "OSL",
-                    name: "hello world4",
-                    email: "helloword4_testing@example.com",
+                    name: "user 1",
+                    email: "user_1_testing@example.com",
                 },
             },
-            userName: "helloworld4",
+            userName: "user1",
         };
 
         const response = await lambda
@@ -57,4 +68,173 @@ describe("createUser", () => {
         expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
     });
+
+    test("Test ID: 1.3 - Valid input: Create exco user with valid name, email and id", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "EXCO",
+                    name: "user 1",
+                    email: "user_1_testing@example.com",
+                },
+            },
+            userName: "user1",
+        };
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+    
+        response_payload = JSON.parse(response["Payload"])
+        expect(response_payload["user_id"]).toMatch(payload["userName"])
+        expect(response_payload["name"]).toMatch(payload["request"]["userAttributes"]["name"])
+        expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
+        expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
+    });
+
+    test.only("2.1 - Missing name: Attempt to create user without providing a name", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "ROOT",
+                    name: "",
+                    email: "user_1_testing@example.com",
+                },
+            },
+            userName: "user1",
+        };
+
+        
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+        
+        console.log(response)
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Name must be provided");
+    });
+
+    test("Test ID: 2.2 - Missing email: Attempt to create user without providing an email", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "EXCO",
+                    name: "user 1",
+                    email: "",
+                },
+            },
+            userName: "user1",
+        };
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid email format");
+    });
+
+    test("Test ID: 2.3 - Invalid email format: Attempt to create user with an incorrect email format", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "EXCO",
+                    name: "user 1",
+                    email: "invalid_email",
+                },
+            },
+            userName: "user1",
+        };
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid email format");
+    });
+
+    test("Test ID: 2.4 - Missing user_id: Attempt to create user without providing an id", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "EXCO",
+                    name: "user 1",
+                    email: "user_1_testing@example.com",
+                },
+            },
+            userName: "",
+        };
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("User ID must be provided");
+    });
+
+    test("Test ID: 2.5 - Invalid user_type: Attempt to create user with an invalid type", async () => {
+        const payload = {
+            test: 1,
+            request: {
+                userAttributes: {
+                    "custom:user_type": "invalid",
+                    name: "user 1",
+                    email: "user_1_testing@example.com",
+                },
+            },
+            userName: "user1",
+        };
+
+        const response = await lambda
+            .invoke({
+                FunctionName: "addUserGroups",
+                Payload: JSON.stringify(payload),
+            })
+            .promise();
+
+        let result = JSON.parse(response.Payload);
+        result = result["errorMessage"];
+
+        expect(result).toBe("Invalid user type. Must be 'root', 'osl', or 'exco'");
+    });
+
+    test("Test ID: 3.1 - Duplicate entry: Attempt to create user with an existing id, name, email, and type combination", async () => {
+        
+
+        //expect(result).toBe("Duplicate entry");
+    });
+
+
 });
