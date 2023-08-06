@@ -155,7 +155,7 @@ const TableAddRow = ({ onClickFunction, settings, tableName }) =>
     </Grid>
   </>
 
-const TableRowTextInput = ({ name, settings, control, minRows = 3, required = false, pattern = null}) => {
+const TableRowTextInput = ({ name, settings, control, minRows = 3, required = false, pattern = null }) => {
   const [error, setError] = useState(false);
   return (
     <Controller
@@ -205,6 +205,7 @@ const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = 
       render={({ field }) => (
         <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
           <OutlinedInput
+            type="number"
             InputLabelProps={{
               required: required
             }}
@@ -213,7 +214,6 @@ const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = 
               field.onChange(parseInt(e.target.value));
               (required && !e.target.value) ? setError(true) : setError(false);
               (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
-              console.log(name, parseInt(e.target.value));
             }}
             onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
             error={error}

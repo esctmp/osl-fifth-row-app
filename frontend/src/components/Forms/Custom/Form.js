@@ -184,7 +184,6 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
             field.onChange(parseInt(e.target.value));
             (required && !e.target.value) ? setError(true) : setError(false);
             (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
-            console.log(name, parseInt(e.target.value));
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
           value={field.value}

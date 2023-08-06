@@ -42,6 +42,7 @@ import { UserID } from '../../../routes/UserID';
 
 const EPFSubmit = () => { // wrapper component to process api calls
   const { epf_id } = useParams() || {};
+  console.log("EPF_ID ?", epf_id);
   const { userId, _ } = useContext(UserID);
 
   const [loaded, setLoaded] = useState(false); // whether api call is done
@@ -104,6 +105,20 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
     } else {
       createEPF(data);
     }
+  }
+
+  function checkInvalid(err) {
+    let isInvalid = false;
+    Object.entries(err).map(([k, v]) => {
+      if (Array.isArray(v)) {
+        Object.entries(v).map(([k2, v2]) => {
+          if (v2?.type == "validate") { isInvalid = true; }
+        });
+      } else {
+        if (v?.type == "validate") { isInvalid = true; }
+      }
+    });
+    return isInvalid;
   }
 
   // DEFINE SECTIONS
@@ -497,7 +512,11 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                               let data = getValues();
                               if (data?.b_event_name) {
                                 console.log(err);
-                                alert("Form is invalid. Please fix and submit it again.");
+                                if (checkInvalid(err)) {
+                                  alert("Form is invalid. Please fix and submit it again.");
+                                } else {
+                                  data.status = STATUS.Draft.description; submit(data);
+                                }
                               } else {
                                 alert("You must fill in the Event Name before saving this form as draft.");
                               };
