@@ -96,7 +96,7 @@ test("System - Fifth Row Submit, OSL Comment And OSL Approve", async () => {
         "d11_quantity": 24,
         "d11_amount": 132.00,
     };
-    let addButton = await driver.findElement(By.xpath('//*[contains(text(),"Table D.1.1")]/following::div[1]//button[@id="add-row"]'));
+    let addButton = await driver.findElement(By.xpath('//*[contains(text(),"Table D.1.1")]/following::div[1]//button[@id="d11-add-row"]'));
     await driver.actions().move({ origin: addButton }).click().perform();
     await driver.wait(until.elementLocated(By.xpath(`//*[contains(@id,"${Object.keys(newRow)[0]}")]`)), 5000);
     for (let key of Object.keys(newRow)) {
