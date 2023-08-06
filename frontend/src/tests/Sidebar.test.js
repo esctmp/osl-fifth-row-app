@@ -1,141 +1,153 @@
 import '@testing-library/jest-dom';
 import '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 // import mediaQuery from 'css-mediaquery';
 import React from 'react';
+import { act } from "react-dom/test-utils";
 import { BrowserRouter as Router } from 'react-router-dom';
-import mockCognito from '../__mocks__/Auth';
-import Header from '../layouts/FullLayout/Header/Header';
-import FREitems from '../layouts/FullLayout/Sidebar/FREitems';
 import Sidebar from '../layouts/FullLayout/Sidebar/Sidebar';
 import { Groups } from "../routes/Groups";
-import { UserID } from "../routes/UserID";
 
-jest.mock('amazon-cognito-identity-js', () => ({
-    CognitoUser: jest.fn(() => mockCognito),
-  }));
-
-const userPool = 
-[
-{
-    "user_id": "1",
-    "name": "EXCO User",
-    "email": "excouser@club.sutd.edu.sg",
-    "type": "FRE",
-    "outstanding EPF": 3,
-},
-{
-    "user_id": "2",
-    "name": "OSL User",
-    "email": "osl@sutd.edu.sg",
-    "type": "OSL",
-    "outstanding EPF": 4,
-},
-{
-    "user_id": "3",
-    "name": "ROOT User",
-    "email": "root@studentgov.sutd.edu.sg",
-    "type": "ROOT",
-    "outstanding EPF": 6,
-},
-]
 
 describe ('Sidebar', () => {
-// SIDE BAR WAS CLOSED DUMBASS!!!!!!!!!
-// need to set window size before testing
-    test('Render - Sidebar', () => {
+
+    test('Render - Sidebar Logo', () => {
+        let t = true;
         render(
             <Router>
-            <UserID.Provider value ={{userId:'null',setUserId:()=>{}}}>
             <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
-            {/* <Sidebar/> */}
-            <Header />
+            <Sidebar isMobileSidebarOpen={t}/>
             </Groups.Provider> 
-            </UserID.Provider>
             </Router>
             )
-        // const field = screen.getByRole("generic");
-        const button = screen.getByTestId("sidebarmenu");
-        // const logo = screen.queryByRole("img", {name: "logo"});
-        // expect(field).toBeInTheDocument();
-        expect(button).toBeInTheDocument();
-        // expect(logo).toHaveAttribute('src', '../layouts/FullLayout/Logo/LogoIcon');
+
+        let logo = screen.getAllByAltText('logo');
+        expect(logo).not.toBeNull();
     });
 
 
-    test('render a list item with NavLink', () => {
-    // Define the test data
-    const item = {
-        title: "Homepage",
-        href: "fifthrow/homepage",
-    };
-    const items = FREitems;
-    const pathDirect = 'fifthrow/homepage'; // Set a path for comparison
-    
-    // Render the component with necessary context and props
-    render(
-        <Router>
-        <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
-        <Sidebar
-        //   item={items}
-        //   pathDirect={pathDirect}
-        //   user={userPool.find(user => user['type'] === "FRE")}
-        />
-        </Groups.Provider>
-        </Router>
-    );
+    test('Render - FRE Sidebar', () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['FRE'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
 
-//     // // Get the rendered list item element
+        const element1 = screen.getByText("Homepage");
+        expect(element1).toBeInTheDocument();
+        const element2 = screen.getByText("EPF");
+        expect(element2).toBeInTheDocument();
+        const element3 = screen.getByText("Create New EPF");
+        expect(element3).toBeInTheDocument();
+        const element4 = screen.getByText("View EPF List");
+        expect(element4).toBeInTheDocument();
         
-        // const list = screen.getByRole('link', {name: "Homepage"});
-        // // const listElement = list.querySelectorAll('li');
-        // // const listElementValue = listElement[0]; 
-        // expect(list).toBeInTheDocument();
-//     const list = screen.getByRole('list');
-//     // expect(list.length).toBe(1);
-//     // const listItem = list.querySelectorAll('li');
-
-//     // // Assertions
-//     // expect (listItem.length).toBe(4); 
-//     expect(list).toBeInTheDocument();
-        // expect(list).toHaveTextContent('Homepage'); // Make sure the text is rendered
-        // expect(list).toHaveAttribute('href', 'fifthrow/homepage'); // Ensure NavLink has the correct 'to' prop
-  });
+    });
 
 
+    test('Render - OSL and ROOT Sidebar', () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['OSL'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
 
-    // side bar will show what buttons based on user type
-    // test('Render - FRE Sidebar', () => {
-    //     render(
-    //         <Router>
-    //         <Groups.Provider value ={{groups:'null', setGroups:()=>{}}}>
-    //         <Sidebar 
-    //             user={userPool.find(user => user['type'] === "FRE")}
-    //         />
-    //         </Groups.Provider> 
-    //         </Router>
-    //         )
-    //     // const user = userPool.find(user => user['type'] === "FRE");
-    //     const list = screen.getByRole('li', {name : "Homepage"});
-    //     expect (list).toBeInTheDocument();
-    //     // -------- works until here
-    //     const listItem = list.querySelectorAll('li');
-    //     expect(listItem).not.toBe("[]")
-        // expect(listItem.length).toBeGreaterThan(0);
-        // expect (listItem).toHaveTextContent("Homepage");
-        // const field1 = screen.getByTestId("Homepage");
-        // const field2 = screen.getByText("EPF");
-        // const field3 = screen.getByText("Create New EPF");
-        // const field4 = screen.getByText("View EPF List");
-        // expect(field1).toBeInTheDocument();
-    //     expect(field2).toBeInTheDocument();
-    //     expect(field3).toBeInTheDocument();
-    //     expect(field4).toBeInTheDocument();
-    // });
-
-    // each button will route to where it is supposed to
+        const element1 = screen.getByText("Homepage");
+        expect(element1).toBeInTheDocument();
+        const element2 = screen.getByText("EPF");
+        expect(element2).toBeInTheDocument();
+        const element3 = screen.getByText("Review EPF");
+        expect(element3).toBeInTheDocument();
+        const element4 = screen.getByText("View EPF List");
+        expect(element4).toBeInTheDocument();
+        
+    });
 
 
+    test('Routing - Homepage button routes correctly', async () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['FRE'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
+        
+        // click on 'Homepage' on sidebar
+        await act(async () => {
+            fireEvent.click(screen.getByTestId("Homepage"));
+        })
+        
+        expect(window.location.pathname).toBe("/fifthrow/homepage")
+            
+    });
+
+
+    test('Routing - Create New EPF button routes correctly', async () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['FRE'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
+        
+        // click on 'Homepage' on sidebar
+        await act(async () => {
+            fireEvent.click(screen.getByTestId("Create New EPF"));
+        })
+        
+        expect(window.location.pathname).toBe("/fifthrow/epf/new")
+            
+    });
+
+
+    test('Routing - View EPF List button routes correctly', async () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['FRE'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
+        
+        // click on 'Homepage' on sidebar
+        await act(async () => {
+            fireEvent.click(screen.getByTestId("View EPF List"));
+        })
+        
+        expect(window.location.pathname).toBe("/fifthrow/epf/view")
+            
+    });
+
+    
+    test('Routing - Review EPF button routes correctly', async () => {
+        let t = true;
+        render(
+            <Router>
+            <Groups.Provider value ={{groups:['OSL'], setGroups:()=>{}}}>
+            <Sidebar isMobileSidebarOpen={t}/>
+            </Groups.Provider> 
+            </Router>
+            )
+        
+        // click on 'Homepage' on sidebar
+        await act(async () => {
+            fireEvent.click(screen.getByTestId("Review EPF"));
+        })
+        
+        expect(window.location.pathname).toBe("/osl/epf/submit")
+            
+    });
 
 
 });
