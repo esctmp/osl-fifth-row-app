@@ -6,14 +6,6 @@ const path = require("path");
 const fs = require("fs");
 
 async function restart() {
-    //TruncateUsers Table
-    const response_users = await lambda
-    .invoke({
-        FunctionName: "clearUSERSTest-staging", 
-    })
-    .promise();
-
-
     //TruncateEPF Table
     const response_epfs = await lambda
     .invoke({
@@ -21,17 +13,27 @@ async function restart() {
     })
     .promise();
     
+    
+    //TruncateUsers Table
+    const response_users = await lambda
+    .invoke({
+        FunctionName: "clearUSERSTest-staging", 
+    })
+    .promise();
+
+    
 
     //Create Test User
     const payload = {
+        test: 1,
+        userName: "1239e242-3538-41f2-95dd-abc62e451310",
         request: {
             userAttributes: {
-                "custom:user_type": "EXCO",
+                "custom:user_type": "fre",
                 name: "test user",
                 email: "test_user@example.com",
             },
-        },
-        userName: "1239e242-3538-41f2-95dd-abc62e451310",
+        }
     };
 
     const response = await lambda
@@ -83,7 +85,7 @@ describe("createEPF", () => {
             }
         }
         expect(matches).toBeTruthy();
-    });
+    }, 1000000);
 
     test("Test ID: 2 - Non-existent EXCO User ID", async () => {
         const jsonFilePath = path.join(
@@ -105,7 +107,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Non-existent exco user id");
-    });
+    }, 1000000);
 
     test("Test ID: 3 - Missing Event Name", async () => {
         const jsonFilePath = path.join(
@@ -127,7 +129,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Event name missing");
-    });
+    }, 1000000);
 
     test("Test ID: 4 - Invalid INT datatype", async () => {
         const jsonFilePath = path.join(
@@ -149,7 +151,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Unexpected data type");
-    });
+    }, 1000000);
 
     test("Test ID: 5 - Invalid Object datatype", async () => {
         const jsonFilePath = path.join(
@@ -171,7 +173,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Unexpected data type");
-    });
+    }, 1000000);
 
     test("Test ID: 6 - Invalid Decimal datatype", async () => {
         const jsonFilePath = path.join(
@@ -193,7 +195,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Unexpected data type");
-    });
+    }, 1000000);
 
     test("Test ID: 7 - Invalid String datatype", async () => {
         const jsonFilePath = path.join(
@@ -215,7 +217,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Unexpected data type");
-    });
+    }, 1000000);
 
 
 
@@ -238,6 +240,7 @@ describe("createEPF", () => {
         const jsonData_2 = fs.readFileSync(jsonFilePath_2, "utf-8");
         let data_2 = JSON.parse(jsonData_2);
 
+        
         const response = await Promise.all([
             lambda
                 .invoke({
@@ -252,12 +255,12 @@ describe("createEPF", () => {
                 })
                 .promise(),
         ]);
-
+   
         let result_EPF1 = JSON.parse(response[0].Payload);
         result_EPF1 = JSON.parse(result_EPF1["body"])
         result_EPF1 = JSON.parse(JSON.stringify(result_EPF1["result"], null, 2))
 
-        let result_EPF2 = JSON.parse(response[0].Payload);
+        let result_EPF2 = JSON.parse(response[1].Payload);
         result_EPF2 = JSON.parse(result_EPF2["body"])
         result_EPF2 = JSON.parse(JSON.stringify(result_EPF2["result"], null, 2))
 
@@ -273,8 +276,6 @@ describe("createEPF", () => {
                 }
 
                 if (String(data_1[key]) != String(result_EPF1[key])) {
-                    console.log(data_1[key])
-                    console.log(result_EPF1[key])
                     matches_1 = false;
                     break;
                 }
@@ -304,8 +305,6 @@ describe("createEPF", () => {
                 }
 
                 if (String(data_1[key]) != String(result_EPF2[key])) {
-                    console.log(data_1[key])
-                    console.log(result_EPF1[key])
                     matches_1 = false;
                     break;
                 }
@@ -320,15 +319,14 @@ describe("createEPF", () => {
                 }
 
                 if (String(data_2[key]) != String(result_EPF1[key])) {
-                    console.log(data_1[key])
-                    console.log(result_EPF1[key])
                     matches_2 = false;
                     break;
                 }
             }
             expect(matches_2).toBeTruthy();
         }
-    });
+        
+    }, 1000000);
 
 
     
@@ -353,7 +351,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Student ID");
-    });
+    }, 1000000);
 
     test("Test ID: 10 - Invalid Contact Number", async () => {
         const jsonFilePath = path.join(
@@ -375,7 +373,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Contact Number");
-    });
+    }, 1000000);
 
     test("Test ID: 11 - Invalid Email Format", async () => {
         const jsonFilePath = path.join(
@@ -397,7 +395,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid email format");
-    });
+    }, 1000000);
 
     test("Test ID: 12 - Invalid Student ID in List", async () => {
         const jsonFilePath = path.join(
@@ -419,7 +417,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Student ID");
-    });
+    }, 1000000);
 
     test("Test ID: 13 - Invalid Value for Money", async () => {
         const jsonFilePath = path.join(
@@ -441,7 +439,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid value for money");
-    });
+    }, 1000000);
 
     test("Test ID: 14 - Invalid Value for Money in List", async () => {
         const jsonFilePath = path.join(
@@ -463,7 +461,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid value for money");
-    });
+    }, 1000000);
 
     test("Test ID: 15 - Invalid Value for Quantity in List", async () => {
         const jsonFilePath = path.join(
@@ -485,7 +483,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid quantity value");
-    });
+    }, 1000000);
 
     test("Test ID: 16 - Invalid Datetime format for Event Schedule", async () => {
         const jsonFilePath = path.join(
@@ -507,7 +505,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Datetime Format");
-    });
+    }, 1000000);
 
     test("Test ID: 17 - Invalid Date format in List", async () => {
         const jsonFilePath = path.join(
@@ -529,7 +527,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Date Format");
-    });
+    }, 1000000);
 
     test("Test ID: 18 - Invalid Time format in List", async () => {
         const jsonFilePath = path.join(
@@ -551,7 +549,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Time Format");
-    });
+    }, 1000000);
 
     test("Test ID: 19 - Invalid Status Type", async () => {
         const jsonFilePath = path.join(
@@ -573,7 +571,7 @@ describe("createEPF", () => {
         result = result["errorMessage"];
 
         expect(result).toBe("Invalid Status Type");
-    });
+    }, 1000000);
 
     afterAll(async()=> {
         

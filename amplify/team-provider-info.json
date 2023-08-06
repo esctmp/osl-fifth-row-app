@@ -43,7 +43,7 @@
           "dbPassword": "12345678",
           "dbUser": "postgres",
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-4236357748794d417478-build.zip"
+          "s3Key": "amplify-builds/createEPF-4e6c5a574a6264334e4b-build.zip"
         },
         "deleteEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
@@ -55,11 +55,11 @@
         },
         "getEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEPF-6950435571466a353150-build.zip"
+          "s3Key": "amplify-builds/getEPF-784f386e565a434f6876-build.zip"
         },
         "getEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/getEPFs-614f794c366853686235-build.zip"
+          "s3Key": "amplify-builds/getEPFs-2f424151703644496c2f-build.zip"
         },
         "getEXCOEPFs": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
@@ -67,7 +67,7 @@
         },
         "updateEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/updateEPF-684f376c483537534a7a-build.zip"
+          "s3Key": "amplify-builds/updateEPF-5650486a77587a454451-build.zip"
         },
         "updateUser": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
@@ -76,6 +76,10 @@
         "clearEPFTests": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
           "s3Key": "amplify-builds/clearEPFTests-58317458567048704241-build.zip"
+        },
+        "clearUSERSTest": {
+          "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
+          "s3Key": "amplify-builds/clearUSERSTest-756543347473312b476f-build.zip"
         }
       }
     }

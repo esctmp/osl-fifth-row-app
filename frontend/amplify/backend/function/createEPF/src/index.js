@@ -304,13 +304,13 @@ exports.handler = async (event) => {
     // BEGIN VERIFICATION //
     // Check for datatypes
     //console.log("Checking datatypes");
-    // for (let i = 0; i < columns.length; i++) {
-    //     const { name, value } = columns[i];
-    //     const expectedType = datatypes[i];
-    //     if (value !== undefined && typeof value !== expectedType) {
-    //         throw new Error("Unexpected data type");
-    //     }
-    // }
+    for (let i = 0; i < columns.length; i++) {
+        const { name, value } = columns[i];
+        const expectedType = datatypes[i];
+        if (value !== undefined && typeof value !== expectedType) {
+            throw new Error("Unexpected data type");
+        }
+    }
 
     // Check for valid status
     //console.log("Checking status");

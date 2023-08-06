@@ -8,21 +8,33 @@ const pool = new Pool({
     port: 5432,
 });
 
+const RETRY_DELAY_MS = 200;
+const MAX_RETRIES = 5;
+
 exports.handler = async (event) => {
-    const epf_id = event.epf_id;
-    const MAX_RETRIES = 5;
-    let result = null;
+    const { epf_id } = JSON.parse(event.body);
+    console.log(epf_id)
+    if (typeof epf_id !== "number") {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Invalid epf_id data type" }),
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*",
+            },
+        };
+    }
+
     let client;
+    let result = null;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
         try {
             client = await pool.connect();
             await client.query("BEGIN");
-            await client.query(
-                "SET TRANSACTION ISOLATION LEVEL READ COMMITTED"
-            );
+            await client.query("SET TRANSACTION ISOLATION LEVEL READ COMMITTED");
 
-            // Check for valid epf_id
             const valid_epf_id = await client.query(
                 `SELECT COUNT(*) FROM EPFS WHERE epf_id = $1 AND is_deleted = false`,
                 [epf_id]
@@ -50,7 +62,15 @@ exports.handler = async (event) => {
                 throw err;
             }
             if (attempt === MAX_RETRIES - 1) {
-                throw new Error("Max retrieval attempts exceeded");
+                return {
+                    statusCode: 500,
+                    body: JSON.stringify({ error: "Max retrieval attempts exceeded" }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Headers": "*",
+                    },
+                };
             }
             await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
         } finally {
@@ -60,22 +80,25 @@ exports.handler = async (event) => {
         }
     }
 
-    if (result["rows"].length === 0) {
+    if (!result || result["rows"].length === 0) {
         return {
+            statusCode: 404,
+            body: JSON.stringify({ message: "EPF not found" }),
             headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "*",
-            },
-            statusCode: 200,
-            body:result["rows"],
-        }
-    }
-    return {
-        headers: {
+                "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
-        },
-        statusCode: 200,
-        body:result["rows"],
+            },
+        };
     }
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(result["rows"]),
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    };
 };

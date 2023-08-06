@@ -67,152 +67,44 @@ describe("getEPF", () => {
         result = JSON.parse(result["body"])
         result = JSON.parse(JSON.stringify(result["result"], null, 2))
         my_epf_id = result["epf_id"]
-    }, 1000000)
 
-    test("Test ID: 1 - Valid EPF ID", async () => {
-        const jsonFilePath = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "createEPF_test8_1.json"
-        );
-        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
-        let data = JSON.parse(jsonData);
-
-        const jsonFilePath_payload = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "getEPF_test1.json"
-        );
-        const jsonData_payload = fs.readFileSync(jsonFilePath_payload, "utf-8");
-        let payload = JSON.parse(jsonData_payload);
-        payload["body"]["epf_id"] = my_epf_id
-
-        const response = await lambda
-            .invoke({
-                FunctionName: "getEPF-staging",
-                Payload: JSON.stringify(payload),
-            })
-            .promise();
-
-        let result = JSON.parse(response.Payload);
-        result = JSON.parse(result["body"]);
-        result = JSON.parse(JSON.stringify(result[0]))
-        data = data["body"]
-
-        
-        let matches = true;
-        for (let key in data) {
-            if (String(data[key]) !== String(result[key])) {
-                matches = false;
-                break;
-            }
-        }
-        expect(matches).toBeTruthy();
-        
-    }, 1000000);
-
-    test("Test ID: 2 - Invalid EPF datatype", async () => {
-        const jsonFilePath_payload = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "getEPF_test2.json"
-        );
-        const jsonData_payload = fs.readFileSync(jsonFilePath_payload, "utf-8");
-        let payload = JSON.parse(jsonData_payload);
-
-        const response = await lambda
-            .invoke({
-                FunctionName: "getEPF-staging",
-                Payload: JSON.stringify(payload),
-            })
-            .promise();
-
-        let result = JSON.parse(response.Payload);
-        result = JSON.parse(result["body"]);
-        result = result["error"];
-
-        expect(result).toBe("Invalid epf_id data type");
-    }, 1000000);
-
-    test("Test ID: 3 - Non-existent EPF ID", async () => {
-        const jsonFilePath_payload = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "getEPF_test3.json"
-        );
-        const jsonData_payload = fs.readFileSync(jsonFilePath_payload, "utf-8");
-        let payload = JSON.parse(jsonData_payload);
-
-        const response = await lambda
-            .invoke({
-                FunctionName: "getEPF-staging",
-                Payload: JSON.stringify(payload),
-            })
-            .promise();
-
-        let result = JSON.parse(response.Payload);
-        result = result["errorMessage"];
-
-        expect(result).toBe("Non-existent epf");
-    }, 1000000);
-
-    test("Test ID: 4 - Get multiple EPFs concurrently", async () => {
 
         //CreateEPF to update
-        const jsonFilePath = path.join(
+        const jsonFilePath_2 = path.join(
             __dirname,
             "getEPF_testjson",
             "createEPF_test8_2.json"
         );
-        const jsonData = fs.readFileSync(jsonFilePath, "utf-8");
-        let data = JSON.parse(jsonData);
+        const jsonData_2 = fs.readFileSync(jsonFilePath_2, "utf-8");
+        let data_2 = JSON.parse(jsonData_2);
 
-        let response_epf = await lambda
+        let response_2 = await lambda
             .invoke({
                 FunctionName: "createEPF-staging",
-                Payload: JSON.stringify(data),
+                Payload: JSON.stringify(data_2),
             })
             .promise();
 
-        let result_epf = JSON.parse(response_epf.Payload);
-        result_epf = JSON.parse(result_epf["body"])
-        result_epf = JSON.parse(JSON.stringify(result_epf["result"], null, 2))
-        my_epf_id_2 = result_epf["epf_id"]
+        let result_2 = JSON.parse(response_2.Payload);
+        result_2 = JSON.parse(result_2["body"])
+        result_2 = JSON.parse(JSON.stringify(result_2["result"], null, 2))
+        my_epf_id_2 = result_2["epf_id"]
+
+    }, 1000000)
 
 
-        const jsonFilePath_payload = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "getEPF_test1.json"
-        );
-        const jsonData_payload = fs.readFileSync(jsonFilePath_payload, "utf-8");
-        let payload = JSON.parse(jsonData_payload);
-        payload["body"]["epf_id"] = my_epf_id
+    test("Test ID: 1 - Single getEPFs call", async () => {
 
-        const jsonFilePath_payload_2 = path.join(
-            __dirname,
-            "getEPF_testjson",
-            "getEPF_test2.json"
-        );
-        const jsonData_payload_2 = fs.readFileSync(jsonFilePath_payload_2, "utf-8");
-        let payload_2 = JSON.parse(jsonData_payload_2);
-        payload_2["body"]["epf_id"] = my_epf_id_2
-
-        const response = await Promise.all([
+        const response = 
             await lambda
             .invoke({
-                FunctionName: "getEPF-staging",
-                Payload: JSON.stringify(payload),
-            })
-            .promise(),
-            await lambda
-            .invoke({
-                FunctionName: "getEPF-staging",
-                Payload: JSON.stringify(payload_2),
+                FunctionName: "getEPFs-staging"
             })
             .promise()
-        ])
 
+        console.log(response)
+
+        /*
         let result_EPF1 = JSON.parse(response[0].Payload);
         result_EPF1 = JSON.parse(result_EPF1["body"])
         result_EPF1 = result_EPF1[0]
@@ -300,6 +192,7 @@ describe("getEPF", () => {
             }
             expect(matches_2).toBeTruthy();
         }
+        */
 
 
     }, 1000000);

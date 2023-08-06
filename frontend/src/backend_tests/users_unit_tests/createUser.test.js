@@ -7,6 +7,14 @@ const fs = require("fs");
 
 describe("createUser", () => {
     beforeEach(async() => {
+        
+        //TruncateEPF Table
+        const response_epfs = await lambda
+        .invoke({
+            FunctionName: "clearEPFTests-staging", 
+        })
+        .promise();
+        
         //TruncateUsers Table
         const response_users = await lambda
         .invoke({
@@ -15,17 +23,21 @@ describe("createUser", () => {
         .promise();
 
     })
+
     test("Test ID: 1.1 - Valid input: Create root user with valid name, email and id", async () => {
+
+
+        
         const payload = {
             test: 1,
+            userName: "1239e242-3538-41f2-95dd-abc62e451310",
             request: {
                 userAttributes: {
-                    "custom:user_type": "ROOT",
-                    name: "user 1",
-                    email: "user_1_testing@example.com",
+                    "custom:user_type": "root",
+                    name: "test user",
+                    email: "test_user@example.com",
                 },
-            },
-            userName: "user1",
+            }
         };
 
         const response = await lambda
@@ -34,12 +46,15 @@ describe("createUser", () => {
                 Payload: JSON.stringify(payload),
             })
             .promise();
+
+        console.log(response)
     
         response_payload = JSON.parse(response["Payload"])
         expect(response_payload["user_id"]).toMatch(payload["userName"])
         expect(response_payload["name"]).toMatch(payload["request"]["userAttributes"]["name"])
         expect(response_payload["email"]).toMatch(payload["request"]["userAttributes"]["email"])
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
+        
     });
 
     test("Test ID: 1.2 - Valid input: Create osl user with valid name, email and id", async () => {
@@ -47,7 +62,7 @@ describe("createUser", () => {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "OSL",
+                    "custom:user_type": "osl",
                     name: "user 1",
                     email: "user_1_testing@example.com",
                 },
@@ -74,7 +89,7 @@ describe("createUser", () => {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "EXCO",
+                    "custom:user_type": "fre",
                     name: "user 1",
                     email: "user_1_testing@example.com",
                 },
@@ -96,12 +111,12 @@ describe("createUser", () => {
         expect(response_payload["user_type"]).toMatch(payload["request"]["userAttributes"]["custom:user_type"])
     });
 
-    test.only("2.1 - Missing name: Attempt to create user without providing a name", async () => {
+    test("2.1 - Missing name: Attempt to create user without providing a name", async () => {
         const payload = {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "ROOT",
+                    "custom:user_type": "root",
                     name: "",
                     email: "user_1_testing@example.com",
                 },
@@ -117,8 +132,7 @@ describe("createUser", () => {
                 Payload: JSON.stringify(payload),
             })
             .promise();
-        
-        console.log(response)
+
 
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
@@ -131,7 +145,7 @@ describe("createUser", () => {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "EXCO",
+                    "custom:user_type": "fre",
                     name: "user 1",
                     email: "",
                 },
@@ -157,7 +171,7 @@ describe("createUser", () => {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "EXCO",
+                    "custom:user_type": "fre",
                     name: "user 1",
                     email: "invalid_email",
                 },
@@ -183,7 +197,7 @@ describe("createUser", () => {
             test: 1,
             request: {
                 userAttributes: {
-                    "custom:user_type": "EXCO",
+                    "custom:user_type": "fre",
                     name: "user 1",
                     email: "user_1_testing@example.com",
                 },
@@ -227,12 +241,10 @@ describe("createUser", () => {
         let result = JSON.parse(response.Payload);
         result = result["errorMessage"];
 
-        expect(result).toBe("Invalid user type. Must be 'root', 'osl', or 'exco'");
+        expect(result).toBe("Invalid user type. Must be 'root', 'osl', or 'fre'");
     });
 
     test("Test ID: 3.1 - Duplicate entry: Attempt to create user with an existing id, name, email, and type combination", async () => {
-        
-
         //expect(result).toBe("Duplicate entry");
     });
 
