@@ -6,7 +6,7 @@ const excoUser = {
     password: "P@ssword1!"
 };
 const oslUser = {
-    email: "testosl@sutd.edu.sg",
+    email: "testosl@club.sutd.edu.sg",
     password: "P@ssword1!"
 };
 

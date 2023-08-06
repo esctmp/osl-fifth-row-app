@@ -1,4 +1,6 @@
-import EPFSubmit from "../pages/FifthRow/EPF/Submit";
+import FifthRowEPFSubmit from "../pages/FifthRow/EPF/Submit";
+import OSLEPFSubmit from "../pages/OSL/EPF/Submit";
+import ROOTEPFSubmit from "../pages/ROOT/EPF/Submit";
 import React from 'react';
 import { render, fireEvent, screen, queryByAttribute } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -31,7 +33,9 @@ const getSampleFormWithStatus = async (status) => {
     var epf_id = form?.epf_id;
     var b_event_name = form?.b_event_name;
     if (epf_id == undefined) { // if cannot find any form with specified status, create one
-        let { epf_id, b_event_name } = await createSampleForm(status);
+        form = await createSampleForm(status);
+        epf_id = form?.epf_id;
+        b_event_name = form?.b_event_name;
     }
     return {
         epf_id: epf_id,
@@ -70,6 +74,30 @@ const createSampleForm = async (status = "Draft") => {
     }
 };
 
+const getFormWithEventName = async (b_event_name) => {
+    let response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    ).then((res) => res, (error) => {
+        throw new Error("Cannot get any EPF forms");
+    });
+    let form = (response.data.find((obj) => obj?.b_event_name == b_event_name) || {});
+    if (form == {}) { // if cannot find any form with specified name, throw error
+        throw new Error("Cannot find EPF form with specified name");
+    } else return form;
+}
+
+const getFormWithEPFId = async (epf_id) => {
+    let response = await axios.get("http://localhost:3000/epfs/getEPF", //"https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
+        {
+            params: { epf_id: epf_id }
+        }
+    ).then((res) => res, (error) => {
+        throw new Error("Cannot get the EPF form with the specified ID");
+    });
+    let form = response.data[0];
+    return form;
+}
+
+
 describe('Fifth Row - EPF Form', () => {
 
     describe('Validation', () => {
@@ -77,7 +105,7 @@ describe('Fifth Row - EPF Form', () => {
         test('Validation - Required', () => {
             render(
                 <UserID.Provider value={{ userId: 'null', setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
             // 11
@@ -99,7 +127,7 @@ describe('Fifth Row - EPF Form', () => {
         test('Validation - Correct Format', async () => {
             render(
                 <UserID.Provider value={{ userId: 'null', setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
             // 15
@@ -141,7 +169,7 @@ describe('Fifth Row - EPF Form', () => {
             const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
             render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
 
@@ -182,7 +210,7 @@ describe('Fifth Row - EPF Form', () => {
             const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
             render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
 
@@ -216,7 +244,7 @@ describe('Fifth Row - EPF Form', () => {
                 , { timeout: 2000 });
 
             // teardown
-            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined }); 
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         }, 25000);
 
         test("Valid Form Behavior", async () => {
@@ -224,7 +252,7 @@ describe('Fifth Row - EPF Form', () => {
             const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
             let dom = render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
             const data = {
@@ -272,11 +300,19 @@ describe('Fifth Row - EPF Form', () => {
                 expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
                 , { timeout: 2000 });
 
+            // 37
+            let form = await getFormWithEventName(data["b_event_name"]);
+            expect(form?.status).toBe("Draft");
+
             // 6
             fireEvent.click(screen.getByRole('button', { name: /Submit/ }));
             await waitFor(() =>
                 expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
                 , { timeout: 2000 });
+
+            // 38
+            form = await getFormWithEventName(data["b_event_name"]);
+            expect(form?.status).toBe("Pending Approval");
         }, 25000);
     })
 
@@ -284,7 +320,7 @@ describe('Fifth Row - EPF Form', () => {
         test('Table Input Fields Validation', async () => {
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
 
@@ -343,7 +379,7 @@ describe('Fifth Row - EPF Form', () => {
             const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
             let dom = render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
 
@@ -443,7 +479,7 @@ describe('Fifth Row - EPF Form', () => {
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
 
@@ -463,7 +499,7 @@ describe('Fifth Row - EPF Form', () => {
             expect(submitBtn).toBeEnabled();
 
             // teardown
-            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined }); 
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         }, 25000);
 
         test('Status - Approved Form Edit Permission', async () => {
@@ -471,10 +507,10 @@ describe('Fifth Row - EPF Form', () => {
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
-    
+
             // 30
             await waitFor(() => {
                 expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
@@ -483,15 +519,15 @@ describe('Fifth Row - EPF Form', () => {
             expect(elem).toBeDisabled();
             elem = queryByAttribute('id', dom.container, 'g_7_1');
             expect(elem).toBeDisabled();
-    
+
             // 31
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
             let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
-            
+
             // teardown
-            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined }); 
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         }, 25000);
 
         test('Status - Pending Approval Form Edit Permission', async () => {
@@ -499,10 +535,10 @@ describe('Fifth Row - EPF Form', () => {
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
-                    <EPFSubmit />
+                    <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
-    
+
             // 32
             await waitFor(() => {
                 expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
@@ -511,16 +547,415 @@ describe('Fifth Row - EPF Form', () => {
             expect(elem).toBeDisabled();
             elem = queryByAttribute('id', dom.container, 'g_7_1');
             expect(elem).toBeDisabled();
-    
+
             // 33
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
             let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
-            
+
             // teardown
-            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined }); 
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+
+        test('Status - Rejected Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <FifthRowEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 34
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeEnabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeEnabled();
+
+            // 35
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeEnabled();
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
+            expect(submitBtn).toBeEnabled();
+
+            // 36
+            fireEvent.click(submitBtn);
+            const form = await getFormWithEventName(b_event_name);
+            expect(form?.epf_id == epf_id).toBe(false);
+            expect(form?.status).toBe("Pending Approval");
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         }, 25000);
     })
 })
 
+describe('OSL - EPF Form', () => {
+
+    describe('Status', () => {
+        test('Status - Pending Approval Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <OSLEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 42
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 43
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeEnabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeEnabled();
+
+            // 44
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeDisabled();
+
+            // 45
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeEnabled();
+            let approveBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(approveBtn).toBeEnabled();
+            let rejectBtn = screen.getByRole('button', { name: /Reject/ });
+            expect(rejectBtn).toBeEnabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+
+        test('Status - Approved Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Approved');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <OSLEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 46
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 47
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeDisabled();
+
+            // 48
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeDisabled();
+
+            // 49
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeDisabled();
+            let approveBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(approveBtn).toBeDisabled();
+            let rejectBtn = screen.getByRole('button', { name: /Reject/ });
+            expect(rejectBtn).toBeDisabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+
+        test('Status - Rejected Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <OSLEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 50
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 51
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeDisabled();
+
+            // 52
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeDisabled();
+
+            // 53
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeDisabled();
+            let approveBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(approveBtn).toBeDisabled();
+            let rejectBtn = screen.getByRole('button', { name: /Reject/ });
+            expect(rejectBtn).toBeDisabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+    });
+
+    describe('Upload', () => {
+        test('Upload - All Forms', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <OSLEPFSubmit />
+                </UserID.Provider>
+            )
+
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeEnabled();
+            let approveBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(approveBtn).toBeEnabled();
+            let rejectBtn = screen.getByRole('button', { name: /Reject/ });
+            expect(rejectBtn).toBeEnabled();
+
+            // 54
+            fireEvent.click(saveDraftBtn);
+            await waitFor(() =>
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+                , { timeout: 2000 });
+
+            // 57
+            let form = await getFormWithEPFId(epf_id);
+            expect(form?.status).toBe("Pending Approval");
+
+            // 55
+            fireEvent.click(approveBtn);
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenCalledTimes(2);
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+            }, { timeout: 2000 });
+
+            // 58
+            form = await getFormWithEPFId(epf_id);
+            expect(form?.status).toBe("Approved");
+
+            // 56
+            fireEvent.click(rejectBtn);
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenCalledTimes(3);
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+            }, { timeout: 2000 });
+
+            // 57
+            form = await getFormWithEPFId(epf_id);
+            expect(form?.status).toBe("Rejected");
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000)
+    });
+});
+
+
+describe('ROOT - EPF Form', () => {
+
+    describe('Status', () => {
+        test('Status - Pending Approval Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <ROOTEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 62
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 63
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeDisabled();
+
+            // 64
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeEnabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeEnabled();
+
+            // 45
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeEnabled();
+            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(submitBtn).toBeEnabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+
+        test('Status - Approved Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Approved');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <ROOTEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 66
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 67
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeDisabled();
+
+            // 68
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeDisabled();
+
+            // 69
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeDisabled();
+            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(submitBtn).toBeDisabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+
+        test('Status - Rejected Form Edit Permission', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <ROOTEPFSubmit />
+                </UserID.Provider>
+            )
+
+            // 70
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let elem = queryByAttribute('id', dom.container, 'a_name');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'g_7_1');
+            expect(elem).toBeDisabled();
+
+            // 71
+            elem = queryByAttribute('id', dom.container, 'a_comments_osl');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_osl');
+            expect(elem).toBeDisabled();
+
+            // 72
+            elem = queryByAttribute('id', dom.container, 'a_comments_root');
+            expect(elem).toBeDisabled();
+            elem = queryByAttribute('id', dom.container, 'f_comments_root');
+            expect(elem).toBeDisabled();
+
+            // 73
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeDisabled();
+            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(submitBtn).toBeDisabled();
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        }, 25000);
+    });
+
+    describe('Upload', () => {
+        test('Upload - All Forms', async () => {
+            const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
+            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            let dom = render(
+                <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
+                    <ROOTEPFSubmit />
+                </UserID.Provider>
+            )
+
+            await waitFor(() => {
+                expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
+            }, { timeout: 5000 });
+            let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
+            expect(saveDraftBtn).toBeDisabled();
+            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            expect(submitBtn).toBeDisabled();
+
+            // 74
+            fireEvent.click(saveDraftBtn);
+            await waitFor(() =>
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+                , { timeout: 2000 });
+
+            // 76
+            let form = await getFormWithEPFId(epf_id);
+            expect(form?.status).toBe("Pending Approval");
+
+            // 75
+            fireEvent.click(submitBtn);
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenCalledTimes(2);
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
+            }, { timeout: 2000 });
+
+            // 77
+            form = await getFormWithEPFId(epf_id);
+            expect(form?.status).toBe("Pending Approval");
+
+            // teardown
+            jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
+        })
+    }, 25000);
+});
