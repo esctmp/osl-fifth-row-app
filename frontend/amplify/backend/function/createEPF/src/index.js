@@ -1,6 +1,5 @@
 const { Pool } = require("pg");
-const AWS = require("aws-sdk");
-
+    
 let pool;
 let client;
 let result = null;
@@ -153,6 +152,8 @@ const epf_db_datatypes_create = {
 // }
 
 exports.handler = async (event) => {
+    const requestBody = JSON.parse(event.body);
+    console.log(event)
     if (event.test == 1) {
         // pool for test db
         pool = new Pool({
@@ -175,109 +176,109 @@ exports.handler = async (event) => {
 
     // START FORMATTING //
     const columns = [
-        { name: "status", value: event.status },
-        { name: "exco_user_id", value: event.exco_user_id },
-        { name: "a_name", value: event.a_name },
-        { name: "a_student_id", value: event.a_student_id },
-        { name: "a_organisation", value: event.a_organisation },
-        { name: "a_contact_number", value: event.a_contact_number },
-        { name: "a_email", value: event.a_email },
-        { name: "a_comments_osl", value: event.a_comments_osl },
-        { name: "a_comments_root", value: event.a_comments_root },
-        { name: "b_event_name", value: event.b_event_name },
-        { name: "b_target_audience", value: event.b_target_audience },
-        { name: "b_event_schedule", value: event.b_event_schedule },
-        { name: "b_expected_turnout", value: event.b_expected_turnout },
-        { name: "b_event_objective", value: event.b_event_objective },
-        { name: "b_comments_osl", value: event.b_comments_osl },
-        { name: "b_comments_root", value: event.b_comments_root },
-        { name: "c1_date", value: event.c1_date },
-        { name: "c1_time", value: event.c1_time },
+        { name: "status", value: requestBody.status },
+        { name: "exco_user_id", value: requestBody.exco_user_id },
+        { name: "a_name", value: requestBody.a_name },
+        { name: "a_student_id", value: requestBody.a_student_id },
+        { name: "a_organisation", value: requestBody.a_organisation },
+        { name: "a_contact_number", value: requestBody.a_contact_number },
+        { name: "a_email", value: requestBody.a_email },
+        { name: "a_comments_osl", value: requestBody.a_comments_osl },
+        { name: "a_comments_root", value: requestBody.a_comments_root },
+        { name: "b_event_name", value: requestBody.b_event_name },
+        { name: "b_target_audience", value: requestBody.b_target_audience },
+        { name: "b_event_schedule", value: requestBody.b_event_schedule },
+        { name: "b_expected_turnout", value: requestBody.b_expected_turnout },
+        { name: "b_event_objective", value: requestBody.b_event_objective },
+        { name: "b_comments_osl", value: requestBody.b_comments_osl },
+        { name: "b_comments_root", value: requestBody.b_comments_root },
+        { name: "c1_date", value: requestBody.c1_date },
+        { name: "c1_time", value: requestBody.c1_time },
         {
             name: "c1_activity_and_description",
-            value: event.c1_activity_and_description,
+            value: requestBody.c1_activity_and_description,
         },
-        { name: "c1_venue", value: event.c1_venue },
-        { name: "c2_date", value: event.c2_date },
-        { name: "c2_time", value: event.c2_time },
+        { name: "c1_venue", value: requestBody.c1_venue },
+        { name: "c2_date", value: requestBody.c2_date },
+        { name: "c2_time", value: requestBody.c2_time },
         {
             name: "c2_activity_and_description",
-            value: event.c2_activity_and_description,
+            value: requestBody.c2_activity_and_description,
         },
-        { name: "c2_venue", value: event.c2_venue },
-        { name: "c3_date", value: event.c3_date },
-        { name: "c3_time", value: event.c3_time },
+        { name: "c2_venue", value: requestBody.c2_venue },
+        { name: "c3_date", value: requestBody.c3_date },
+        { name: "c3_time", value: requestBody.c3_time },
         {
             name: "c3_activity_and_description",
-            value: event.c3_activity_and_description,
+            value: requestBody.c3_activity_and_description,
         },
-        { name: "c3_venue", value: event.c3_venue },
-        { name: "c3_cleanup_date", value: event.c3_cleanup_date },
-        { name: "c3_cleanup_time", value: event.c3_cleanup_time },
+        { name: "c3_venue", value: requestBody.c3_venue },
+        { name: "c3_cleanup_date", value: requestBody.c3_cleanup_date },
+        { name: "c3_cleanup_time", value: requestBody.c3_cleanup_time },
         {
             name: "c3_cleanup_activity_and_description",
-            value: event.c3_cleanup_activity_and_description,
+            value: requestBody.c3_cleanup_activity_and_description,
         },
-        { name: "c3_cleanup_venue", value: event.c3_cleanup_venue },
-        { name: "c_comments_osl", value: event.c_comments_osl },
-        { name: "c_comments_root", value: event.c_comments_root },
-        { name: "d1a_club_income_fund", value: event.d1a_club_income_fund },
-        { name: "d1a_osl_seed_fund", value: event.d1a_osl_seed_fund },
-        { name: "d1a_donation", value: event.d1a_donation },
-        { name: "d1b_revenue", value: event.d1b_revenue },
+        { name: "c3_cleanup_venue", value: requestBody.c3_cleanup_venue },
+        { name: "c_comments_osl", value: requestBody.c_comments_osl },
+        { name: "c_comments_root", value: requestBody.c_comments_root },
+        { name: "d1a_club_income_fund", value: requestBody.d1a_club_income_fund },
+        { name: "d1a_osl_seed_fund", value: requestBody.d1a_osl_seed_fund },
+        { name: "d1a_donation", value: requestBody.d1a_donation },
+        { name: "d1b_revenue", value: requestBody.d1b_revenue },
         {
             name: "d1b_donation_or_scholarship",
-            value: event.d1b_donation_or_scholarship,
+            value: requestBody.d1b_donation_or_scholarship,
         },
         {
             name: "d1b_total_source_of_funds",
-            value: event.d1b_total_source_of_funds,
+            value: requestBody.d1b_total_source_of_funds,
         },
         {
             name: "d11_items_goods_services",
-            value: event.d11_items_goods_services,
+            value: requestBody.d11_items_goods_services,
         },
-        { name: "d11_price", value: event.d11_price },
-        { name: "d11_quantity", value: event.d11_quantity },
-        { name: "d11_amount", value: event.d11_amount },
-        { name: "d11_total_revenue", value: event.d11_total_revenue },
-        { name: "d2_items", value: event.d2_items },
-        { name: "d2_reason_for_purchase", value: event.d2_reason_for_purchase },
-        { name: "d2_venue", value: event.d2_venue },
-        { name: "d2_total_expenditure", value: event.d2_total_expenditure },
-        { name: "d_comments_osl", value: event.d_comments_osl },
-        { name: "d_comments_root", value: event.d_comments_root },
-        { name: "e_personal_data", value: event.e_personal_data },
-        { name: "e_comments_osl", value: event.e_comments_osl },
-        { name: "e_comments_root", value: event.e_comments_root },
-        { name: "f_name", value: event.f_name },
-        { name: "f_student_id", value: event.f_student_id },
-        { name: "f_position", value: event.f_position },
-        { name: "f_comments_osl", value: event.f_comments_osl },
-        { name: "f_comments_root", value: event.f_comments_root },
-        { name: "g_1_1", value: event.g_1_1 },
-        { name: "g_1_2", value: event.g_1_2 },
-        { name: "g_1_3", value: event.g_1_3 },
-        { name: "g_2_1", value: event.g_2_1 },
-        { name: "g_2_2", value: event.g_2_2 },
-        { name: "g_2_3", value: event.g_2_3 },
-        { name: "g_3_1", value: event.g_3_1 },
-        { name: "g_3_2", value: event.g_3_2 },
-        { name: "g_3_3", value: event.g_3_3 },
-        { name: "g_4_1", value: event.g_4_1 },
-        { name: "g_4_2", value: event.g_4_2 },
-        { name: "g_4_3", value: event.g_4_3 },
-        { name: "g_5_1", value: event.g_5_1 },
-        { name: "g_5_2", value: event.g_5_2 },
-        { name: "g_5_3", value: event.g_5_3 },
-        { name: "g_6_1", value: event.g_6_1 },
-        { name: "g_6_2", value: event.g_6_2 },
-        { name: "g_6_3", value: event.g_6_3 },
-        { name: "g_7_1", value: event.g_7_1 },
-        { name: "g_7_2", value: event.g_7_2 },
-        { name: "g_7_3", value: event.g_7_3 },
-        { name: "g_comments_osl", value: event.g_comments_osl },
-        { name: "g_comments_root", value: event.g_comments_root },
+        { name: "d11_price", value: requestBody.d11_price },
+        { name: "d11_quantity", value: requestBody.d11_quantity },
+        { name: "d11_amount", value: requestBody.d11_amount },
+        { name: "d11_total_revenue", value: requestBody.d11_total_revenue },
+        { name: "d2_items", value: requestBody.d2_items },
+        { name: "d2_reason_for_purchase", value: requestBody.d2_reason_for_purchase },
+        { name: "d2_venue", value: requestBody.d2_venue },
+        { name: "d2_total_expenditure", value: requestBody.d2_total_expenditure },
+        { name: "d_comments_osl", value: requestBody.d_comments_osl },
+        { name: "d_comments_root", value: requestBody.d_comments_root },
+        { name: "e_personal_data", value: requestBody.e_personal_data },
+        { name: "e_comments_osl", value: requestBody.e_comments_osl },
+        { name: "e_comments_root", value: requestBody.e_comments_root },
+        { name: "f_name", value: requestBody.f_name },
+        { name: "f_student_id", value: requestBody.f_student_id },
+        { name: "f_position", value: requestBody.f_position },
+        { name: "f_comments_osl", value: requestBody.f_comments_osl },
+        { name: "f_comments_root", value: requestBody.f_comments_root },
+        { name: "g_1_1", value: requestBody.g_1_1 },
+        { name: "g_1_2", value: requestBody.g_1_2 },
+        { name: "g_1_3", value: requestBody.g_1_3 },
+        { name: "g_2_1", value: requestBody.g_2_1 },
+        { name: "g_2_2", value: requestBody.g_2_2 },
+        { name: "g_2_3", value: requestBody.g_2_3 },
+        { name: "g_3_1", value: requestBody.g_3_1 },
+        { name: "g_3_2", value: requestBody.g_3_2 },
+        { name: "g_3_3", value: requestBody.g_3_3 },
+        { name: "g_4_1", value: requestBody.g_4_1 },
+        { name: "g_4_2", value: requestBody.g_4_2 },
+        { name: "g_4_3", value: requestBody.g_4_3 },
+        { name: "g_5_1", value: requestBody.g_5_1 },
+        { name: "g_5_2", value: requestBody.g_5_2 },
+        { name: "g_5_3", value: requestBody.g_5_3 },
+        { name: "g_6_1", value: requestBody.g_6_1 },
+        { name: "g_6_2", value: requestBody.g_6_2 },
+        { name: "g_6_3", value: requestBody.g_6_3 },
+        { name: "g_7_1", value: requestBody.g_7_1 },
+        { name: "g_7_2", value: requestBody.g_7_2 },
+        { name: "g_7_3", value: requestBody.g_7_3 },
+        { name: "g_comments_osl", value: requestBody.g_comments_osl },
+        { name: "g_comments_root", value: requestBody.g_comments_root },
     ];
 
     const definedColumns = columns.filter(
@@ -288,29 +289,29 @@ exports.handler = async (event) => {
     const defined_values = definedColumns.map((column) => column.value);
     const datatypes = Object.values(epf_db_datatypes_create);
 
-    const exco_user_id = event.exco_user_id;
+    const exco_user_id = requestBody.exco_user_id;
     // END FORMATTING //
 
     // BEGIN VERIFICATION //
     // Check for datatypes
     //console.log("Checking datatypes");
-    for (let i = 0; i < columns.length; i++) {
-        const { name, value } = columns[i];
-        const expectedType = datatypes[i];
-        if (value !== undefined && typeof value !== expectedType) {
-            throw new Error("Unexpected data type");
-        }
-    }
+    // for (let i = 0; i < columns.length; i++) {
+    //     const { name, value } = columns[i];
+    //     const expectedType = datatypes[i];
+    //     if (value !== undefined && typeof value !== expectedType) {
+    //         throw new Error("Unexpected data type");
+    //     }
+    // }
 
     // Check for valid status
     //console.log("Checking status");
-    if (!status_types.includes(event.status)) {
+    if (!status_types.includes(requestBody.status)) {
         throw new Error("Invalid Status Type");
     }
 
     // Check for event name
     //console.log("Checking event name");
-    if (event.b_event_name.trim().length == 0) {
+    if (requestBody.b_event_name.trim().length == 0) {
         throw new Error("Event name missing");
     }
 
@@ -318,13 +319,13 @@ exports.handler = async (event) => {
     //console.log("Checking student id");
     const student_id_regex = /^1\d{6}$/;
     if (
-        !student_id_regex.test(event.a_student_id) &&
-        event.a_student_id !== undefined
+        !student_id_regex.test(requestBody.a_student_id) &&
+        requestBody.a_student_id !== undefined
     ) {
         throw new Error("Invalid Student ID");
     }
 
-    event.f_student_id.forEach((student_id) => {
+    requestBody.f_student_id.forEach((student_id) => {
         if (!student_id_regex.test(parseInt(student_id)) && student_id !== "") {
             throw new Error("Invalid Student ID");
         }
@@ -334,20 +335,20 @@ exports.handler = async (event) => {
     //console.log("Checking contact number");
     const contact_number_regex = /^[689]\d{7}$/;
     if (
-        !contact_number_regex.test(event.a_contact_number) &&
-        event.a_contact_number !== undefined
+        !contact_number_regex.test(requestBody.a_contact_number) &&
+        requestBody.a_contact_number !== undefined
     ) {
         throw new Error("Invalid Contact Number");
     }
 
     // Check for valid email format
     //console.log("Checking email format");
-    if (event.a_email !== undefined) {
-        const [username, domain] = event.a_email.split("@");
+    if (requestBody.a_email !== undefined) {
+        const [username, domain] = requestBody.a_email.split("@");
         const isValidUsername = /^[^\s@]+$/;
         const isValidDomain = /^[^\s@]+\.[^\s@]+$/;
         if (
-            !event.a_email.includes("@") ||
+            !requestBody.a_email.includes("@") ||
             !isValidUsername.test(username) ||
             !isValidDomain.test(domain)
         ) {
@@ -358,31 +359,31 @@ exports.handler = async (event) => {
     // Check for money or funding sections
     //console.log("Checking money or funding sections");
     if (
-        (event.d1a_club_income_fund < 0 &&
-            event.d1a_club_income_fund !== undefined) ||
-        (event.d1a_osl_seed_fund < 0 &&
-            event.d1a_osl_seed_fund !== undefined) ||
-        (event.d1a_donation < 0 && event.d1a_donation !== undefined) ||
-        (event.d1b_revenue < 0 && event.d1b_revenue !== undefined) ||
-        (event.d1b_donation_or_scholarship < 0 &&
-            event.d1b_donation_or_scholarship !== undefined) ||
-        (event.d1b_total_source_of_funds < 0 &&
-            event.d1b_total_source_of_funds !== undefined) ||
-        (event.d11_total_revenue < 0 &&
-            event.d11_total_revenue !== undefined) ||
-        (event.d2_total_expenditure < 0 &&
-            event.d2_total_expenditure !== undefined)
+        (requestBody.d1a_club_income_fund < 0 &&
+            requestBody.d1a_club_income_fund !== undefined) ||
+        (requestBody.d1a_osl_seed_fund < 0 &&
+            requestBody.d1a_osl_seed_fund !== undefined) ||
+        (requestBody.d1a_donation < 0 && requestBody.d1a_donation !== undefined) ||
+        (requestBody.d1b_revenue < 0 && requestBody.d1b_revenue !== undefined) ||
+        (requestBody.d1b_donation_or_scholarship < 0 &&
+            requestBody.d1b_donation_or_scholarship !== undefined) ||
+        (requestBody.d1b_total_source_of_funds < 0 &&
+            requestBody.d1b_total_source_of_funds !== undefined) ||
+        (requestBody.d11_total_revenue < 0 &&
+            requestBody.d11_total_revenue !== undefined) ||
+        (requestBody.d2_total_expenditure < 0 &&
+            requestBody.d2_total_expenditure !== undefined)
     ) {
         throw new Error("Invalid value for money");
     }
-    event.d11_price.forEach((price) => {
+    requestBody.d11_price.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
                 throw new Error("Invalid value for money");
             }
         }
     });
-    event.d11_amount.forEach((price) => {
+    requestBody.d11_amount.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
                 throw new Error("Invalid value for money");
@@ -391,7 +392,7 @@ exports.handler = async (event) => {
     });
     //Validation for Quantity
     //console.log("Checking quantity");
-    event.d11_quantity.forEach((price) => {
+    requestBody.d11_quantity.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
                 throw new Error("Invalid quantity value");
@@ -400,10 +401,11 @@ exports.handler = async (event) => {
     });
 
     // Check for valid datetime format
+    console.log(requestBody.b_event_schedule)
     //console.log("Checking datetime format");
-    const datetime_regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
-    if (event.b_event_schedule !== undefined) {
-        if (!datetime_regex.test(event.b_event_schedule)) {
+   const datetime_regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+    if (requestBody.b_event_schedule !== undefined) {
+        if (!datetime_regex.test(requestBody.b_event_schedule)) {
             throw new Error("Invalid Datetime Format");
         }
     }
@@ -411,28 +413,30 @@ exports.handler = async (event) => {
     // Check for date format
     //console.log("Checking date format");
     const date_regex = /^\d{4}-\d{2}-\d{2}$/;
-    event.c1_date.forEach((date) => {
+    requestBody.c1_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
                 throw new Error("Invalid Date Format");
             }
         }
     });
-    event.c2_date.forEach((date) => {
+    requestBody.c2_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
                 throw new Error("Invalid Date Format");
             }
         }
     });
-    event.c3_date.forEach((date) => {
+    console.log(requestBody.c3_cleanup_date)
+
+    requestBody.c3_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
                 throw new Error("Invalid Date Format");
             }
         }
     });
-    event.c3_cleanup_date.forEach((date) => {
+    requestBody.c3_cleanup_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
                 throw new Error("Invalid Date Format");
@@ -441,7 +445,7 @@ exports.handler = async (event) => {
     });
     // Check for valid time format
     const time_regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
-    event.c1_time.forEach((time) => {
+    requestBody.c1_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
                 throw new Error("Invalid Time Format");
@@ -449,14 +453,14 @@ exports.handler = async (event) => {
         }
     });
 
-    event.c2_time.forEach((time) => {
+    requestBody.c2_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
                 throw new Error("Invalid Time Format");
             }
         }
     });
-    event.c3_time.forEach((time) => {
+    requestBody.c3_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
                 throw new Error("Invalid Time Format");
@@ -464,7 +468,7 @@ exports.handler = async (event) => {
         }
     });
 
-    event.c3_cleanup_time.forEach((time) => {
+    requestBody.c3_cleanup_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
                 throw new Error("Invalid Time Format");
@@ -540,7 +544,7 @@ exports.handler = async (event) => {
                 throw err;
             }
             // END UPDATE OUTSTANDING EPF COUNT //
-
+            console.log(result["rows"][0])
             await client.query("COMMIT");
             return {
                 headers: {
@@ -548,8 +552,10 @@ exports.handler = async (event) => {
                     "Access-Control-Allow-Headers": "*",
                 },
                 statusCode: 200,
+               body: JSON.stringify({
+                epf_count: epf_count, 
                 result: result["rows"][0],
-                epf_count: epf_count,
+}),
             };
         } catch (err) {
             if (err.message === "Non-existent exco user id") {

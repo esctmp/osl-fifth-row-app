@@ -63,6 +63,8 @@ const EPFSubmit = () => {
 
   useEffect(() => {
     if (settings.loadForm) {
+      console.log("Beep")
+      console.log(getEPF(epf_id))
       getEPF(epf_id).then(values => {
         Object.entries(values).map(([k, v]) => setValue(k, v));
         if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
