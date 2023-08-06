@@ -29,7 +29,7 @@ import {
   FormRadioField,
   STATUS
 } from "../../../components/Forms/Custom/Form";
-import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
+import { Backdrop, CircularProgress, Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm, useFormState } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
@@ -40,32 +40,58 @@ import { UserID } from '../../../routes/UserID';
 // TODO file attachment feature
 // TODO autosave
 
-// TODO api calls
-// TODO create ROOT page
-// TODO backend remove validation?
-
-const EPFSubmit = () => {
-  // DEFINE FORM CONTROL VARIABLES
-  // const { userId, setUserId } = useContext(UserID);
-  const { epf_id } = useParams();
+const EPFSubmit = () => { // wrapper component to process api calls
+  const { epf_id } = useParams() || {};
   const { userId, _ } = useContext(UserID);
-  const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
-  const settings = FORM_MODES[mode];
-  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
-  const formControl = { // global form vars that should be passed down to imported custom component
-    control: control,
-    settings: settings,
-    setValue: setValue
-  };
-  console.log("RE-RENDERED");
+
+  const [loaded, setLoaded] = useState(false); // whether api call is done
+  const [initialValues, setInitialValues] = useState({}); // values from api call
+  const [settings, setSettings] = useState((epf_id != undefined ? FORM_MODES["DRAFT"] : FORM_MODES["NEW"])); // whether fields are enabled/disabled/shown
+  console.log("RENDERING THE WRAPPER COMPONENT");
 
   useEffect(() => {
     if (settings.loadForm) {
       getEPF(epf_id).then(values => {
-        Object.entries(values).map(([k, v]) => setValue(k, v));
-        if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
-        if (values?.status == STATUS.Approved.description) { formControl.settings = FORM_MODES["ARCHIVED"]; }
+        setInitialValues(values);
+        if (values?.status == STATUS.Rejected.description) { setSettings(FORM_MODES["REJECTED"]); }
+        if (values?.status == STATUS.Submitted.description) { setSettings(FORM_MODES["PENDING APPROVAL"]); }
+        if (values?.status == STATUS.Approved.description) { setSettings(FORM_MODES["APPROVED"]); }
+        setLoaded(true);
       })
+    } else {
+      setLoaded(true);
+    }
+  }, []); // empty array dependencies -> useEffect will not rerun on re-render
+
+  return (
+    <>
+      {loaded
+        ? <EPFSubmitForm epf_id={epf_id} userId={userId} settings={settings} initialValues={initialValues} />
+        :
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}>
+          <CircularProgress />
+        </Backdrop>
+      }
+    </>
+  );
+}
+
+const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actual form component
+  // DEFINE FORM CONTROL VARIABLES
+  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
+  const formControl = { // global form vars that should be passed down to imported custom component
+    control: control,
+    setValue: setValue,
+    settings: settings
+  };
+  console.log("RENDERING THE ACTUAL FORM");
+
+  // SET INITIAL VALUES
+  useEffect(() => { // equivalent to componentDidMount
+    if (settings.loadForm) {
+      Object.entries(initialValues).map(([k, v]) => setValue(k, v));
     } else {
       setValue("exco_user_id", userId);
     }
@@ -78,6 +104,20 @@ const EPFSubmit = () => {
     } else {
       createEPF(data);
     }
+  }
+
+  function checkInvalid(err) {
+    let isInvalid = false;
+    Object.entries(err).map(([k, v]) => {
+      if (Array.isArray(v)) {
+        Object.entries(v).map(([k2, v2]) => {
+          if (v2?.type == "validate") { isInvalid = true; }
+        });
+      } else {
+        if (v?.type == "validate") { isInvalid = true; }
+      }
+    });
+    return isInvalid;
   }
 
   // DEFINE SECTIONS
@@ -206,7 +246,7 @@ const EPFSubmit = () => {
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "float"]
+      colTypes: [, "money"]
     };
 
     const tableSettingsD1B = {
@@ -215,19 +255,19 @@ const EPFSubmit = () => {
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "float"]
+      colTypes: [, "money"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [, "float", "number", "float"]
+      colTypes: [, "money", "number", "money"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [, 'float'],
+      colTypes: [, 'money'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -239,7 +279,7 @@ const EPFSubmit = () => {
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [, 'float'],
+      colTypes: [, 'money'],
       rowRequired: [true]
     }
     return (
@@ -321,7 +361,8 @@ const EPFSubmit = () => {
       names: ['f_name', 'f_student_id', 'f_position'],
       colNames: ['Name', 'Student ID', 'Position'],
       colConfig: [4, 4, 4],
-      minRowsRequired: 1
+      minRowsRequired: 1,
+      patterns: [, /^\d{7}$/,]
     }
     return (
       <>
@@ -336,8 +377,8 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="g" owner="OSL" />
+            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
@@ -391,8 +432,8 @@ const EPFSubmit = () => {
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="g_comments_osl" owner="OSL" />
+            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
@@ -449,7 +490,7 @@ const EPFSubmit = () => {
                       <SectionG />
                       {/* <SectionFiles /> */}
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained"
+                        <Button style={{ width: 120, height: 40 }} variant="contained" disabled={!settings.enableInputs}
                           onClick={handleSubmit(
                             async (data) => { // onValid
                               data.status = STATUS.Submitted.description; submit(data);
@@ -461,7 +502,7 @@ const EPFSubmit = () => {
                           )}>
                           Submit
                         </Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" disabled={!settings.enableInputs}
                           onClick={handleSubmit(
                             async (data) => { // onValid
                               data.status = STATUS.Draft.description; submit(data);
@@ -469,7 +510,12 @@ const EPFSubmit = () => {
                             async (err) => { // onInvalid
                               let data = getValues();
                               if (data?.b_event_name) {
-                                data.status = STATUS.Draft.description; submit(data);
+                                console.log(err);
+                                if (checkInvalid(err)) {
+                                  alert("Form is invalid. Please fix and submit it again.");
+                                } else {
+                                  data.status = STATUS.Draft.description; submit(data);
+                                }
                               } else {
                                 alert("You must fill in the Event Name before saving this form as draft.");
                               };
