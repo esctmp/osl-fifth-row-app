@@ -1,11 +1,6 @@
-// import { test } from 'node:test';
 import { Builder, By, Key, until } from 'selenium-webdriver';
 
 const url = "http://localhost:3001";
-const excoUser = {
-    email: "testfre@club.sutd.edu.sg",
-    password: "P@ssword1!"
-};
 const verificationCode = "246810"
 const newPassword = "NewP@ssword1!"
 

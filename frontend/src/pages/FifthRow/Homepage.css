@@ -52,46 +52,4 @@
 
 }
 
-/* to contain the two boxes */
-/* .sidecontainer{   
-    display: flex;
-    justify-content: center;
-} */
 
-/* two identical boxes at the bottom*/
-/* .bottomTwoBox {   
-    flex: 1;
-    max-width: 250px;
-    height: 130px;
-    margin: 120px;    
-    margin-top: 130px;
-    background-color: #ffffff;
-    border: 1px solid #b0b0b0;
-    margin-bottom: 100px;
-    border-radius: 10px;
-    font-family: "DM Sans", sans-serif;
-} */
-
-/* .clubDetailsBox {
-    font-family: "DM Sans", sans-serif;
-    margin-top: 8px;
-    font-size: 15px;
-    text-align: center;
-    
-}
-
-.remainingBudgetBox {
-    font-family: "DM Sans", sans-serif;
-    margin-top: 8px;
-    font-size: 15px;
-    text-align: center;
-    
-}
-
-.remainingAmount {
-    font-family: "DM Sans", sans-serif;
-    margin-top: 20px;
-    font-size: 30px;
-    text-align: center;
-    
-} */

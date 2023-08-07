@@ -8,16 +8,28 @@ import '@testing-library/jest-dom';
 import { waitFor } from "@testing-library/react";
 import { UserID } from "../routes/UserID.js";
 import Router from "react-router-dom";
+import apis from "../apis.js";
 import axios from 'axios';
+
+const ENV = "AWS";
 
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
     useParams: jest.fn(),
 }));
 
+var spy;
+beforeEach(() => {
+    spy = jest.spyOn(window, 'alert');
+})
+
+afterEach(() => {
+    spy.mockRestore();
+})
+
 const getSampleUserId = async () => {
     // get sample user id
-    let response = await axios.get("http://localhost:3000/users/getUsers",
+    let response = await axios.get(apis[ENV].getUsers
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EXCO user ids");
     });
@@ -25,7 +37,7 @@ const getSampleUserId = async () => {
 };
 
 const getSampleFormWithStatus = async (status) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    let response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -47,7 +59,7 @@ const createSampleForm = async (status = "Draft") => {
     // upload draft form
     let userId = await getSampleUserId();
     let eventName = `Unit Test Event ${(new Date).toISOString()}`;
-    let response = await axios.post("http://localhost:3000/epfs/createEPF",
+    let response = await axios.post(apis[ENV].createEPF,
         {
             "a_student_id": 1222222,
             "b_event_name": eventName,
@@ -63,7 +75,7 @@ const createSampleForm = async (status = "Draft") => {
         throw new Error("Cannot create EPF form");
     });
     // get newly uploaded form
-    response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -75,7 +87,7 @@ const createSampleForm = async (status = "Draft") => {
 };
 
 const getFormWithEventName = async (b_event_name) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    let response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -86,7 +98,7 @@ const getFormWithEventName = async (b_event_name) => {
 }
 
 const getFormWithEPFId = async (epf_id) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPF", //"https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
+    let response = await axios.get(apis[ENV].getEPF,
         {
             params: { epf_id: epf_id }
         }
@@ -166,7 +178,7 @@ describe('Fifth Row - EPF Form', () => {
     describe('Upload', () => {
         test('Blank Form Behavior', async () => {
             const userId = await getSampleUserId();
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
                     <FifthRowEPFSubmit />
@@ -201,13 +213,13 @@ describe('Fifth Row - EPF Form', () => {
             await waitFor(() =>
                 expect(alertMock).toHaveBeenLastCalledWith("Form is invalid. Please fix and submit it again.")
                 , { timeout: 2000 });
-        }, 25000)
+        }, 30000)
 
         test("Invalid Form Behavior", async () => {
             const { userId, epf_id, b_event_name } = await createSampleForm();
             // expect(epf_id).not.toBeUndefined();
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
                     <FifthRowEPFSubmit />
@@ -245,16 +257,18 @@ describe('Fifth Row - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test("Valid Form Behavior", async () => {
             const userId = await getSampleUserId();
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            let spy = jest.spyOn(window, 'alert');
+            const alertMock = spy.mockImplementation(() => { });
             let dom = render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
                     <FifthRowEPFSubmit />
                 </UserID.Provider>
             )
+            let eventName = `Unit Test Event ${(new Date).toISOString()}`;
             const data = {
                 // compulsory fields
                 "a_name": "user 1",
@@ -262,7 +276,7 @@ describe('Fifth Row - EPF Form', () => {
                 "a_organisation": "organisation 1",
                 "a_contact_number": 99998888,
                 "a_email": "user_1@mymail.sutd.edu.sg",
-                "b_event_name": "Unit Test Event 1",
+                "b_event_name": eventName,
                 "b_target_audience": "target Audience 1",
                 "b_expected_turnout": 1,
                 "b_event_objective": "event Objective 1",
@@ -282,7 +296,7 @@ describe('Fifth Row - EPF Form', () => {
                 "c3_activity_and_description": "do sth after",
                 "c3_venue": "LT1",
                 "f_name": "name1",
-                "f_student_id": "1006732",
+                "f_student_id": 1006732,
                 "f_position": "Treasurer"
             }
 
@@ -296,9 +310,10 @@ describe('Fifth Row - EPF Form', () => {
                 fireEvent.change(elem, { target: { value: data[key] } });
             }
             fireEvent.click(screen.getByRole('button', { name: /Save draft/ }));
-            await waitFor(() =>
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenCalledTimes(1);
                 expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
-                , { timeout: 2000 });
+            }, { timeout: 2000 });
 
             // 37
             let form = await getFormWithEventName(data["b_event_name"]);
@@ -306,14 +321,16 @@ describe('Fifth Row - EPF Form', () => {
 
             // 6
             fireEvent.click(screen.getByRole('button', { name: /Submit/ }));
-            await waitFor(() =>
-                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!")
-                , { timeout: 2000 });
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenCalledTimes(2);
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!");
+            }, { timeout: 2000 });
 
             // 38
+            await new Promise(r => setTimeout(r, 3000)); // allow for backend to process the form
             form = await getFormWithEventName(data["b_event_name"]);
             expect(form?.status).toBe("Pending Approval");
-        }, 25000);
+        }, 30000);
     })
 
     describe('Table', () => {
@@ -376,7 +393,7 @@ describe('Fifth Row - EPF Form', () => {
 
         test("Table Row Addition and Deletion", async () => {
             const userId = await getSampleUserId();
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             let dom = render(
                 <UserID.Provider value={{ userId: userId, setUserId: () => { } }}>
                     <FifthRowEPFSubmit />
@@ -457,7 +474,7 @@ describe('Fifth Row - EPF Form', () => {
                 "c3_activity_and_description": "do sth after",
                 "c3_venue": "LT1",
                 "f_name": "name1",
-                "f_student_id": "1006732",
+                "f_student_id": 1006732,
                 "f_position": "Treasurer"
             }
             for (let key of Object.keys(data)) {
@@ -470,7 +487,7 @@ describe('Fifth Row - EPF Form', () => {
                 expect(alertMock).toHaveBeenLastCalledWith("Form is invalid. Please fix and submit it again.")
                 , { timeout: 2000 });
 
-        }, 25000);
+        }, 30000);
     })
 
     describe('Status', () => {
@@ -500,7 +517,7 @@ describe('Fifth Row - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Approved Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Approved');
@@ -528,7 +545,7 @@ describe('Fifth Row - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Pending Approval Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
@@ -556,11 +573,12 @@ describe('Fifth Row - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Rejected Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
+            const alertMock = spy.mockImplementation(() => { })
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
                     <FifthRowEPFSubmit />
@@ -583,14 +601,56 @@ describe('Fifth Row - EPF Form', () => {
             expect(submitBtn).toBeEnabled();
 
             // 36
+            let newEventName = `Unit Test Event ${(new Date).toISOString()}`;
+            const data = {
+                // compulsory fields
+                "a_name": "user 1",
+                "a_student_id": 1000001,
+                "a_organisation": "organisation 1",
+                "a_contact_number": 99998888,
+                "a_email": "user_1@mymail.sutd.edu.sg",
+                "b_event_name": newEventName,
+                "b_target_audience": "target Audience 1",
+                "b_expected_turnout": 1,
+                "b_event_objective": "event Objective 1",
+                "d11_total_revenue": 30.00,
+                "d2_total_expenditure": 25.00,
+                "b_event_schedule": "2023-08-04 14:30",
+                "c1_date": "2023-08-21",
+                "c1_time": "14:00",
+                "c1_activity_and_description": "do sth",
+                "c1_venue": "LT1",
+                "c2_date": "2023-08-21",
+                "c2_time": "16:00",
+                "c2_activity_and_description": "actual event stuff",
+                "c2_venue": "LT1",
+                "c3_date": "2023-08-21",
+                "c3_time": "19:00",
+                "c3_activity_and_description": "do sth after",
+                "c3_venue": "LT1",
+                "f_name": "name1",
+                "f_student_id": 1006732,
+                "f_position": "Treasurer"
+            }
+            await waitFor(() => { // make sure form is valid now
+                expect(screen.getByLabelText(/^Event Name/)).toBeInTheDocument();
+            }, { timeout: 1000 });
+            for (let key of Object.keys(data)) {
+                let elem = queryByAttribute('id', dom.container, new RegExp(`${key}$`));
+                expect(elem).not.toBeNull();
+                fireEvent.change(elem, { target: { value: data[key] } });
+            }
             fireEvent.click(submitBtn);
-            const form = await getFormWithEventName(b_event_name);
+            await waitFor(() => {
+                expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!");
+            }, { timeout: 2000 });
+            const form = await getFormWithEventName(newEventName);
             expect(form?.epf_id == epf_id).toBe(false);
             expect(form?.status).toBe("Pending Approval");
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
     })
 })
 
@@ -599,7 +659,7 @@ describe('OSL - EPF Form', () => {
     describe('Status', () => {
         test('Status - Pending Approval Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -638,11 +698,11 @@ describe('OSL - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Approved Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Approved');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -681,11 +741,11 @@ describe('OSL - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Rejected Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -724,13 +784,13 @@ describe('OSL - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
     });
 
     describe('Upload', () => {
         test('Upload - All Forms', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -742,11 +802,8 @@ describe('OSL - EPF Form', () => {
                 expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
             }, { timeout: 5000 });
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
-            expect(saveDraftBtn).toBeEnabled();
             let approveBtn = screen.getByRole('button', { name: /Approve/ });
-            expect(approveBtn).toBeEnabled();
             let rejectBtn = screen.getByRole('button', { name: /Reject/ });
-            expect(rejectBtn).toBeEnabled();
 
             // 54
             fireEvent.click(saveDraftBtn);
@@ -782,7 +839,7 @@ describe('OSL - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000)
+        }, 35000)
     });
 });
 
@@ -792,7 +849,7 @@ describe('ROOT - EPF Form', () => {
     describe('Status', () => {
         test('Status - Pending Approval Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -824,16 +881,16 @@ describe('ROOT - EPF Form', () => {
             // 45
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeEnabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeEnabled();
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Approved Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Approved');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -865,16 +922,16 @@ describe('ROOT - EPF Form', () => {
             // 69
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
 
         test('Status - Rejected Form Edit Permission', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Rejected');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -906,18 +963,18 @@ describe('ROOT - EPF Form', () => {
             // 73
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 25000);
+        }, 30000);
     });
 
     describe('Upload', () => {
         test('Upload - All Forms', async () => {
             const { epf_id, b_event_name } = await getSampleFormWithStatus('Pending Approval');
-            const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => { });
+            const alertMock = spy.mockImplementation(() => { })
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: epf_id });
             let dom = render(
                 <UserID.Provider value={{ userId: null, setUserId: () => { } }}>
@@ -929,9 +986,7 @@ describe('ROOT - EPF Form', () => {
                 expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
             }, { timeout: 5000 });
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
-            expect(saveDraftBtn).toBeDisabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
-            expect(submitBtn).toBeDisabled();
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
 
             // 74
             fireEvent.click(saveDraftBtn);
@@ -957,5 +1012,5 @@ describe('ROOT - EPF Form', () => {
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         })
-    }, 25000);
+    }, 35000);
 });

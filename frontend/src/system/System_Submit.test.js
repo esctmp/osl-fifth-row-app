@@ -1,6 +1,9 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
+import apis from '../apis';
 
-const url = "http://localhost:3001";
+const ENV = "AWS"; // LOCAL or AWS
+
+const url = apis[ENV].main;
 const excoUser = {
     email: "testfre@club.sutd.edu.sg",
     password: "P@ssword1!"

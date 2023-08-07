@@ -456,7 +456,7 @@ export const TableRowsDynamic = (props) => {
   });
 
   useEffect(() => {
-    if (fields.length < props?.minRowsRequired && !props.settings.loadForm) {
+    if (fields.length < props?.minRowsRequired) {
       for (let i = 0; i < props?.minRowsRequired; i++) {
         append(Object.fromEntries(props.names.map(k => [k, ""])));
       }
