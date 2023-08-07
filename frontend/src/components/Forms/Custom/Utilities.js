@@ -32,7 +32,6 @@ export async function getEPF(epf_id) {
     const reqdata={"epf_id": parseInt(epf_id)}
     const response = await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",reqdata);
     console.log(response.data);
-
     let data = convertJSONToFields(response.data);
     console.log("LOADED", data[0]);
     return data[0]

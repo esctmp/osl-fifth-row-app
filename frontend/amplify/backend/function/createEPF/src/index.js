@@ -305,6 +305,21 @@ exports.handler = async (event) => {
 
     // Check for valid status
     //console.log("Checking status");
+    const student_id_regex = /^1\d{6}$/;
+  if (requestBody.A_student_id !== undefined) {
+    if (!student_id_regex.test(requestBody.A)) {
+      throw new Error("Invalid Student ID");
+    }
+  }
+  if (requestBody.f_student_id !== undefined) {
+    requestBody.f_student_id.forEach((student_id) => {
+      if (student_id !== "") {
+        if (!student_id_regex.test(parseInt(student_id))) {
+          throw new Error("Invalid Student ID");
+        }
+      }
+    });
+  }
     if (!status_types.includes(requestBody.status)) {
         throw new Error("Invalid Status Type");
     }
@@ -315,46 +330,33 @@ exports.handler = async (event) => {
         throw new Error("Event name missing");
     }
 
-    // Check for valid student id
-    //console.log("Checking student id");
-    const student_id_regex = /^1\d{6}$/;
-    if (
-        !student_id_regex.test(requestBody.a_student_id) &&
-        requestBody.a_student_id !== undefined
-    ) {
-        throw new Error("Invalid Student ID");
-    }
-
     requestBody.f_student_id.forEach((student_id) => {
         if (!student_id_regex.test(parseInt(student_id)) && student_id !== "") {
             throw new Error("Invalid Student ID");
         }
     });
-
-    // Check for valid contact number
-    //console.log("Checking contact number");
-    const contact_number_regex = /^[689]\d{7}$/;
-    if (
-        !contact_number_regex.test(requestBody.a_contact_number) &&
-        requestBody.a_contact_number !== undefined
-    ) {
-        throw new Error("Invalid Contact Number");
+      const contact_number_regex = /^[689]\d{7}$/;
+  if (requestBody.a_contact_number !== undefined) {
+    if (!contact_number_regex.test(requestBody.a_contact_number)) {
+      throw new Error("Invalid Contact Number");
     }
+  }
 
     // Check for valid email format
     //console.log("Checking email format");
-    if (requestBody.a_email !== undefined) {
-        const [username, domain] = requestBody.a_email.split("@");
-        const isValidUsername = /^[^\s@]+$/;
-        const isValidDomain = /^[^\s@]+\.[^\s@]+$/;
-        if (
-            !requestBody.a_email.includes("@") ||
-            !isValidUsername.test(username) ||
-            !isValidDomain.test(domain)
-        ) {
-            throw new Error("Invalid email format");
-        }
+ if (requestBody.a_email !== undefined) {
+    const [username, domain] = requestBody.a_email.split("@");
+    const isValidUsername = /^[^\s@]+$/;
+    const isValidDomain = /^[^\s@]+\.[^\s@]+$/;
+    if (
+      !requestBody.a_email.includes("@") ||
+      !isValidUsername.test(username) ||
+      !isValidDomain.test(domain)
+    ) {
+      throw new Error("Invalid email format");
     }
+  }
+
 
     // Check for money or funding sections
     //console.log("Checking money or funding sections");
@@ -376,6 +378,8 @@ exports.handler = async (event) => {
     ) {
         throw new Error("Invalid value for money");
     }
+      if (requestBody.d11_price !== undefined) {
+
     requestBody.d11_price.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
@@ -383,6 +387,8 @@ exports.handler = async (event) => {
             }
         }
     });
+      }
+      if(requestBody.d11_amount !==undefined){
     requestBody.d11_amount.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
@@ -390,8 +396,10 @@ exports.handler = async (event) => {
             }
         }
     });
+      }
     //Validation for Quantity
-    //console.log("Checking quantity");
+    //console.log("Checking quantity")
+          if(requestBody.d11_quantity !==undefined){
     requestBody.d11_quantity.forEach((price) => {
         if (price !== "") {
             if (price < 0) {
@@ -399,6 +407,12 @@ exports.handler = async (event) => {
             }
         }
     });
+          }
+ if (requestBody.b_event_name !== undefined) {
+    if (requestBody.b_event_name.trim().length == 0) {
+      throw new Error("Event name missing");
+    }
+  }
 
     // Check for valid datetime format
     console.log(requestBody.b_event_schedule)
@@ -413,6 +427,8 @@ exports.handler = async (event) => {
     // Check for date format
     //console.log("Checking date format");
     const date_regex = /^\d{4}-\d{2}-\d{2}$/;
+      if (requestBody.c1_date !== undefined) {
+
     requestBody.c1_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
@@ -420,6 +436,9 @@ exports.handler = async (event) => {
             }
         }
     });
+      }
+            if (requestBody.c2_date !== undefined) {
+
     requestBody.c2_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
@@ -428,7 +447,9 @@ exports.handler = async (event) => {
             }
         }
     });
+            }
     console.log(requestBody.c3_cleanup_date)
+            if (requestBody.c3_date !== undefined) {
 
     requestBody.c3_date.forEach((date) => {
         if (date !== "") {
@@ -437,6 +458,9 @@ exports.handler = async (event) => {
             }
         }
     });
+            }
+                        if (requestBody.c3_cleanup_date !== undefined) {
+
     requestBody.c3_cleanup_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
@@ -444,8 +468,11 @@ exports.handler = async (event) => {
             }
         }
     });
+                        }
     // Check for valid time format
     const time_regex = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+                            if (requestBody.c1_time !== undefined) {
+
     requestBody.c1_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
@@ -453,6 +480,9 @@ exports.handler = async (event) => {
             }
         }
     });
+                            }
+                                                        if (requestBody.c2_time !== undefined) {
+
 
     requestBody.c2_time.forEach((time) => {
         if (time !== "") {
@@ -461,6 +491,9 @@ exports.handler = async (event) => {
             }
         }
     });
+                                                        }
+if (requestBody.c3_time !== undefined) {
+
     requestBody.c3_time.forEach((time) => {
         if (time !== "") {
             if (!time_regex.test(time)) {
@@ -468,6 +501,8 @@ exports.handler = async (event) => {
             }
         }
     });
+                                                                                                                }
+if (requestBody.c3_cleanup_time !== undefined) {
 
     requestBody.c3_cleanup_time.forEach((time) => {
         if (time !== "") {
@@ -476,7 +511,7 @@ exports.handler = async (event) => {
             }
         }
     });
-
+}
     // END VERIFICATION OF EVENT//
 
     while (retryCount > 0) {
