@@ -83,7 +83,7 @@ const Root_Pending_Table = () => {
         const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
 
-        const approvedData = response.data.filter(item => item.status !== "Approved");
+        const approvedData = response.data.filter(item => item.status !== "Approved"||"Draft");
 
         const transformedData = approvedData.map((item) => {
           let pbg;
@@ -94,7 +94,10 @@ const Root_Pending_Table = () => {
             pbg = "#FF6600";
           } else if (item.status === "Declined") {
             pbg = "#CC0000";
+          } else if (item.status === "Draft") {
+            pbg = "#666666";
           }
+          
   
           return {
             id: item.epf_id.toString(),
