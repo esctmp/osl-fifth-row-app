@@ -51,7 +51,7 @@ const EPFSubmit = () => { // wrapper component to process api calls
 
   useEffect(() => {
     if (settings.loadForm) {
-      getEPF(epf_id).then(values => {
+      getEPF(epf_id).then(values => { // TODO table does not register data if form is disabled
         setInitialValues(values);
         if (values?.status == STATUS.Rejected.description) { setSettings(FORM_MODES["REJECTED"]); }
         if (values?.status == STATUS.Submitted.description) { setSettings(FORM_MODES["PENDING APPROVAL"]); }
@@ -99,7 +99,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
 
   // DEFINE HANDLES 
   async function submit(data) {
-    if (epf_id != undefined) {
+    if (data?.epf_id != undefined) {
       updateEPF(data);
     } else {
       createEPF(data);
@@ -493,6 +493,10 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                         <Button style={{ width: 120, height: 40 }} variant="contained" disabled={!settings.enableInputs}
                           onClick={handleSubmit(
                             async (data) => { // onValid
+                              if (data?.status == STATUS.Rejected.description) { // create new epf if form is already rejected
+                                let { epf_id, ...rest } = data;
+                                data = rest;
+                              }
                               data.status = STATUS.Submitted.description; submit(data);
                             },
                             async (err) => { // onInvalid

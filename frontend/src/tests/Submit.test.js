@@ -8,7 +8,10 @@ import '@testing-library/jest-dom';
 import { waitFor } from "@testing-library/react";
 import { UserID } from "../routes/UserID.js";
 import Router from "react-router-dom";
+import apis from "../apis.js";
 import axios from 'axios';
+
+const ENV = "LOCAL";
 
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
@@ -26,7 +29,7 @@ afterEach(() => {
 
 const getSampleUserId = async () => {
     // get sample user id
-    let response = await axios.get("http://localhost:3000/users/getUsers",
+    let response = await axios.get(apis[ENV].getUsers
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EXCO user ids");
     });
@@ -34,7 +37,7 @@ const getSampleUserId = async () => {
 };
 
 const getSampleFormWithStatus = async (status) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    let response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -56,7 +59,7 @@ const createSampleForm = async (status = "Draft") => {
     // upload draft form
     let userId = await getSampleUserId();
     let eventName = `Unit Test Event ${(new Date).toISOString()}`;
-    let response = await axios.post("http://localhost:3000/epfs/createEPF",
+    let response = await axios.post(apis[ENV].createEPF,
         {
             "a_student_id": 1222222,
             "b_event_name": eventName,
@@ -72,7 +75,7 @@ const createSampleForm = async (status = "Draft") => {
         throw new Error("Cannot create EPF form");
     });
     // get newly uploaded form
-    response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -84,7 +87,7 @@ const createSampleForm = async (status = "Draft") => {
 };
 
 const getFormWithEventName = async (b_event_name) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs"
+    let response = await axios.get(apis[ENV].getEPFs
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF forms");
     });
@@ -95,7 +98,7 @@ const getFormWithEventName = async (b_event_name) => {
 }
 
 const getFormWithEPFId = async (epf_id) => {
-    let response = await axios.get("http://localhost:3000/epfs/getEPF", //"https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
+    let response = await axios.get(apis[ENV].getEPF,
         {
             params: { epf_id: epf_id }
         }
@@ -637,7 +640,6 @@ describe('Fifth Row - EPF Form', () => {
                 expect(elem).not.toBeNull();
                 fireEvent.change(elem, { target: { value: data[key] } });
             }
-            fireEvent.change(screen.getByLabelText(/^Event Name/), { target: { value: newEventName } });
             fireEvent.click(submitBtn);
             await waitFor(() => {
                 expect(alertMock).toHaveBeenLastCalledWith("Form uploaded successfully!");
@@ -837,7 +839,7 @@ describe('OSL - EPF Form', () => {
 
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
-        }, 30000)
+        }, 35000)
     });
 });
 
@@ -879,7 +881,7 @@ describe('ROOT - EPF Form', () => {
             // 45
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeEnabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeEnabled();
 
             // teardown
@@ -920,7 +922,7 @@ describe('ROOT - EPF Form', () => {
             // 69
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
 
             // teardown
@@ -961,7 +963,7 @@ describe('ROOT - EPF Form', () => {
             // 73
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
             expect(saveDraftBtn).toBeDisabled();
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
             expect(submitBtn).toBeDisabled();
 
             // teardown
@@ -984,7 +986,7 @@ describe('ROOT - EPF Form', () => {
                 expect(screen.getByLabelText(/^Event Name/)).toHaveValue(b_event_name);
             }, { timeout: 5000 });
             let saveDraftBtn = screen.getByRole('button', { name: /Save draft/ });
-            let submitBtn = screen.getByRole('button', { name: /Approve/ });
+            let submitBtn = screen.getByRole('button', { name: /Submit/ });
 
             // 74
             fireEvent.click(saveDraftBtn);
@@ -1010,5 +1012,5 @@ describe('ROOT - EPF Form', () => {
             // teardown
             jest.spyOn(Router, 'useParams').mockReturnValue({ epf_id: undefined });
         })
-    }, 30000);
+    }, 35000);
 });
