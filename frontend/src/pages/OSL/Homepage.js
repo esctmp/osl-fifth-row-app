@@ -4,7 +4,9 @@ import test_logo from "../../assets/images/logo-short.png";
 import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
+//This is homepage
 const Homepage = () => {
+
   const[FRname,setFRname] = useState("OSL User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
@@ -41,6 +43,15 @@ const Logo = () => {
     </div>
   )
 }
+
+// const InformationBox = () => {
+//   return (
+//     <div className="informationBox">
+//       <p className="informationText">There are 3 forms for your approval.</p>
+//     </div>
+//   )
+// }
+
 
 
 export default Homepage;

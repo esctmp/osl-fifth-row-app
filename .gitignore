@@ -150,6 +150,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-#ignore test-report.html
-test-report.html

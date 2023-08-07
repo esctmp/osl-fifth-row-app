@@ -35,9 +35,8 @@ export const FORM_MODES = {
   // Fifth Row
   "NEW": { enableInputs: true, loadForm: false, showComments: false, enableOSLComments: false, enableROOTComments: false },
   "DRAFT": { enableInputs: true, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
-  "PENDING APPROVAL": { enableInputs: false, loadForm: true, showComments: false, enableOSLComments: false, enableROOTComments: false },
-  "APPROVED": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
-  "REJECTED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "REVIEW": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
+  "SUBMITTED": { enableInputs: true, loadForm: true, showComments: true, enableOSLComments: false, enableROOTComments: false },
 
   // OSL
   "OSL_COMMENT": { enableInputs: false, loadForm: true, showComments: true, enableOSLComments: true, enableROOTComments: false },
@@ -53,7 +52,7 @@ export const STATUS = {
   Draft: Symbol("Draft"), // access for fifthrow only
   Submitted: Symbol("Pending Approval"), // disable input access for fifth row, enable access for OSL & ROOT
   Approved: Symbol("Approved"), // disable input access for all
-  Rejected: Symbol("Rejected"), // disable input access for all
+  Declined: Symbol("Declined"), // disable input access for all
 };
 
 
@@ -184,6 +183,7 @@ export const FormNumberField = ({ name, control, settings, multiline = false, re
             field.onChange(parseInt(e.target.value));
             (required && !e.target.value) ? setError(true) : setError(false);
             (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
+            console.log(name, parseInt(e.target.value));
           }}
           onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
           value={field.value}
@@ -346,7 +346,6 @@ export const FormRadioField = ({ name, label, control, options, settings, requir
             >
               {options.map((option, idx) =>
                 <FormControlLabel
-                  disabled={!settings.enableInputs}
                   value={idx}
                   control={<Radio />}
                   sx={{ mb: -1 }}

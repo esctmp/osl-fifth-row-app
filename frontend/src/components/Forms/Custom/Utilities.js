@@ -1,9 +1,6 @@
 import { object } from 'prop-types';
 import dummyEPF from '../../../assets/dummyEPF.json';
 import axios from 'axios';
-import apis from '../../../apis.js';
-
-const ENV = "AWS"; // LOCAL or AWS
 
 /**
  * Group all list fields of the same table and turn them into an array field.
@@ -32,6 +29,7 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
+<<<<<<< HEAD
     let response = await axios.get(apis[ENV].getEPF,
         {
             params: { epf_id: epf_id }
@@ -49,6 +47,18 @@ export async function getEPF(epf_id) {
     //let data = convertJSONToFields(dummyEPF);
     console.log("LOADED", data);
     return data;
+=======
+    console.log("asdas"+epf_id)
+    const reqdata={"epf_id": parseInt(epf_id)}
+
+    const response = await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",reqdata);
+
+    console.log(response.data);
+
+    let data = convertJSONToFields(response.data);
+    console.log("LOADED", data[0]);
+    return data[0]
+>>>>>>> parent of 3eb27a0 (Merge commit '5bd11e9ee9d29c732982415a81b30170b654ce57' into main2)
 }
 
 
@@ -119,7 +129,7 @@ export const convertFieldsToJSON = (data) => {
 export async function createEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("SUBMITTED", data);
-    await axios.post(apis[ENV].createEPF, 
+    await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/createEPF",
         data,
         {
             headers: {
@@ -138,7 +148,7 @@ export async function updateEPF(data) {
     delete data?.date_created;
     data = convertFieldsToJSON(data);
     console.log("UPDATED", data);
-    await axios.put(apis[ENV].updateEPF,
+    await axios.put("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/updateEPF",
         data,
         {
             headers: {

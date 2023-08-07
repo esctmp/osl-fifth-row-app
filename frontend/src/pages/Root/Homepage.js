@@ -5,7 +5,9 @@ import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
 
+//This is homepage
 const Homepage = () => {
+
   const[FRname,setFRname] = useState("ROOT User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
@@ -44,5 +46,15 @@ const Logo = () => {
     </div>
   )
 }
+
+// const InformationBox = () => {
+//   return (
+//     <div className="informationBox">
+//       <p className="informationText">There are 3 forms for your viewing.</p>
+//     </div>
+//   )
+// }
+
+
 
 export default Homepage;

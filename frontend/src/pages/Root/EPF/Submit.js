@@ -29,64 +29,34 @@ import {
   FormRadioField,
   STATUS
 } from "../../../components/Forms/Custom/Form";
-import { Backdrop, CircularProgress, Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
+import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm, useFormState } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserID } from '../../../routes/UserID';
+
 // To test this out, fill in the fields then click 'Submit' and check console for the submitted data
 
-const EPFSubmit = () => { // wrapper component to process api calls
-  const { epf_id } = useParams() || {};
-  const { userId, _ } = useContext(UserID);
-
-  const [loaded, setLoaded] = useState(false); // whether api call is done
-  const [initialValues, setInitialValues] = useState({}); // values from api call
-  const [settings, setSettings] = useState((epf_id != undefined ? FORM_MODES["ROOT_COMMENT"] : FORM_MODES["NEW"])); // whether fields are enabled/disabled/shown
-  console.log("RENDERING THE WRAPPER COMPONENT");
+const EPFSubmit = () => {
+  // DEFINE FORM CONTROL VARIABLE
+  const { userId, setUserId } = useContext(UserID);
+  const { epf_id } = useParams();
+  const mode = (epf_id != undefined) ? "ROOT_COMMENT" : "NEW";
+  const settings = FORM_MODES[mode];
+  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
+  const formControl = { // global form vars that should be passed down to imported custom component
+    control: control,
+    settings: settings,
+    setValue: setValue
+  };
+  console.log("RE-RENDERED");
 
   useEffect(() => {
     if (settings.loadForm) {
       getEPF(epf_id).then(values => {
-        setInitialValues(values);
-        if (values?.status == STATUS.Approved.description) { setSettings(FORM_MODES["ARCHIVED"]); }
-        if (values?.status == STATUS.Rejected.description) { setSettings(FORM_MODES["ARCHIVED"]); }
-        setLoaded(true);
+        if (values?.status == STATUS.Approved.description || values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["ARCHIVED"]; } // TODO fix
+        Object.entries(values).map(([k, v]) => setValue(k, v));
       })
-    } else {
-      setLoaded(true);
-    }
-  }, []); // empty array dependencies -> useEffect will not rerun on re-render
-
-  return (
-    <>
-      {loaded
-        ? <EPFSubmitForm epf_id={epf_id} userId={userId} settings={settings} initialValues={initialValues} />
-        :
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={true}>
-          <CircularProgress />
-        </Backdrop>
-      }
-    </>
-  );
-}
-
-const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actual form component
-  // DEFINE FORM CONTROL VARIABLES
-  const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
-  const formControl = { // global form vars that should be passed down to imported custom component
-    control: control,
-    setValue: setValue,
-    settings: settings
-  };
-  console.log("RENDERING THE ACTUAL FORM");
-
-  // SET INITIAL VALUES
-  useEffect(() => { // equivalent to componentDidMount
-    if (settings.loadForm) {
-      Object.entries(initialValues).map(([k, v]) => setValue(k, v));
     }
   }, []);
 
@@ -94,6 +64,8 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
   async function submit(data) {
     if (epf_id != undefined) {
       updateEPF(data);
+    } else {
+      createEPF(data);
     }
   }
 
@@ -223,7 +195,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "money"]
+      colTypes: [, "float"]
     };
 
     const tableSettingsD1B = {
@@ -232,19 +204,19 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "money"]
+      colTypes: [, "float"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [, "money", "number", "money"]
+      colTypes: [, "float", "number", "float"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [, 'money'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -256,7 +228,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [, 'money'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     }
     return (
@@ -338,8 +310,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       names: ['f_name', 'f_student_id', 'f_position'],
       colNames: ['Name', 'Student ID', 'Position'],
       colConfig: [4, 4, 4],
-      minRowsRequired: 1,
-      patterns: [, /^\d{7}$/,]
+      minRowsRequired: 1
     }
     return (
       <>
@@ -391,7 +362,6 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
         <>List all Other Risks not listed in this table and not already identified in Annex A.<br></br><div style={{ fontWeight: 'normal' }}>This may include potential infringements of any University policies, core values and applicable regulations governing the organization and execution of an event. </div></>
       ],
     }
-
     return (
       <>
         <SectionHeader text="G. Risk Assessment" />
@@ -409,13 +379,14 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="g_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
+            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
     );
   };
+
 
   // RENDERING
   return (
@@ -446,30 +417,18 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained" disabled={!settings.enableROOTComments}
+                        <Button style={{ width: 120, height: 40 }} variant="contained" 
                           onClick={handleSubmit(
                             async (data) => {
                               submit(data);
-                            },
-                            async (err) => { // onInvalid
-                              let data = getValues();
-                              console.log(err);
-                              submit(data);
-                            }
-                          )}>
+                            })}>
                           Submit
                         </Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" disabled={!settings.enableROOTComments}
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" 
                           onClick={handleSubmit(
                             async (data) => {
                               submit(data);
-                            },
-                            async (err) => { // onInvalid
-                              let data = getValues();
-                              console.log(err);
-                              submit(data);
-                            }
-                          )}>
+                            })}>
                           Save draft
                         </Button>
                       </Stack>
