@@ -11,7 +11,7 @@ import Router from "react-router-dom";
 import apis from "../apis.js";
 import axios from 'axios';
 
-const ENV = "LOCAL";
+const ENV = "AWS";
 
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
