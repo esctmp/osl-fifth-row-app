@@ -97,6 +97,7 @@ const Root_Pending_Table = () => {
           } else if (item.status === "Draft") {
             pbg = "#666666";
           }
+          
   
           return {
             id: item.epf_id.toString(),
