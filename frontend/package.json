@@ -15,7 +15,8 @@
     "@material-ui/lab": "5.0.0-alpha.38",
     "@material-ui/pickers": "^3.3.10",
     "@material-ui/system": "5.0.0-alpha.34",
-    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/dom": "^9.3.1",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "apexcharts": "^3.23.1",
@@ -47,13 +48,14 @@
     "jest": "^29.6.2",
     "jest-css-modules": "^2.1.0",
     "jest-environment-jsdom": "^29.6.2",
+    "jest-html-reporter": "^3.10.1",
     "react-test-renderer": "^18.2.0",
     "react-testing-library": "^8.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest --silent",
+    "test": "jest --silent --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -73,5 +75,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest-html-reporter": {
+    "pageTitle": "Unit Tests",
+    "outputPath": "./test-report.html",
+    "includeFailureMsg": true
   }
 }
