@@ -423,7 +423,8 @@ exports.handler = async (event) => {
     requestBody.c2_date.forEach((date) => {
         if (date !== "") {
             if (!date_regex.test(date)) {
-                throw new Error("Invalid Date Format");
+                throw new Error("Invalid Date Format"); 
+                 
             }
         }
     });
