@@ -6,11 +6,10 @@ const oslUser = {
     email: "testosl@club.sutd.edu.sg",
     password: "P@ssword1!"
 };
-
-
+let env = "AWS"
 const getRandomPendingEPFId = async () => {
     // get sample EPF id
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs",
+    let response = await axios.get(`${apis[env].getEPF}?epf_id=${userId}`,
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF Id");
     });
@@ -24,7 +23,7 @@ const getRandomPendingEPFId = async () => {
 
 const getValidName = async () => {
     // get sample EPF id
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs",
+    let response = await axios.get(`${apis[env].getEPFs}`,
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any Valid Name");
     });

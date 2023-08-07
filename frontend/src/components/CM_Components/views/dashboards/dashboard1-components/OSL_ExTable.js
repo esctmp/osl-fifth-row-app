@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import apis from "../../../../../apis"
 
 import {
   Typography,
@@ -19,6 +20,7 @@ import {
 } from "@material-ui/core";
 
 const OSL_ExTable = () => {
+  let env = "AWS";
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 3; // Number of rows to display per page
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,7 +87,8 @@ const OSL_ExTable = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        const response = await axios.get(`${apis[env].getEPFs}`);
+        // const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
 
         const approvedData = response.data.filter(item => item.status !== "Approved");
 

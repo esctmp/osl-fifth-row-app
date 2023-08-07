@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import apis from "../../../../../apis"
 
 import {
   Typography,
@@ -19,7 +20,7 @@ import {
 } from "@material-ui/core";
 
 const Root_Archives = () => {
-
+  let env = "AWS";
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 3; // Number of rows to display per page
   const [searchTerm, setSearchTerm] = useState("");
@@ -78,8 +79,9 @@ const Root_Archives = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("ARGGHHHHH")
-        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log("ARGGHHHHH");
+        const response = await axios.get(`${apis[env].getEPFs}`);
+        // const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
         console.log("hi");
 
         const approvedData = response.data.filter(item => item.status === "Approved");
