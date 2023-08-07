@@ -1,6 +1,9 @@
 import { object } from 'prop-types';
 import dummyEPF from '../../../assets/dummyEPF.json';
 import axios from 'axios';
+import apis from '../../../apis.js';
+
+const ENV = "AWS"; // LOCAL or AWS
 
 /**
  * Group all list fields of the same table and turn them into an array field.
@@ -29,6 +32,7 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
+<<<<<<< HEAD
     console.log("asdas"+epf_id)
     const reqdata={"epf_id": parseInt(epf_id)}
 
@@ -39,6 +43,25 @@ export async function getEPF(epf_id) {
     let data = convertJSONToFields(response.data);
     console.log("LOADED", data[0]);
     return data[0]
+=======
+    let response = await axios.get(apis[ENV].getEPF,
+        {
+            params: { epf_id: epf_id }
+        }
+    ).then((res) => res, (error) => {
+        console.log(error);
+        if (ENV == "LOCAL") {
+            return { data: [{}] };
+        } else {
+            return { body: {} };
+        }
+    });
+    let res = (ENV == "LOCAL" ? response.data[0] : response.body);
+    let data = convertJSONToFields(res);
+    //let data = convertJSONToFields(dummyEPF);
+    console.log("LOADED", data);
+    return data;
+>>>>>>> 5bd11e9ee9d29c732982415a81b30170b654ce57
 }
 
 
@@ -77,7 +100,7 @@ export const convertFieldsToJSON = (data) => {
 export async function createEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("SUBMITTED", data);
-    await axios.post("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/createEPF",
+    await axios.post(apis[ENV].createEPF, 
         data,
         {
             headers: {
@@ -95,7 +118,7 @@ export async function createEPF(data) {
 export async function updateEPF(data) {
     data = convertFieldsToJSON(data);
     console.log("UPDATED", data);
-    await axios.put("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/updateEPF",
+    await axios.put(apis[ENV].updateEPF,
         data,
         {
             headers: {

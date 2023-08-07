@@ -59,7 +59,7 @@ const TableRowName = ({ rowName, rowNameAlign = '', sx = {}, required = false })
     </Typography>
   </Box>
 
-const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
+const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes = [], minRows = 3, required = false, pattern = null }) => {
   const getInputComponent = (name, type) => {
     const props = {
       name: name,
@@ -67,6 +67,7 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
       minRows: minRows,
       control: control,
       required: required || false,
+      pattern: pattern
     };
     if (type == "number") {
       return <TableRowNumberInput {...props} />
@@ -76,6 +77,8 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
       return <TableRowDateInput {...props} />
     } else if (type == "time") {
       return <TableRowTimeInput {...props} />
+    } else if (type == "money") {
+      return <TableRowMoneyInput {...props} />
     } else {
       return <TableRowTextInput {...props} />
     };
@@ -109,21 +112,21 @@ const TableRowStatic = ({ settings, control, rowName, names, colConfig, colTypes
  * @param {boolean} props.settings.enableComments
  * @returns {React.Component}
  */
-export const TableRowsStatic = ({ names, rowNames, rowRequired = [], ...rest }) => {
+export const TableRowsStatic = ({ names, rowNames, rowRequired = [], patterns = [], ...rest }) => {
   return (
     <>
       {rowNames.map((rowName, idx) =>
-        <TableRowStatic rowName={rowName} idx={idx} names={names[idx]} {...rest} required={rowRequired[idx]} />
+        <TableRowStatic rowName={rowName} idx={idx} names={names[idx]} {...rest} required={rowRequired[idx]} pattern={patterns[idx]} />
       )}
     </>
   )
 };
 
-const TableDeleteRow = ({ onClickFunction, settings }) =>
+const TableDeleteRow = ({ onClickFunction, settings, tableName }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
-        id='delete-row'
+        id={tableName + '-delete-row'}
         variant='outlined'
         color='error'
         display='flex'
@@ -136,11 +139,11 @@ const TableDeleteRow = ({ onClickFunction, settings }) =>
     </Grid>
   </>
 
-const TableAddRow = ({ onClickFunction, settings }) =>
+const TableAddRow = ({ onClickFunction, settings, tableName }) =>
   <>
     <Grid item alignItems='stretch' lg={12} md={12} sx={{ border: '1px solid', borderColor: '#B9B9B9' }}>
       <Button
-        id='add-row'
+        id={tableName + '-add-row'}
         variant='outlined'
         display='flex'
         sx={{ fontSize: 28, height: '30px', width: '100%' }}
@@ -152,7 +155,7 @@ const TableAddRow = ({ onClickFunction, settings }) =>
     </Grid>
   </>
 
-const TableRowTextInput = ({ name, settings, control, minRows = 3, required = false }) => {
+const TableRowTextInput = ({ name, settings, control, minRows = 3, required = false, pattern = null }) => {
   const [error, setError] = useState(false);
   return (
     <Controller
@@ -165,16 +168,15 @@ const TableRowTextInput = ({ name, settings, control, minRows = 3, required = fa
       render={({ field }) => (
         <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
           <OutlinedInput
-            InputLabelProps={{
-              required: required
-            }}
+            InputLabelProps={name}
             onChange={(e) => {
               field.onChange(e.target.value);
-              (required && !e.target.value) ? setError(true) : setError(false);
+              ((required && !e.target.value) || (pattern && !pattern.test(e.target.value))) ? setError(true) : setError(false);
             }}
             onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
             error={error}
             id={name}
+            aria-label={name}
             key={name}
             fullWidth
             multiline
@@ -190,7 +192,7 @@ const TableRowTextInput = ({ name, settings, control, minRows = 3, required = fa
   )
 }
 
-const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = false }) => {
+const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = false, pattern = null }) => {
   const [error, setError] = useState(false);
   return (
     <Controller
@@ -203,13 +205,15 @@ const TableRowNumberInput = ({ name, settings, control, minRows = 3, required = 
       render={({ field }) => (
         <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
           <OutlinedInput
+            type="number"
             InputLabelProps={{
               required: required
             }}
             onChange={(e) => {
+              let s = e.target.value;
               field.onChange(parseInt(e.target.value));
               (required && !e.target.value) ? setError(true) : setError(false);
-              (e.target.value && !/^[0-9]*$/.test(e.target.value)) ? setError(true) : setError(false);
+              (e.target.value && (!/^[0-9]*$/.test(e.target.value) || (pattern && !pattern.test(s)))) ? setError(true) : setError(false);
             }}
             onFocus={() => { (required && !field.value) ? setError(true) : setError(false); }}
             error={error}
@@ -242,15 +246,52 @@ const TableRowFloatInput = ({ name, settings, control, minRows = 3, required = f
       render={({ field }) => (
         <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
           <OutlinedInput
-            InputLabelProps={{
-              required: required
-            }}
+            InputLabelProps={name}
             onChange={(e) => {
               field.onChange(e.target.value);
-              ((e.target.value && !/^[$]?[0-9]*[\.]?[0-9]*$/.test(e.target.value)) || (required && !e.target.value)) ? setError(true) : setError(false);
+              ((e.target.value && !/^[0-9]*[\.]?[0-9]*$/.test(e.target.value)) || (required && !e.target.value)) ? setError(true) : setError(false);
             }}
             onFocus={() => {
               ((required && !field.value) || (field.value && !/^[$]?[0-9]*[.]?[0-9]*$/.test(field.value))) ? setError(true) : setError(false);
+            }}
+            error={error}
+            id={name}
+            key={name}
+            fullWidth
+            multiline
+            minRows={minRows}
+            value={field.value}
+            disabled={!settings.enableInputs}
+            sx={{ height: '100%' }} // TODO make error border a bit thicker
+            display='flex'
+          />
+        </Box>
+      )}
+    />
+  )
+}
+
+
+const TableRowMoneyInput = ({ name, settings, control, minRows = 3, required = false }) => { // allow for '$' sign to match SQL Money input fields
+  const [error, setError] = useState(false);
+  return (
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        required: required,
+        validate: () => { return !error; }
+      }}
+      render={({ field }) => (
+        <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
+          <OutlinedInput
+            InputLabelProps={name}
+            onChange={(e) => {
+              field.onChange(e.target.value);
+              ((e.target.value && !/^[0-9]*[\.]?[0-9]{0,2}$/.test(e.target.value)) || (required && !e.target.value)) ? setError(true) : setError(false);
+            }}
+            onFocus={() => {
+              ((required && !field.value) || (field.value && !/^[0-9]*[.]?[0-9]{0,2}$/.test(field.value))) ? setError(true) : setError(false);
             }}
             error={error}
             id={name}
@@ -325,9 +366,7 @@ const TableRowTimeInput = ({ name, settings, control, minRows = 3, required = fa
         <Box display="flex" maxWidth sx={{ height: "100%" }} alignItems="stretch">
           <OutlinedInput
             type="time"
-            InputLabelProps={{
-              required: required
-            }}
+            InputLabelProps={name}
             onChange={(e) => {
               field.onChange(e.target.value);
               ((required && !e.target.value) || (e.target.value && !/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(e.target.value))) ? setError(true) : setError(false);
@@ -353,7 +392,7 @@ const TableRowTimeInput = ({ name, settings, control, minRows = 3, required = fa
   )
 }
 
-const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = [], minRows = 3, required = false }) => {
+const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = [], minRows = 3, required = false, pattern = null }) => {
   const getInputComponent = (name, type) => {
     const props = {
       name: `${name.split('_')[0] + '_grouped'}.${idx}.${name}`,
@@ -361,6 +400,7 @@ const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = 
       minRows: minRows,
       control: control,
       required: required || false,
+      pattern: pattern
     }
     if (type == "number") {
       return <TableRowNumberInput {...props} />
@@ -370,6 +410,8 @@ const TableRowDynamic = ({ settings, control, idx, names, colConfig, colTypes = 
       return <TableRowDateInput {...props} />
     } else if (type == "time") {
       return <TableRowTimeInput {...props} />
+    } else if (type == "money") {
+      return <TableRowMoneyInput {...props} />
     } else {
       return <TableRowTextInput {...props} />
     };
@@ -414,7 +456,7 @@ export const TableRowsDynamic = (props) => {
   });
 
   useEffect(() => {
-    if (fields.length < props?.minRowsRequired && !props.settings.loadForm) {
+    if (fields.length < props?.minRowsRequired) {
       for (let i = 0; i < props?.minRowsRequired; i++) {
         append(Object.fromEntries(props.names.map(k => [k, ""])));
       }
@@ -425,12 +467,12 @@ export const TableRowsDynamic = (props) => {
     <>
       {fields.map((field, idx) => {
         return (idx < props?.minRowsRequired)
-          ? <TableRowDynamic keys={field.id} idx={idx} required={true} {...props} />
-          : <TableRowDynamic keys={field.id} idx={idx} {...props} />
+          ? <TableRowDynamic keys={field.id} idx={idx} required={true} pattern={(props?.patterns || [])[idx]} {...props} />
+          : <TableRowDynamic keys={field.id} idx={idx} pattern={(props?.patterns || [])[idx]} {...props} />
       }
       )}
-      <TableDeleteRow onClickFunction={(e) => { if (fields.length > (props?.minRowsRequired || 0)) { remove(fields.length - 1) } }} {...props} />
-      <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} {...props} />
+      <TableDeleteRow onClickFunction={(e) => { if (fields.length > (props?.minRowsRequired || 0)) { remove(fields.length - 1) } }} tableName={props.names[0].split('_')[0]}{...props} />
+      <TableAddRow onClickFunction={(e) => { append(Object.fromEntries(props.names.map(k => [k, ""]))); }} tableName={props.names[0].split('_')[0]} {...props} />
     </>
   )
 }
