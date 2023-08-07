@@ -32,7 +32,6 @@ export const convertJSONToFields = (data) => {
 }
 
 export async function getEPF(epf_id) {
-<<<<<<< HEAD
     console.log("asdas"+epf_id)
     const reqdata={"epf_id": parseInt(epf_id)}
 
@@ -43,25 +42,6 @@ export async function getEPF(epf_id) {
     let data = convertJSONToFields(response.data);
     console.log("LOADED", data[0]);
     return data[0]
-=======
-    let response = await axios.get(apis[ENV].getEPF,
-        {
-            params: { epf_id: epf_id }
-        }
-    ).then((res) => res, (error) => {
-        console.log(error);
-        if (ENV == "LOCAL") {
-            return { data: [{}] };
-        } else {
-            return { body: {} };
-        }
-    });
-    let res = (ENV == "LOCAL" ? response.data[0] : response.body);
-    let data = convertJSONToFields(res);
-    //let data = convertJSONToFields(dummyEPF);
-    console.log("LOADED", data);
-    return data;
->>>>>>> 5bd11e9ee9d29c732982415a81b30170b654ce57
 }
 
 
