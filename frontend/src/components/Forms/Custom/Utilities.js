@@ -62,6 +62,7 @@ export async function getEPF(epf_id) {
  */
 export const convertFieldsToJSON = (data) => {
     // Filter out undefined/null data
+    console.log(data)
     data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(
         !value
         || (Array.isArray(value) && (value.length == 0 || value[0] == false))
