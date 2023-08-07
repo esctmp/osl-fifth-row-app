@@ -93,6 +93,8 @@ const Root_Archives = () => {
             pbg = "#FF6600";
           } else if (item.status === "Declined") {
             pbg = "#CC0000";
+          } else if (item.status === "Draft") {
+            pbg = "#666666";
           }
   
           return {
