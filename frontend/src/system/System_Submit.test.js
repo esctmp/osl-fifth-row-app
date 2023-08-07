@@ -1,7 +1,7 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
 import apis from '../apis';
 
-const ENV = "AWS"; // LOCAL or AWS
+const ENV = "LOCAL"; // LOCAL or AWS
 
 const url = apis[ENV].main;
 const excoUser = {
