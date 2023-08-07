@@ -20,6 +20,7 @@
     "@testing-library/user-event": "^12.8.3",
     "apexcharts": "^3.23.1",
     "aws-amplify": "^5.3.5",
+    "aws-sdk": "^2.1430.0",
     "axios": "^1.4.0",
     "axois": "^0.0.1-security",
     "chromedriver": "^115.0.0",
