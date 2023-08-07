@@ -224,7 +224,7 @@ test("Unit Testing for Pending table - Check for components to be functional and
     await driver.actions().move({ origin: FilterByStatusButton }).click().perform();
 
     
-    let ValidStatus="Pending"
+    let ValidStatus="Pending Approval"
     await driver.findElement(By.xpath('//*[contains(text(),"Pending Approval")]/following::div[1]//input[@placeholder="Search by Status"]')).sendKeys(Key.chord(Key.CONTROL,"a", Key.DELETE));;;
     await driver.findElement(By.xpath('//*[contains(text(),"Pending Approval")]/following::div[1]//input[@placeholder="Search by Status"]')).sendKeys(ValidStatus);
     
