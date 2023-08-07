@@ -94,9 +94,9 @@ const ExTable = () => {
   
           if (item.status === "Approved") {
             pbg = "#66FF00";
-          } else if (item.status === "Pending") {
+          } else if (item.status === "Pending Approval") {
             pbg = "#FF6600";
-          } else if (item.status === "Declined") {
+          } else if (item.status === "Rejected") {
             pbg = "#CC0000";
           } else if (item.status === "Draft") {
             pbg = "#666666";
