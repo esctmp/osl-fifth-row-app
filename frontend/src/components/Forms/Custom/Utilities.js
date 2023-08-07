@@ -16,6 +16,7 @@ const ENV = "AWS"; // LOCAL or AWS
  */
 export const convertJSONToFields = (data) => {
     // Filter out undefined/null data
+
     data = Object.fromEntries(Object.entries(data).filter(([_, value]) => !(value == undefined || value?.length == 0)));
 
     // Convert all ungrouped data to grouped
@@ -44,7 +45,7 @@ export async function getEPF(epf_id) {
             return { body: {} };
         }
     });
-    let res = (ENV == "LOCAL" ? response.data[0] : response.body);
+    let res = response.data[0];
     let data = convertJSONToFields(res);
     //let data = convertJSONToFields(dummyEPF);
     console.log("LOADED", data);
