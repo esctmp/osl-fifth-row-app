@@ -5,16 +5,12 @@ import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
 
-//This is homepage
 const Homepage = () => {
-
   const[FRname,setFRname] = useState("ROOT User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
   useEffect(()=>
   axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
-    // console.log(response.data[0].name);
-    // console.log(response.data[0].outstanding_epf);
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
@@ -46,15 +42,5 @@ const Logo = () => {
     </div>
   )
 }
-
-// const InformationBox = () => {
-//   return (
-//     <div className="informationBox">
-//       <p className="informationText">There are 3 forms for your viewing.</p>
-//     </div>
-//   )
-// }
-
-
 
 export default Homepage;

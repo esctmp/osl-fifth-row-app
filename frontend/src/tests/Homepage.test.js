@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 import React from 'react';
 import Homepage from "../pages/FifthRow/Homepage.js";
 import { UserID } from "../routes/UserID.js";
@@ -11,19 +13,12 @@ const userPool =
     "name": "EXCO User 1",
     "email": "excouser1@club.sutd.edu.sg",
     "type": "FRE",
-    "outstanding EPF": 3,
-},
-{
-    "user_id": "2",
-    "name": "EXCO User 2",
-    "email": "excouser2@club.sutd.edu.sg",
-    "type": "FRE",
-    "outstanding EPF": 4,
+    "outstanding_epf": 3,
 },
 ]
 
-
 describe('Homepage', () => {
+
     // 1
     test('Render - Landing Page', () => {
         render(
@@ -39,33 +34,48 @@ describe('Homepage', () => {
     });
 
     // 2
-    test('Display outstanding EPF when user successfully logs in', () => {
+    test('Display outstanding EPF when user successfully logs in', async () => {
+
+        const mockAxios = new MockAdapter(axios);
+        const userId = '1';
+        const apiResponse = [userPool.find(user => user['user_id'] === userId)];
+
+        // mock axios get request
+        mockAxios.onGet(`http://localhost:3000/users/getUser?user_id=${userId}`).reply(200, apiResponse);
+
+
         render(
-            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
+            <UserID.Provider value ={{userId: userId, setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )
-        
-        const user = userPool.find(user => user['user_id'] === "1");
-        expect(user['outstanding EPF']).toBe(3);
 
-        const field = screen.getByTestId("epfcount");
-        expect(field).toBeInTheDocument();
+        await waitFor(() => {
+            const epfCount = screen.getByTestId('epfcount');
+            expect(epfCount).toBeInTheDocument();
+            expect(epfCount).toHaveTextContent("You have 3 outstanding forms to review.")
+        })
+
     });
 
     // 3
-    test('Display username when user successfully logs in', () => {
+    test('Display username when user successfully logs in', async () => {
+        const mockAxios = new MockAdapter(axios);
+        const userId = '1';
+        const apiResponse = [userPool.find(user => user['user_id'] === userId)];
+        mockAxios.onGet(`http://localhost:3000/users/getUser?user_id=${userId}`).reply(200, apiResponse);
         render(
-            <UserID.Provider value ={{userId:'null', setUserId:()=>{}}}>
+            <UserID.Provider value ={{userId: userId, setUserId:()=>{}}}>
             <Homepage />
             </UserID.Provider> 
             )
-        
-        const user = userPool.find(user => user['user_id'] === "2");
-        expect(user['name']).toBe("EXCO User 2");
 
-        const field = screen.getByTestId("username");
-        expect(field).toBeInTheDocument();
+        await waitFor(() => {
+            const username = screen.getByTestId('username');
+            expect(username).toBeInTheDocument();
+            expect(username).toHaveTextContent("EXCO User 1")
+        })
+        
     });
 
     // 4 
