@@ -150,21 +150,21 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
     const tableSettingsC1 = {
       names: ['c1_date', 'c1_time', 'c1_activity_and_description', 'c1_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
-      colTypes: ['date', 'time', ,],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
+      colTypes: ['date*', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC2 = {
-      names: ['c2_date', 'c2_time', 'c2_activity_and_description', 'c2_venue'],
+      names: ['c2_date*', 'c2_time', 'c2_activity_and_description', 'c2_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
       colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC3_1 = {
       names: ['c3_date', 'c3_time', 'c3_activity_and_description', 'c3_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
       colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     };
@@ -336,7 +336,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
   const SectionF = () => {
     const tableSettingsF = {
       names: ['f_name', 'f_student_id', 'f_position'],
-      colNames: ['Name', 'Student ID', 'Position'],
+      colNames: ['Name*', 'Student ID*', 'Position*'],
       colConfig: [4, 4, 4],
       minRowsRequired: 1,
       patterns: [, /^\d{7}$/,]
