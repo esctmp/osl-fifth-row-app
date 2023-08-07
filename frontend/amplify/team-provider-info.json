@@ -19,7 +19,7 @@
         },
         "createEPF": {
           "deploymentBucketName": "amplify-frontend-staging-172614-deployment",
-          "s3Key": "amplify-builds/createEPF-6e746a52536461314c4b-build.zip",
+          "s3Key": "amplify-builds/createEPF-74466b314d6b66315574-build.zip",
           "dbHost": "database-1.cpb6hjfazsgd.ap-southeast-1.rds.amazonaws.com",
           "dbName": "esc_db",
           "dbPassword": "12345678",
