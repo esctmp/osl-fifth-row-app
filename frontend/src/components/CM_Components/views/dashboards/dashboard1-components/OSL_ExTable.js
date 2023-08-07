@@ -90,17 +90,19 @@ const OSL_ExTable = () => {
         const response = await axios.get(`${apis[env].getEPFs}`);
         // const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
 
-        const approvedData = response.data.filter(item => item.status !== "Approved");
+        const approvedData = response.data.filter(item => (item.status !== "Approved")&& (item.status !=="Draft"));
 
         const transformedData = approvedData.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
             pbg = "#66FF00";
-          } else if (item.status === "Pending") {
+          } else if (item.status === "Pending Approval") {
             pbg = "#FF6600";
-          } else if (item.status === "Declined") {
+          } else if (item.status === "Rejected") {
             pbg = "#CC0000";
+          } else if (item.status === "Draft") {
+            pbg = "#666666";
           }
   
           return {
