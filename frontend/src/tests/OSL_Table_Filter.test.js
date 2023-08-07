@@ -10,7 +10,7 @@ const oslUser = {
 
 const getRandomPendingEPFId = async () => {
     // get sample EPF id
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs",
+    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs",
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any EPF Id");
     });
@@ -24,7 +24,7 @@ const getRandomPendingEPFId = async () => {
 
 const getValidName = async () => {
     // get sample EPF id
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs",
+    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs",
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any Valid Name");
     });
@@ -41,7 +41,7 @@ const getinvalidName = async () => {
 
 const getValidClub = async () => {
     // get sample EPF id
-    let response = await axios.get("http://localhost:3000/epfs/getEPFs",
+    let response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs",
     ).then((res) => res, (error) => {
         throw new Error("Cannot get any Valid Club");
     });
