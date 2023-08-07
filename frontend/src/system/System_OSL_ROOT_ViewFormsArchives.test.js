@@ -76,7 +76,7 @@ test("System - Fifth Row Submit And OSL Approve", async () => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     await driver.actions().move({ origin: NextPageButton }).click().perform();
     
-    // 10. OSL user clicks on the EPF of Pending 
+    // 10. OSL user clicks on the EPF of Pending
     await driver.wait(until.elementLocated(By.xpath('//*[@id="root"]/div/div/div/div/div/div[1]/div/div/div/div/table/tbody/tr/td[3]/a/h6')));
     await new Promise(resolve => setTimeout(resolve, 2000));
     let EPFclick = await driver.findElement(By.xpath('//*[@id="root"]/div/div/div/div/div/div[1]/div/div/div/div/table/tbody/tr/td[3]/a/h6'));

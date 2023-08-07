@@ -85,9 +85,7 @@ const OSL_ExTable = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("ARGGHHHHH")
         const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
-        console.log("hi");
 
         const approvedData = response.data.filter(item => item.status !== "Approved");
 
@@ -130,7 +128,6 @@ const OSL_ExTable = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}
