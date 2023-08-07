@@ -29,7 +29,7 @@ import {
   FormRadioField,
   STATUS
 } from "../../../components/Forms/Custom/Form";
-import { Backdrop, CircularProgress, Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
+import { Card, CardContent, Container, Divider, Box, Typography, TextField, FormControlLabel, Checkbox, Input, Button, Grid, RadioGroup, Radio, FormControl, Stack, MenuItem, FormGroup, } from "@material-ui/core";
 import { Controller, useForm, useFormState } from "react-hook-form";
 import { useLocation, useParams } from 'react-router-dom';
 import { useContext } from 'react';
@@ -40,58 +40,36 @@ import { UserID } from '../../../routes/UserID';
 // TODO file attachment feature
 // TODO autosave
 
-const EPFSubmit = () => { // wrapper component to process api calls
-  const { epf_id } = useParams() || {};
-  const { userId, _ } = useContext(UserID);
+// TODO api calls
+// TODO create ROOT page
+// TODO backend remove validation?
 
-  const [loaded, setLoaded] = useState(false); // whether api call is done
-  const [initialValues, setInitialValues] = useState({}); // values from api call
-  const [settings, setSettings] = useState((epf_id != undefined ? FORM_MODES["DRAFT"] : FORM_MODES["NEW"])); // whether fields are enabled/disabled/shown
-  console.log("RENDERING THE WRAPPER COMPONENT");
-
-  useEffect(() => {
-    if (settings.loadForm) {
-      getEPF(epf_id).then(values => { // TODO table does not register data if form is disabled
-        setInitialValues(values);
-        if (values?.status == STATUS.Rejected.description) { setSettings(FORM_MODES["REJECTED"]); }
-        if (values?.status == STATUS.Submitted.description) { setSettings(FORM_MODES["PENDING APPROVAL"]); }
-        if (values?.status == STATUS.Approved.description) { setSettings(FORM_MODES["APPROVED"]); }
-        setLoaded(true);
-      })
-    } else {
-      setLoaded(true);
-    }
-  }, []); // empty array dependencies -> useEffect will not rerun on re-render
-
-  return (
-    <>
-      {loaded
-        ? <EPFSubmitForm epf_id={epf_id} userId={userId} settings={settings} initialValues={initialValues} />
-        :
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={true}>
-          <CircularProgress />
-        </Backdrop>
-      }
-    </>
-  );
-}
-
-const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actual form component
+const EPFSubmit = () => {
   // DEFINE FORM CONTROL VARIABLES
+  // const { userId, setUserId } = useContext(UserID);
+  const { epf_id } = useParams();
+  const { userId, _ } = useContext(UserID);
+  const mode = (epf_id != undefined) ? "DRAFT" : "NEW";
+  const settings = FORM_MODES[mode];
   const { handleSubmit, control, setValue, getValues } = useForm({ reValidateMode: 'onSubmit' });
   const formControl = { // global form vars that should be passed down to imported custom component
     control: control,
-    setValue: setValue,
-    settings: settings
+    settings: settings,
+    setValue: setValue
   };
-  console.log("RENDERING THE ACTUAL FORM");
+  console.log("Submit")
+  console.log(epf_id)
+  console.log("RE-RENDERED");
 
-  // SET INITIAL VALUES
-  useEffect(() => { // equivalent to componentDidMount
+  useEffect(() => {
     if (settings.loadForm) {
-      Object.entries(initialValues).map(([k, v]) => setValue(k, v));
+      console.log("Beep")
+      console.log(getEPF(epf_id))
+      getEPF(epf_id).then(values => {
+        Object.entries(values).map(([k, v]) => setValue(k, v));
+        if (values?.status == STATUS.Declined.description) { formControl.settings = FORM_MODES["REVIEW"]; }
+        if (values?.status == STATUS.Approved.description) { formControl.settings = FORM_MODES["ARCHIVED"]; }
+      })
     } else {
       setValue("exco_user_id", userId);
     }
@@ -99,25 +77,11 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
 
   // DEFINE HANDLES 
   async function submit(data) {
-    if (data?.epf_id != undefined) {
+    if (epf_id != undefined) {
       updateEPF(data);
     } else {
       createEPF(data);
     }
-  }
-
-  function checkInvalid(err) {
-    let isInvalid = false;
-    Object.entries(err).map(([k, v]) => {
-      if (Array.isArray(v)) {
-        Object.entries(v).map(([k2, v2]) => {
-          if (v2?.type == "validate") { isInvalid = true; }
-        });
-      } else {
-        if (v?.type == "validate") { isInvalid = true; }
-      }
-    });
-    return isInvalid;
   }
 
   // DEFINE SECTIONS
@@ -246,7 +210,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       rowNames: ["Club Income Fund", "OSL Seed Fund", "Donation"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "money"]
+      colTypes: [, "float"]
     };
 
     const tableSettingsD1B = {
@@ -255,19 +219,19 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       rowNames: ["Revenue from Sales of Goods and Services (Please complete table D.1.1)", "Donation or Scholarship", "Total Source of Funds"],
       colConfig: [6, 6],
       colNames: ['Source', 'Amount ($)'],
-      colTypes: [, "money"]
+      colTypes: [, "float"]
     };
     const tableSettingsD11_1 = {
       names: ["d11_items_goods_services", "d11_price", "d11_quantity", "d11_amount"],
       colConfig: [3, 3, 3, 3],
       colNames: ['Item/Goods/Services', 'Price ($)', 'Quantity', 'Amount ($)'],
-      colTypes: [, "money", "number", "money"]
+      colTypes: [, "float", "number", "float"]
     };
     const tableSettingsD11_2 = {
       names: [['d11_total_revenue']],
       rowNames: ['Total Revenue'],
       colConfig: [6, 6],
-      colTypes: [, 'money'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     };
     const tableSettingsD2_1 = {
@@ -279,7 +243,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       names: [['d2_total_expenditure']],
       rowNames: ['Total Expenditure'],
       colConfig: [6, 6],
-      colTypes: [, 'money'],
+      colTypes: [, 'float'],
       rowRequired: [true]
     }
     return (
@@ -361,8 +325,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
       names: ['f_name', 'f_student_id', 'f_position'],
       colNames: ['Name', 'Student ID', 'Position'],
       colConfig: [4, 4, 4],
-      minRowsRequired: 1,
-      patterns: [, /^\d{7}$/,]
+      minRowsRequired: 1
     }
     return (
       <>
@@ -377,8 +340,8 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="g" owner="OSL" />
-            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
+            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
@@ -432,8 +395,8 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           </Grid>
 
           <Grid item xs={3} >
-            <FormCommentField {...formControl} name="g_comments_osl" owner="OSL" />
-            <FormCommentField {...formControl} name="g_comments_root" owner="ROOT" />
+            <FormCommentField {...formControl} name="f_comments_osl" owner="OSL" />
+            <FormCommentField {...formControl} name="f_comments_root" owner="ROOT" />
           </Grid>
         </Grid>
       </>
@@ -490,13 +453,9 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                       <SectionG />
                       {/* <SectionFiles /> */}
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} variant="contained" disabled={!settings.enableInputs}
+                        <Button style={{ width: 120, height: 40 }} variant="contained"
                           onClick={handleSubmit(
                             async (data) => { // onValid
-                              if (data?.status == STATUS.Rejected.description) { // create new epf if form is already rejected
-                                let { epf_id, ...rest } = data;
-                                data = rest;
-                              }
                               data.status = STATUS.Submitted.description; submit(data);
                             },
                             async (err) => { // onInvalid
@@ -506,7 +465,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                           )}>
                           Submit
                         </Button>
-                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained" disabled={!settings.enableInputs}
+                        <Button style={{ width: 120, height: 40 }} sx={draftButtonStyle} variant="contained"
                           onClick={handleSubmit(
                             async (data) => { // onValid
                               data.status = STATUS.Draft.description; submit(data);
@@ -514,12 +473,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                             async (err) => { // onInvalid
                               let data = getValues();
                               if (data?.b_event_name) {
-                                console.log(err);
-                                if (checkInvalid(err)) {
-                                  alert("Form is invalid. Please fix and submit it again.");
-                                } else {
-                                  data.status = STATUS.Draft.description; submit(data);
-                                }
+                                data.status = STATUS.Draft.description; submit(data);
                               } else {
                                 alert("You must fill in the Event Name before saving this form as draft.");
                               };

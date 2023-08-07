@@ -85,7 +85,9 @@ const OSL_ExTable = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log("ARGGHHHHH")
+        const response = await axios.get("https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs"); // Replace with your actual API endpoint
+        console.log("hi");
 
         const approvedData = response.data.filter(item => (item.status !== "Approved")&& (item.status !=="Draft"));
 
@@ -94,9 +96,9 @@ const OSL_ExTable = () => {
   
           if (item.status === "Approved") {
             pbg = "#66FF00";
-          } else if (item.status === "Pending") {
+          } else if (item.status === "Pending Approval") {
             pbg = "#FF6600";
-          } else if (item.status === "Declined") {
+          } else if (item.status === "Rejected") {
             pbg = "#CC0000";
           } else if (item.status === "Draft") {
             pbg = "#666666";
@@ -130,6 +132,7 @@ const OSL_ExTable = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
+  
 
   return (
     <div style={{ overflowX: "auto" }}> {/* Add container with overflow scrolling */}

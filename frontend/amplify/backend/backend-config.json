@@ -94,7 +94,7 @@
     }
   },
   "auth": {
-    "frontend4bc2862d": {
+    "frontend05785438": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -109,6 +109,16 @@
       "service": "Lambda"
     },
     "GetUsers": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "clearEPFTests": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "clearUSERSTest": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -152,6 +162,360 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_frontend05785438_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_auth_frontend05785438_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "frontend05785438"
+        }
+      ]
+    },
+    "AMPLIFY_function_CreateEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_CreateEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_GetUsers_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GetUsers"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearEPFTests_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearEPFTests_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearUSERSTest_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearUSERSTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_clearUSERSTest_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "clearUSERSTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbHost": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbPassword": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_dbUser": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_createEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "createEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAllEPFTests_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAllEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteAllEPFTests_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteAllEPFTests"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_deleteUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "deleteUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_getEXCOEPFs_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getEXCOEPFs"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateEPF_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateEPF"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_updateUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "updateUser"
+        }
+      ]
     }
   }
 }

@@ -11,7 +11,7 @@ const rdsConfig = {
 const pool = new Pool(rdsConfig);
 
 exports.handler = async (event) => {
-    const user_id = event.user_id; // Assuming the user_id is passed as an event parameter
+    const user_id = event.exco_user_id; // Assuming the user_id is passed as an event parameter
 
     try {
         const result = await getEXCOEPFs(user_id);

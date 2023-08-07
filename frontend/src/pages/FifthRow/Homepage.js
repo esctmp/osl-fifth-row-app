@@ -1,6 +1,7 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import logo_short from "../../assets/images/logo-short.png";
+//import data from "../../components/HomepageData/Data.json";
+import axios from "axios";
 import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
 
@@ -9,7 +10,7 @@ const Homepage = () => {
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
+  axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser?user_id=${userId}`).then(function(response){
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
@@ -42,5 +43,40 @@ const Logo = () => {
     </div>
   )
 }
+
+// const InformationBox = () => {
+  
+//   return (
+//     <div className="informationBox">
+//       <p className="informationText">You have {EPFcount} outstanding forms to review.</p>
+//     </div>
+//   )
+// }
+
+// const ClubDetailsBox = () => {
+//   return (
+//     <div className="bottomTwoBox">
+//       <h2 className="clubDetailsBox">Club Details</h2>
+//     </div>
+//   )
+// }
+
+// const RemainingBudgetBox = () => {
+//   return (
+//     <div className="bottomTwoBox">
+//       <h2 className="remainingBudgetBox">Remaining Budget</h2>
+//       <h2 className="remainingAmount"> $345 </h2>
+//     </div>
+//   )
+// }
+
+// const SidebySideBoxes = () => {
+//   return (
+//     <div className="sidecontainer">
+//       <ClubDetailsBox />
+//       <RemainingBudgetBox />
+//     </div>
+//   )
+// }
 
 export default Homepage;

@@ -24,10 +24,12 @@ export default function Login() {
           group = user.attributes["custom:user_type"];
           if (!group){
             group = user.signInUserSession.accessToken.payload["cognito:groups"];}
+          console.log(group);
+          console.log(group == "FRE");
+          console.log(group ==="FRE");
           setGroups(group);
           setUserId(uid);
           setUserLoggedIn(true);
-          
           if (group.includes('OSL')|| group == "OSL") {
             navigate("/osl/homepage");
           } else if (group.includes('FRE') || group=="FRE") {
@@ -57,10 +59,7 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="email">Club Email:</label>
                                 <input
-                                    {...register("email", { required: "*Email is required!",pattern:{
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]*sutd\.edu\.sg$/i,
-                    message: "*Invalid email address entered"
-                } })}
+                                    {...register("email")}
                                     type="text"
                                     id="email"
                                     name="email"

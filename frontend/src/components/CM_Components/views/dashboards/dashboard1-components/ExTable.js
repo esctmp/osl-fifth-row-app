@@ -87,16 +87,16 @@ const ExTable = () => {
         console.log("ARGGHHHHH")
         console.log(userId)
         console.log("UID")
-        const response = await axios.get(`http://localhost:3000/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
+        const response = await axios.get(`https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
         console.log("hi");
         const transformedData = response.data.map((item) => {
           let pbg;
   
           if (item.status === "Approved") {
             pbg = "#66FF00";
-          } else if (item.status === "Pending") {
+          } else if (item.status === "Pending Approval") {
             pbg = "#FF6600";
-          } else if (item.status === "Declined") {
+          } else if (item.status === "Rejected") {
             pbg = "#CC0000";
           } else if (item.status === "Draft") {
             pbg = "#666666";

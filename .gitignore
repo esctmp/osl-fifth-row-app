@@ -117,7 +117,7 @@ dist
 .dynamodb/
 
 # TernJS port file
-.tern-port
+.tern-port 
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
@@ -150,6 +150,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-#ignore test-report.html
-test-report.html
