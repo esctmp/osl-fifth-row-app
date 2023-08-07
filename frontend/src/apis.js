@@ -4,8 +4,8 @@ export default {
         updateEPF: "https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/updateEPF",
         getEPF: "https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPF",
         getEPFs: "https://gqzy046009.execute-api.ap-southeast-1.amazonaws.com/staging/epfs/getEPFs",
-        getUser: "https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getUser",
-        getUsers: "https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/getUsers",
+        getUser: "https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUser",
+        getUsers: "https://mtdlypyeyk.execute-api.ap-southeast-1.amazonaws.com/staging/users/GetUsers",
         main: "https://main2.dta2y13etkzgu.amplifyapp.com/#/login"
     },
     LOCAL: {
