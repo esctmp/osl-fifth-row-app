@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
-// import mediaQuery from 'css-mediaquery';
 import React from 'react';
 import { act } from "react-dom/test-utils";
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -100,7 +99,7 @@ describe ('Sidebar', () => {
             </Router>
             )
         
-        // click on 'Homepage' on sidebar
+        // click on 'Create New EPF' on sidebar
         await act(async () => {
             fireEvent.click(screen.getByTestId("Create New EPF"));
         })
@@ -120,7 +119,7 @@ describe ('Sidebar', () => {
             </Router>
             )
         
-        // click on 'Homepage' on sidebar
+        // click on 'View EPF List' on sidebar
         await act(async () => {
             fireEvent.click(screen.getByTestId("View EPF List"));
         })
@@ -140,7 +139,7 @@ describe ('Sidebar', () => {
             </Router>
             )
         
-        // click on 'Homepage' on sidebar
+        // click on 'Review EPF' on sidebar
         await act(async () => {
             fireEvent.click(screen.getByTestId("Review EPF"));
         })
