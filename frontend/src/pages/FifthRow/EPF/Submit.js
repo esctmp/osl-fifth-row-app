@@ -99,7 +99,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
 
   // DEFINE HANDLES 
   async function submit(data) {
-    if (data?.epf_id != undefined) {
+    if (data.epf_id != undefined) {
       updateEPF(data);
     } else {
       createEPF(data);
