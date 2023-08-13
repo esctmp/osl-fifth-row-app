@@ -3,7 +3,7 @@ import dummyEPF from '../../../assets/dummyEPF.json';
 import axios from 'axios';
 import apis from '../../../apis.js';
 
-const ENV = "AWS"; // LOCAL or AWS
+const ENV = "LOCAL"; // LOCAL or AWS
 
 /**
  * Group all list fields of the same table and turn them into an array field.

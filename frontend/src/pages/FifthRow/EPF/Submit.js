@@ -153,9 +153,9 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
           <Grid item xs={9}>
             <Grid container spacing={2} sx={{ mb: 5 }}>
               <Grid item xs={6}><FormTextField {...formControl} name="b_event_name" required={true} /></Grid>
-              <Grid item xs={6}><FormTextField {...formControl} name="b_target_audience" required={true} /></Grid>
+              <Grid item xs={6}><FormTextField {...formControl} name="b_target_audience" required={true}/></Grid>
               <Grid item xs={6}><FormDateTimeField {...formControl} name="b_event_schedule" required={true} /></Grid>
-              <Grid item xs={6}><FormNumberField {...formControl} name="b_expected_turnout" required={true} /></Grid>
+              <Grid item xs={6}><FormNumberField {...formControl} name="b_expected_turnout" required={true} pattern={/^\d+$/}  /></Grid>
               <Grid item xs={12}><FormTextField {...formControl} name="b_event_objective" required={true} multiline={true} /></Grid>
             </Grid>
           </Grid>
@@ -173,23 +173,23 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
     const tableSettingsC1 = {
       names: ['c1_date', 'c1_time', 'c1_activity_and_description', 'c1_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
       colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC2 = {
       names: ['c2_date', 'c2_time', 'c2_activity_and_description', 'c2_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
       colTypes: ['date', 'time', ,],
       minRowsRequired: 1
     }
     const tableSettingsC3_1 = {
       names: ['c3_date', 'c3_time', 'c3_activity_and_description', 'c3_venue'],
       colConfig: [3, 2, 4, 3],
-      colNames: ['Date', 'Time', 'Activity and Description', 'Venue'],
+      colNames: ['Date*', 'Time*', 'Activity and Description*', 'Venue*'],
       colTypes: ['date', 'time', ,],
-      minRowsRequired: 1
+      minRowsRequired: 1,
     };
     const tableSettingsC3_2 = {
       // Replace 'C3_cleanup' with 'C3cleanup' to not break processing
@@ -359,7 +359,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
   const SectionF = () => {
     const tableSettingsF = {
       names: ['f_name', 'f_student_id', 'f_position'],
-      colNames: ['Name', 'Student ID', 'Position'],
+      colNames: ['Name*', 'Student ID*', 'Position*'],
       colConfig: [4, 4, 4],
       minRowsRequired: 1,
       patterns: [, /^\d{7}$/,]
@@ -494,7 +494,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                           onClick={handleSubmit(
                             async (data) => { // onValid
                               if (data?.status == STATUS.Rejected.description) { // create new epf if form is already rejected
-                                let { epf_id, ...rest } = data;
+                                let { epf_id, date_created, ...rest } = data;
                                 data = rest;
                               }
                               data.status = STATUS.Submitted.description; submit(data);

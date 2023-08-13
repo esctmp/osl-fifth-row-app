@@ -12,5 +12,6 @@ module.exports = {
   transformIgnorePatterns: [
     "/node_modules/(?!(@aws-sdk|aws-amplify|@aws-amplify)).+\\.js$"
   ],
-  testResultsProcessor: "./node_modules/jest-html-reporter"
+  testResultsProcessor: "./node_modules/jest-html-reporter",
+  collectCoverage: true,
 };

@@ -1,7 +1,7 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
 import apis from '../apis';
 
-const ENV = "AWS"; // LOCAL or AWS
+const ENV = "LOCAL"; // LOCAL or AWS
 
 const url = apis[ENV].main;
 const excoUser = {
@@ -221,6 +221,8 @@ test("System - Fifth Row Submit, OSL Comment And OSL Approve", async () => {
             throw new Error("Unable to find submitted EPF");
         }
     }
+    // sleep for 1 second
+    await new Promise(resolve => setTimeout(resolve, 1000));
     let status = await driver.findElement(By.xpath(parentXpath + `//h6[contains(text(),"${eventName}")]/./../../following::td[1]//span`)).getText();
     expect(status).toBe("Approved");
 
