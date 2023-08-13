@@ -446,7 +446,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                       <SectionF />
                       <SectionG />
                       <Stack spacing={2} direction="row" justifyContent="center">
-                        <Button style={{ width: 120, height: 40 }} color="error" variant="contained" disabled={!settings.enableROOTComments}
+                        <Button style={{ width: 120, height: 40 }} variant="contained" disabled={!settings.enableROOTComments}
                           onClick={handleSubmit(
                             async (data) => {
                               submit(data);

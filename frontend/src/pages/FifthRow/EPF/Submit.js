@@ -494,7 +494,7 @@ const EPFSubmitForm = ({ epf_id, userId, initialValues, settings }) => { // actu
                           onClick={handleSubmit(
                             async (data) => { // onValid
                               if (data?.status == STATUS.Rejected.description) { // create new epf if form is already rejected
-                                let { epf_id, ...rest } = data;
+                                let { epf_id, date_created, ...rest } = data;
                                 data = rest;
                               }
                               data.status = STATUS.Submitted.description; submit(data);
