@@ -3,6 +3,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
 // import products from "./Data.json"
 import axios from "axios";
+import apis from "../../../../../../src/apis"
 import { UserID } from "../../../../../routes/UserID";
 
 
@@ -23,6 +24,7 @@ import {
 
 
 const ExTable = () => {
+  const env = "AWS";
 
   const {userId,setUserId} = useContext(UserID);
   const [page, setPage] = React.useState(0);
@@ -87,7 +89,8 @@ const ExTable = () => {
         console.log("ARGGHHHHH")
         console.log(userId)
         console.log("UID")
-        const response = await axios.get(`http://localhost:3000/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
+        const response = await axios.get(`${apis[env].getEPFs}`); // Replace with your actual API endpoint
+        // const response = await axios.get(`http://localhost:3000/users/getEXCOEPFs?exco_user_id=${userId}`); // Replace with your actual API endpoint
         console.log("hi");
         const transformedData = response.data.map((item) => {
           let pbg;

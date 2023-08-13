@@ -8,6 +8,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Groups } from "../../../routes/Groups";
 import { UserID } from "../../../routes/UserID";
+import apis from "../../../../src/apis"
 
 import {
   AppBar,
@@ -22,7 +23,10 @@ import {
   Toolbar,
 } from "@material-ui/core";
 
+
 const Header = (props) => {
+  
+  let env = "AWS";
 
   const navigate = useNavigate();
   
@@ -68,9 +72,10 @@ const Header = (props) => {
   const {userId,setUserId} = useContext(UserID);
   const {groups, setGroups} = useContext(Groups);
   console.log(userId);
+  console.log(`${apis[env].getUser}?user_id=${userId}`);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
-    console.log(response.data[0].name);
+  axios.get(`${apis[env].getUser}?user_id=${userId}`).then(function(response){
+    console.log(`${apis[env].getUser}?user_id=${userId}`);
     setFRname(response.data[0].name);
     }).catch(error =>{
         console.error("Error fetching User: ",error);

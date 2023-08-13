@@ -3,14 +3,18 @@ import React, { useContext, useEffect, useState } from "react";
 import test_logo from "../../assets/images/logo-short.png";
 import { UserID } from "../../routes/UserID";
 import "./Homepage.css";
+import apis from "../../../src/apis"
+
+let env = "LOCAL"
 
 const Homepage = () => {
   const[FRname,setFRname] = useState("OSL User");
   const[EPFcount, setEPFcount] = useState("_");
   const {userId,setUserId} = useContext(UserID);
-  console.log(userId);
+  console.log(`${apis[env].getUser}?user_id=${userId}`);
   useEffect(()=>
-  axios.get(`http://localhost:3000/users/getUser?user_id=${userId}`).then(function(response){
+  axios.get(`${apis[env].getUser}?user_id=${userId}`).then(function(response){
+    console.log(response);
     setEPFcount(response.data[0].outstanding_epf);
     setFRname(response.data[0].name);
     }).catch(error =>{
